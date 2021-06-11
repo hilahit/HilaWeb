@@ -12,9 +12,15 @@ from .forms import Question
 from colorama import init, Fore, Back, Style
 init()
 
+
 @login_required(login_url="login")
-def create_questionare_view(request, key):
-    print(Fore.RED + "I am here")
+def patient_questionnaires_view(request, key):
+    print(key)
+
+    return render(request, 'accounts/patients/patient_questionnaires.html', {'patient': "test"})
+
+@login_required(login_url="login")
+def create_questionnaire_view(request, key):
     if request.method == "POST":
         answers = {}
         form = Question(request.POST)
@@ -41,7 +47,7 @@ def create_questionare_view(request, key):
 
             return patient_view(request, key)
     else:
-        return render(request, 'accounts/patients/questionnaire.html',{'patient': "test"})
+        return render(request, 'accounts/patients/create_questionnaire.html',{'patient': "test"})
 
 
 @login_required(login_url="login")
