@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+<head>
+    <link rel="stylesheet" href="{%  static  'css/style.css'  %}">
+    <title>Linguist</title>
+</head>
+
+{% block content %}
+
+<!-- {% include 'status.html' %} -->
+
+
+<br>
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-6 shadow-sm p-3 mb-5 bg-white rounde">
+            <h5 class="text-center">הודעות חדשות</h5>
+            <hr>
+            <div class="card card-body">
+                <table class="table table-sm">
+                    <tr class="text-center text-secondary">
+                        <th>מטופל</th>
+                        <th>נושא</th>
+                        <th>תאריך</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6 shadow-sm p-3 mb-5 bg-white rounde">
+            <h5 class="text-center">רשומות אחרונות</h5>
+            <hr>
+            <div class="card card-body">
+                <table class="table table-sm">
+                    <tr class="text-center text-secondary">
+                        <th>מטופל</th>
+                        <th>פעולה</th>
+                        <th>תאריך</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

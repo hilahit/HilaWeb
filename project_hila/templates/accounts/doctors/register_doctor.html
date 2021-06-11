@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<h1 dir="rtl">כניסה</h1>
+<br />
+
+<div class="mb-3">
+    <!--    action="/accounts/register"-->
+    <form class="site-form" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Register">
+        <!--        <button class="btn btn-secondary">Post</button>-->
+
+    </form>
+</div>
+
+{% endblock %}

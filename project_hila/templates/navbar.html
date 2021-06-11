@@ -1,0 +1,35 @@
+{% load static %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Linguist</title>
+</head>
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow-sm p-3 mb-5 bg-body rounded">
+    <a target="_self" href="{% url 'home' %}">
+        <img src="{% static 'images/logo_hila_50.png' %} " class="img-fluid">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav align-items-end ml-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register_doctor' %}">הוספת רופאים</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'add_patients' %}">הוספת מטופלים</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'search_patients' %}">חיפוש מטופלים</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<br><br>

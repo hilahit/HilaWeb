@@ -1,0 +1,63 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+<div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
+
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body h-100">
+                <h5>מטופל/ת: {{ key }}</h5>
+                <hr>
+                <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
+                <a class="btn btn-outline-danger  btn-sm btn-block" href="">מחיקת משתמש</a>
+
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body h-100">
+                <h5>פרטי התקשרות</h5>
+                <hr>
+                <p>אימייל: {{ key }}</p>
+                <p>טלפון: </p>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body h-100">
+                <h5>פעולה אחרונה</h5>
+                <hr>
+                <h1 style="text-align: center;padding: 10px"></h1>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col">
+            <div class="card card-body w-25">
+                <button class="btn btn-primary" type="submit">הוספת שאלון</button>
+            </div>
+        </div>
+
+
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <th>פעולה</th>
+                        <th>תאריך</th>
+                        <th>סטאטוס</th>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

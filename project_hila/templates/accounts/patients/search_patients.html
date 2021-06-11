@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
+
+    <!------ Include the above in your HEAD tag ---------->
+    <div class="input-group mb-3 w-50 mx-auto ">
+        <input type="text" class="form-control" placeholder="חיפוש לפי שם" aria-label="Recipient's username"
+            aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">חיפוש</button>
+    </div>
+
+    <table class="table" style="text-align: right" dir="rtl">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">שם</th>
+                <th scope="col">תאריך לידה</th>
+                <th scope="col">אימייל</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pat in patients %}
+            <tr>
+                <td scope="row"> {{forloop.counter}}</td>
+                <td scope="row"><a href="{% url 'patient' pat.email %}">{{ pat.name }}</a></td>
+                <td scope="row">{{ pat.date_of_birth }}</td>
+                <td scope="row">{{ pat.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
