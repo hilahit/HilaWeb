@@ -7,25 +7,60 @@ from .models import Patient
 from django.contrib.auth import login
 from .firebase_repo import db, create_user_without_sign_in
 from django.contrib.auth.decorators import login_required
+from .forms import Question
+
+from colorama import init, Fore, Back, Style
+init()
+
+@login_required(login_url="login")
+def create_questionare_view(request, key):
+    print(Fore.RED + "I am here")
+    if request.method == "POST":
+        answers = {}
+        form = Question(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            choice_type = form.cleaned_data['choice_type']
+            if choice_type != 'OpenQuestion':
+                number_of_answers = int(request.POST.get("number_of_answers", 0)) + 1
+                for i in range(number_of_answers):
+                    answers[str(i)] = request.POST.get(str(i))
+                
+            if choice_type == 'SingleChoice' or choice_type == 'MultipleChoice':
+                type = 'MultipleChoiceQuestion'
+            else:
+                type = 'OpenQuestion'
+            
+            data = {
+                'title': title,
+                'choiceType': choice_type,
+                'choices': answers,
+                'type': type
+            }
+
+            return patient_view(request, key)
+    else:
+        return render(request, 'accounts/patients/questionnaire.html',{'patient': "test"})
 
 
 @login_required(login_url="login")
 def patient_view(request, key):
 
-    # patients_in_db = db.child("Patients").get()
-
     patient = db.child("Patients").order_by_key().equal_to(key).get()
 
     if patient is None:
+        messages.warning(request, "error, no such user")
         return search_patients_view(request)
 
     patient_obj = patient.val()
-
-    patient_details = patient_obj[list(patient_obj.keys())[0]]
+    details = patient_obj[list(patient_obj.keys())[0]]
+    patient_key = list(patient_obj.keys())[0]
 
     patient_to_show = {
-        "name": patient_details['name'],
-        "email": patient_details['patient_details']['email'],
+        "name": details['name'],
+        "email": details['patient_details']['email'],
+        "key": patient_key
     }
 
     return render(request, 'accounts/patients/patient.html', {'patient': patient_to_show})
