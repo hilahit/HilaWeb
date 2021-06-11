@@ -24,7 +24,7 @@
             {% for pat in patients %}
             <tr>
                 <td scope="row"> {{forloop.counter}}</td>
-                <td scope="row"><a href="{% url 'patient' pat.email %}">{{ pat.name }}</a></td>
+                <td scope="row"><a href="{% url 'patient' pat.key %}">{{ pat.name }}</a></td>
                 <td scope="row">{{ pat.date_of_birth }}</td>
                 <td scope="row">{{ pat.email }}</td>
             </tr>

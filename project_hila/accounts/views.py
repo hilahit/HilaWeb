@@ -10,12 +10,35 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url="login")
 def patient_view(request, key):
-    print(key)
 
-    pat = db.child("Patients").order_by_child("name").equal_to(key)
-    print(pat.get())
+    patients_in_db = db.child("Patients").get()
 
-    return render(request, 'accounts/patient.html', {'key': key})
+    for patient in patients_in_db.each():
+        if (patient.key() == key):
+            patient_details = patient.val().get("patient_details")
+            email = "-"
+            date = "="
+
+            if patient_details is not None:
+                email = patient_details["email"]
+            
+            patient_to_show = {
+                "name": patient.val().get("name"),
+                "date_of_birth": date,
+                "email": email,
+                "key": patient.key()
+            }
+
+            return render(request, 'accounts/patients/patient.html', {'patient': patient_to_show})
+    else:
+        return search_patients_view(request)
+
+
+    # patient_from_db = db.child("Patients").order_by_child("name").equal_to(key).get()
+    # print(patient_from_db)
+
+    
+    # return render(request, 'accounts/patients/patient.html', {'key': key})
 
 @login_required(login_url="login")
 def search_patients_view(request):
@@ -26,7 +49,6 @@ def search_patients_view(request):
     for pat in patients_from_db.each():
 
         patient_details = pat.val().get("patient_details")
-        print(patient_details)
 
         email = "-"
         date = "-"
