@@ -5,8 +5,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Patient
 from django.contrib.auth import login
 from .firebase_repo import db, create_user_without_sign_in
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url="login")
 def patient_view(request, key):
     print(key)
 
@@ -15,7 +17,7 @@ def patient_view(request, key):
 
     return render(request, 'accounts/patient.html', {'key': key})
 
-
+@login_required(login_url="login")
 def search_patients_view(request):
     patients_from_db = db.child("Patients").get()
 
@@ -46,6 +48,7 @@ def search_patients_view(request):
     return render(request, 'accounts/patients/search_patients.html', {'patients': patient_list})
 
 
+@login_required(login_url="login")
 def add_patients(response):
     if response.method == "POST":
         patient_form = PatientRegisterForm(response.POST)
@@ -84,6 +87,7 @@ def add_patients(response):
         return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
 
+@login_required(login_url="login")
 def register_doctor_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
