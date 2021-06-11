@@ -5,13 +5,17 @@
 <br />
 
 <div class="mb-3">
-    <!--    action="/accounts/register"-->
     <form class="site-form" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Login">
-        <!--        <button class="btn btn-secondary">Post</button>-->
-
+        
+        <!-- If user tried to access a member page without logging in first, 
+        redirect to login page, and upon login success, redirect to the requested page -->
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{request.GET.next}}">
+        {% endif %}
+            
     </form>
 </div>
 
