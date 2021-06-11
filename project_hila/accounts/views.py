@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from pyasn1.type.univ import Null
 from .forms import PatientRegisterForm
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -11,34 +12,24 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url="login")
 def patient_view(request, key):
 
-    patients_in_db = db.child("Patients").get()
+    # patients_in_db = db.child("Patients").get()
 
-    for patient in patients_in_db.each():
-        if (patient.key() == key):
-            patient_details = patient.val().get("patient_details")
-            email = "-"
-            date = "="
+    patient = db.child("Patients").order_by_key().equal_to(key).get()
 
-            if patient_details is not None:
-                email = patient_details["email"]
-            
-            patient_to_show = {
-                "name": patient.val().get("name"),
-                "date_of_birth": date,
-                "email": email,
-                "key": patient.key()
-            }
-
-            return render(request, 'accounts/patients/patient.html', {'patient': patient_to_show})
-    else:
+    if patient is None:
         return search_patients_view(request)
 
+    patient_obj = patient.val()
 
-    # patient_from_db = db.child("Patients").order_by_child("name").equal_to(key).get()
-    # print(patient_from_db)
+    patient_details = patient_obj[list(patient_obj.keys())[0]]
 
-    
-    # return render(request, 'accounts/patients/patient.html', {'key': key})
+    patient_to_show = {
+        "name": patient_details['name'],
+        "email": patient_details['patient_details']['email'],
+    }
+
+    return render(request, 'accounts/patients/patient.html', {'patient': patient_to_show})
+
 
 @login_required(login_url="login")
 def search_patients_view(request):
