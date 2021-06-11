@@ -31,14 +31,12 @@
                     <li class="nav-item">
                         <form class="logout-link" action="{% url 'logout' %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit">התנתק</button>
-
+                            <button type="submit" class="btn btn-danger">יציאה</button>
                         </form>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">התחבר</a>
-
                     </li>
                 {% endif %}
             </ul>

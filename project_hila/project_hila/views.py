@@ -1,7 +1,10 @@
+from django.forms import widgets
+from django.forms.widgets import Widget
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django import forms
 
 @login_required(login_url="login")
 def home(request):
@@ -11,9 +14,11 @@ def home(request):
         return login_view(request)
 
 
+
 def login_view(request):
     """ If user tried to access a member page without logging in first, 
-        redirect to login page, and upon login success, redirect to the requested page. """
+        redirect to login page and upon login success, 
+        redirect to the requested page. """
 
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -21,7 +26,6 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
 
-            
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             else:

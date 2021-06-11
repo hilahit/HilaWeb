@@ -1,22 +1,33 @@
 {% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
 
-<h1 dir="rtl">התחברות</h1>
-<br />
+<div class="container-fluid">
+    <h1 class="text-center">התחברות</h1>
+    <br />
+    <div class="row justify-content-center">
 
-<div class="mb-3">
-    <form class="site-form" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Login">
-        
-        <!-- If user tried to access a member page without logging in first, 
-        redirect to login page, and upon login success, redirect to the requested page -->
-        {% if request.GET.next %}
+        <form method="post" style="text-align: right " dir="rtl">
+            {% csrf_token %}
+            <label for="username">אימייל</label>
+            <br>
+            {{ form.username}}
+            <br><br>
+            <label for="password">סיסמא</label>
+            <br>
+            {{ form.password}}
+            <br><br>
+            <div class="d-flex justify-content-center"​>
+               
+                <button type="submit" class="btn btn-dark">התחברות</button>
+            </div>
+            <!-- If user tried to access a member page without logging in first, 
+                    redirect to login page, and upon login success, redirect to the requested page -->
+            {% if request.GET.next %}
             <input type="hidden" name="next" value="{{request.GET.next}}">
-        {% endif %}
-            
-    </form>
+            {% endif %}
+        </form>
+    </div>
 </div>
-
 {% endblock %}
