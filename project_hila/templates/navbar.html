@@ -27,6 +27,25 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'search_patients' %}">חיפוש מטופלים</a>
             </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <form class="logout-link" action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">התנתק</button>
+            
+                </form>
+            </li>
+            
+            {% else %}
+            <li class="nav-item">
+                <form class="logout-link" action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">התחבר</button>
+            
+                </form>
+            </li>
+            {% endif %}
+     
         </ul>
 
     </div>
