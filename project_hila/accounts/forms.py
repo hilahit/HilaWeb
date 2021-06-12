@@ -31,12 +31,15 @@ class PatientRegisterForm(forms.ModelForm):
         }
 
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'dir': 'rtl'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control'}),
-            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********',}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********', }),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+
 
 
 class Question(forms.Form):

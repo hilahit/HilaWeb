@@ -9,9 +9,9 @@ from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email
 from django.contrib.auth.decorators import login_required
 from .forms import Question
 from project_hila.views import home
-
+from operator import itemgetter
 from colorama import init, Fore, Back, Style
-init()
+
 
 
 @login_required(login_url="login")
@@ -149,7 +149,9 @@ def search_patients_view(request):
             "email": email,
             "key": pat.key()
         }
+
         patient_list.append(new_patient)
+        patient_list.sort(key=itemgetter('name'), reverse=False)
 
     return render(request, 'accounts/patients/search_patients.html', {'patients': patient_list})
 
