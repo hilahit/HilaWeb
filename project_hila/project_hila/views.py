@@ -5,8 +5,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.views.decorators.cache import cache_control
+
+
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def home(request):
     if request.user.is_authenticated:
         return render(request, 'dashboard.html')
@@ -37,6 +41,7 @@ def login_view(request):
 
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def logout_view(request):
     if (request.method == 'POST'):
         logout(request)

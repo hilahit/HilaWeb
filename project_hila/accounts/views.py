@@ -10,11 +10,12 @@ from django.contrib.auth.decorators import login_required
 from .forms import Question
 from project_hila.views import home
 from operator import itemgetter
-from colorama import init, Fore, Back, Style
+from django.views.decorators.cache import cache_control
 
 
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def delete_patient_view(request, key):
 
     isDeleted = delete_patient(key)
@@ -34,6 +35,7 @@ def patient_questionnaires_view(request, key):
     return render(request, 'accounts/patients/patient_questionnaires.html', {'question_form': form})
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def create_questionnaire_view(request, key):
     if request.method == "POST":
         answers = {}
@@ -62,13 +64,15 @@ def create_questionnaire_view(request, key):
             return patient_view(request, key)
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def patient_view(request, key):
 
     patient = db.child("Patients").order_by_key().equal_to(key).get()
 
-    
+    print("##################")
+    print(patient.val())
 
-    if patient is None:
+    if not patient.val():
         messages.warning(request, "error, no such user")
         return search_patients_view(request)
 
@@ -86,6 +90,7 @@ def patient_view(request, key):
 
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def search_patient_by_keyword_view(request):
     if request.method == 'GET':
         keyword = request.GET.get('search')
@@ -120,6 +125,7 @@ def search_patient_by_keyword_view(request):
 
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def search_patients_view(request):
 
     patients_from_db = db.child("Patients").get()
@@ -157,6 +163,7 @@ def search_patients_view(request):
 
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def add_patients(response):
     if response.method == "POST":
         patient_form = PatientRegisterForm(response.POST)
@@ -201,6 +208,7 @@ def add_patients(response):
 
 
 @login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def register_doctor_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
