@@ -20,8 +20,11 @@ def delete_patient_view(request, key):
     isDeleted = delete_patient(key)
     if isDeleted:
         db.child("Patients").child(key).remove()
+        # show user deleted successfully
+        # need to handle on back pressed
         return search_patients_view(request)
 
+    # need to show deletion error
     return home(request)
 
 
@@ -90,7 +93,7 @@ def search_patient_by_keyword_view(request):
 
         date = "-"
 
-        patients_from_db = db.child("Patients").get()
+        patients_from_db = db.child("Patients").get() # returns an OrderedDict
         patient_list_to_show = []
         for pat in patients_from_db.each():
 

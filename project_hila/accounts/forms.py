@@ -16,14 +16,6 @@ class PatientRegisterForm(forms.ModelForm):
         self.fields['password'].required = True
         self.fields['phone_number'].required = True
 
-    #
-    # first_name = forms.CharField(required=True, max_length=255)
-    # last_name = forms.CharField(required=True, max_length=255)
-    # email = forms.EmailField()
-    # password = forms.CharField(widget=forms.PasswordInput)
-
-    # style the fields
-
     class Meta:
         model = Patient
 
@@ -39,10 +31,10 @@ class PatientRegisterForm(forms.ModelForm):
         }
 
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'dir': 'rtl'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control'}),
-            'password': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '********',}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
