@@ -10,7 +10,7 @@
                 <h5>מטופל/ת: {{ patient.name }}</h5>
                 <hr>
                 <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
-                <a class="btn btn-outline-danger  btn-sm btn-block" href="">מחיקת משתמש</a>
+                <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'delete_patient' patient.key %}">מחיקת משתמש</a>
 
             </div>
         </div>

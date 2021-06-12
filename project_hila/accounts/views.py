@@ -5,14 +5,24 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Patient
 from django.contrib.auth import login
-from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email
+from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
 from django.contrib.auth.decorators import login_required
 from .forms import Question
+from project_hila.views import home
 
 from colorama import init, Fore, Back, Style
 init()
 
 
+@login_required(login_url="login")
+def delete_patient_view(request, key):
+
+    isDeleted = delete_patient(key)
+    if isDeleted:
+        db.child("Patients").child(key).remove()
+        return search_patients_view(request)
+
+    return home(request)
 
 
 @login_required(login_url="login")
@@ -48,7 +58,6 @@ def create_questionnaire_view(request, key):
 
             return patient_view(request, key)
 
-
 @login_required(login_url="login")
 def patient_view(request, key):
 
@@ -74,11 +83,10 @@ def patient_view(request, key):
 
 
 @login_required(login_url="login")
-def search_patient_by_keyword(request):
+def search_patient_by_keyword_view(request):
     if request.method == 'GET':
         keyword = request.GET.get('search')
         print(keyword)
-
 
         date = "-"
 
@@ -101,7 +109,7 @@ def search_patient_by_keyword(request):
                         "email": patient_email,
                         "key": pat.key()
                     }
-                    
+
                     patient_list_to_show.append(patient_found)
 
 
@@ -110,7 +118,12 @@ def search_patient_by_keyword(request):
 
 @login_required(login_url="login")
 def search_patients_view(request):
+
     patients_from_db = db.child("Patients").get()
+    print(patients_from_db)
+
+    if patients_from_db.val() is None:
+        return home(request)
 
     patient_list = []
 
@@ -179,7 +192,7 @@ def add_patients(response):
 
     else:
         patient_form = PatientRegisterForm()
-        return render(response, "accounts/patients/search_patients.html", {'form': patient_form})
+        return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
 
 @login_required(login_url="login")

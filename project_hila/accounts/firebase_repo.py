@@ -37,3 +37,10 @@ def get_patient_by_email(email):
         return patient
     except:
         return None
+
+def delete_patient(key):
+    try:
+        auth.delete_user(key)
+        return True
+    except:
+        return False
