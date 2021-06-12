@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Patient
 from django.contrib.auth import login
-from .firebase_repo import db, create_user_without_sign_in
+from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email
 from django.contrib.auth.decorators import login_required
 from .forms import Question
 
@@ -15,9 +15,8 @@ init()
 
 @login_required(login_url="login")
 def patient_questionnaires_view(request, key):
-    print(key)
-
-    return render(request, 'accounts/patients/patient_questionnaires.html', {'patient': "test"})
+    form = Question()
+    return render(request, 'accounts/patients/patient_questionnaires.html', {'question_form': form})
 
 @login_required(login_url="login")
 def create_questionnaire_view(request, key):
@@ -46,8 +45,6 @@ def create_questionnaire_view(request, key):
             }
 
             return patient_view(request, key)
-    else:
-        return render(request, 'accounts/patients/create_questionnaire.html',{'patient': "test"})
 
 
 @login_required(login_url="login")
@@ -115,6 +112,11 @@ def add_patients(response):
 
             # new_patient = auth_fb.create_user_with_email_and_password(email=email, password=password)
 
+            patient_in_db = get_patient_by_email(email)
+            if (patient_in_db is not None):
+                messages.warning(response, "This email already exists")
+                return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
+
             new_patient = create_user_without_sign_in(email, password)
 
             patient_details = {
@@ -134,11 +136,11 @@ def add_patients(response):
             messages.warning(response, "bad credentails")
 
         patient_form = PatientRegisterForm()
-        return render(response, "accounts/patients/search_patients.html", {'form': patient_form})
+        return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
     else:
         patient_form = PatientRegisterForm()
-        return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
+        return render(response, "accounts/patients/search_patients.html", {'form': patient_form})
 
 
 @login_required(login_url="login")

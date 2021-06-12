@@ -1,6 +1,7 @@
 import os
 
 import firebase_admin
+from pyasn1.type.univ import Null
 from pyrebase import pyrebase
 from firebase_admin import auth
 
@@ -23,9 +24,16 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
 
 def create_user_without_sign_in(email, password):
+
     new_patient = auth.create_user(
         email=email,
         password=password,
     )
-
     return new_patient
+
+def get_patient_by_email(email):
+    try:
+        patient = auth.get_user_by_email(email)
+        return patient
+    except:
+        return None
