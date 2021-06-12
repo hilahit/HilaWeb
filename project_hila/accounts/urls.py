@@ -11,6 +11,7 @@ urlpatterns = [
     # THIS DOESNT WORK
     # url(r'^patient/<str:key>/$', views.patient_view, name='patient'),
 
+    path('search_patient_by_keyword/', views.search_patient_by_keyword,name='search_patient_by_keyword'),
 
     path('patient_questionnaires/<str:key>/',views.patient_questionnaires_view, name="patient_questionnaires"),
 

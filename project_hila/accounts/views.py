@@ -13,6 +13,8 @@ from colorama import init, Fore, Back, Style
 init()
 
 
+
+
 @login_required(login_url="login")
 def patient_questionnaires_view(request, key):
     form = Question()
@@ -52,6 +54,8 @@ def patient_view(request, key):
 
     patient = db.child("Patients").order_by_key().equal_to(key).get()
 
+    
+
     if patient is None:
         messages.warning(request, "error, no such user")
         return search_patients_view(request)
@@ -67,6 +71,41 @@ def patient_view(request, key):
     }
 
     return render(request, 'accounts/patients/patient.html', {'patient': patient_to_show})
+
+
+@login_required(login_url="login")
+def search_patient_by_keyword(request):
+    if request.method == 'GET':
+        keyword = request.GET.get('search')
+        print(keyword)
+
+
+        date = "-"
+
+        patients_from_db = db.child("Patients").get()
+        patient_list_to_show = []
+        for pat in patients_from_db.each():
+
+            patient_details = pat.val().get("patient_details")
+
+            if patient_details is not None:
+
+                patient_email = patient_details["email"]
+                patient_name = pat.val().get("name")
+
+                if keyword in patient_email or keyword in patient_name:
+
+                    patient_found = {
+                        "name": patient_name,
+                        "date_of_birth": date,
+                        "email": patient_email,
+                        "key": pat.key()
+                    }
+                    
+                    patient_list_to_show.append(patient_found)
+
+
+    return render(request, 'accounts/patients/search_patients.html', {'search_results': patient_list_to_show})
 
 
 @login_required(login_url="login")

@@ -2,18 +2,20 @@
 
 {% block content %}
 
-<!-- <div class="input-group mb-3 w-50 mx-auto ">
-    <input type="text" class="form-control" placeholder="חיפוש לפי שם" aria-label="Recipient's username"
-        aria-describedby="button-addon2">
-    <button class="btn btn-outline-secondary" type="button" id="button-addon2">חיפוש</button>
-</div> -->
+    <!-- <div class="input-group mb-3 w-50 mx-auto">
+        <input type="search" class="form-control rounded" placeholder="חיפוש לפי שם" aria-label="Search"
+            aria-describedby="search-addon" />
+        <button type="button" class="btn btn-outline-primary">חיפוש</button>
+    </div> -->
 
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
 
     <div class="input-group mb-3 w-50 mx-auto">
-        <input type="search" class="form-control rounded" placeholder="חיפוש לפי שם" aria-label="Search"
-            aria-describedby="search-addon" />
-        <button type="button" class="btn btn-outline-primary">חיפוש</button>
+        <form action="{% url 'search_patient_by_keyword' %}">
+            <input type="text" placeholder="חיפוש" name="search">
+            {% csrf_token %}
+            <button type="submit">חיפוש</button>
+        </form>
     </div>
 
     <table class="table" style="text-align: right" dir="rtl">
@@ -26,14 +28,26 @@
             </tr>
         </thead>
         <tbody>
-            {% for pat in patients %}
-            <tr>
-                <td scope="row"> {{forloop.counter}}</td>
-                <td scope="row"><a href="{% url 'patient' pat.key %}">{{ pat.name }}</a></td>
-                <td scope="row">{{ pat.date_of_birth }}</td>
-                <td scope="row">{{ pat.email }}</td>
-            </tr>
-            {% endfor %}
+            <!-- user searched for patients -->
+            {% if patients is None %}
+                {% for pat in search_results %}
+                <tr>
+                    <td scope="row"> {{forloop.counter}}</td>
+                    <td scope="row"><a href="{% url 'patient' pat.key %}">{{ pat.name }}</a></td>
+                    <td scope="row">{{ pat.date_of_birth }}</td>
+                    <td scope="row">{{ pat.email }}</td>
+                </tr>
+                {% endfor %}
+            {% else %} sdsd
+                {% for pat in patients %}
+                <tr>
+                    <td scope="row"> {{forloop.counter}}</td>
+                    <td scope="row"><a href="{% url 'patient' pat.key %}">{{ pat.name }}</a></td>
+                    <td scope="row">{{ pat.date_of_birth }}</td>
+                    <td scope="row">{{ pat.email }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 </div>
