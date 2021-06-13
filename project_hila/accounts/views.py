@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from pyasn1.type.univ import Null
-from .forms import PatientRegisterForm
+from .forms import PatientRegisterForm, DoctorRegisterForm
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Patient
@@ -13,10 +13,11 @@ from operator import itemgetter
 from django.views.decorators.cache import cache_control
 
 
-
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def delete_patient_view(request, key):
+    """ This function will delete a user from the authenticated users list.
+        Upon success, all of the user's data in the realtime databse will be deleted."""
 
     isDeleted = delete_patient(key)
     if isDeleted:
@@ -32,7 +33,10 @@ def delete_patient_view(request, key):
 @login_required(login_url="login")
 def patient_questionnaires_view(request, key):
     form = Question()
-    return render(request, 'accounts/patients/patient_questionnaires.html', {'question_form': form})
+    return render(
+        request,
+        'accounts/patients/patient_questionnaires.html',
+        {'question_form': form})
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
@@ -42,9 +46,11 @@ def create_questionnaire_view(request, key):
         form = Question(request.POST)
 
         if form.is_valid():
+
             title = form.cleaned_data['title']
             choice_type = form.cleaned_data['choice_type']
             if choice_type != 'OpenQuestion':
+
                 number_of_answers = int(request.POST.get("number_of_answers", 0)) + 1
                 for i in range(number_of_answers):
                     answers[str(i)] = request.POST.get(str(i))
@@ -69,10 +75,7 @@ def patient_view(request, key):
 
     patient = db.child("Patients").order_by_key().equal_to(key).get()
 
-    print("##################")
-    print(patient.val())
-
-    if not patient.val():
+    if not patient.val(): # patient.val() is of type list
         messages.warning(request, "error, no such user")
         return search_patients_view(request)
 
@@ -86,12 +89,18 @@ def patient_view(request, key):
         "key": patient_key
     }
 
-    return render(request, 'accounts/patients/patient.html', {'patient': patient_to_show})
+    return render(
+        request, 
+        'accounts/patients/patient.html', 
+        {'patient': patient_to_show})
 
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def search_patient_by_keyword_view(request):
+    """ This function searches through the real time database 
+        patients that hhave a name or an email that contains the given keyword."""
+
     if request.method == 'GET':
         keyword = request.GET.get('search')
         print(keyword)
@@ -121,7 +130,10 @@ def search_patient_by_keyword_view(request):
                     patient_list_to_show.append(patient_found)
 
 
-    return render(request, 'accounts/patients/search_patients.html', {'search_results': patient_list_to_show})
+    return render(
+        request, 
+        'accounts/patients/search_patients.html', 
+        {'search_results': patient_list_to_show})
 
 
 @login_required(login_url="login")
@@ -159,7 +171,10 @@ def search_patients_view(request):
         patient_list.append(new_patient)
         patient_list.sort(key=itemgetter('name'), reverse=False)
 
-    return render(request, 'accounts/patients/search_patients.html', {'patients': patient_list})
+    return render(
+        request, 
+        'accounts/patients/search_patients.html', 
+        {'patients': patient_list})
 
 
 @login_required(login_url="login")
@@ -178,8 +193,14 @@ def add_patients(response):
 
             patient_in_db = get_patient_by_email(email)
             if (patient_in_db is not None):
-                messages.warning(response, "This email already exists")
-                return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
+                messages.warning(
+                    response, 
+                    "This email already exists")
+
+                return render(
+                    response, 
+                    "accounts/patients/add_patients.html", 
+                    {'form': patient_form})
 
             new_patient = create_user_without_sign_in(email, password)
 
@@ -200,26 +221,36 @@ def add_patients(response):
             messages.warning(response, "bad credentails")
 
         patient_form = PatientRegisterForm()
-        return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
+        return render(
+            response, 
+            "accounts/patients/add_patients.html", 
+            {'form': patient_form})
 
     else:
         patient_form = PatientRegisterForm()
-        return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
+        return render(
+            response, 
+            "accounts/patients/add_patients.html", 
+            {'form': patient_form})
 
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def register_doctor_view(request):
     if request.method == 'POST':
+
         form = UserCreationForm(request.POST)
 
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            # login(request, user)
 
             return redirect('home')
     else:
         form = UserCreationForm
 
-    return render(request, 'accounts/doctors/register_doctor.html', {'form': form})
+    return render(
+        request, 
+        'accounts/doctors/register_doctor.html', 
+        {'form': form})
 

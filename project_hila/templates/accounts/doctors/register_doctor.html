@@ -1,18 +1,67 @@
 {% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block content %}
 
-<h1 dir="rtl">כניסה</h1>
 <br />
 
-<div class="mb-3">
-    <!--    action="/accounts/register"-->
-    <form class="site-form" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Register">
-        <!--        <button class="btn btn-secondary">Post</button>-->
+<div class="container-fluid ">
+    <div class="row h-100 justify-content-center align-items-center ">
+        <div class="form-group w-50">
+                <form method="post" style="text-align: right " dir="rtl">
 
-    </form>
+                    {% if form.errors %}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    {% csrf_token %}
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        <label class="label">שם משתמש</label>
+                        {% render_field form.username class="form-control" %}
+                    </div>
+
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        <label class="label">סיסמא</label>
+                        {% render_field form.password1 class="form-control" %}
+                    </div>
+
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        <label class="label">אישור סיסמא</label>
+                        {% render_field form.password2 class="form-control" %}
+                    </div>
+                    
+                    <div class="col-md-12 text-center ">
+                        <button class="btn btn-secondary">הוספה</button>
+                    </div>
+                </form>
+        </div>
+    </div>
 </div>
+
+<!-- <form method="post" style="text-align: right " dir="rtl">
+    {% csrf_token %}
+
+    {% for field in form %}
+    {{ field.label }}
+    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+
+        {% render_field field class="form-control" %}
+    </div>
+    {% endfor %}
+    <div class="col-md-12 text-center ">
+        <button class="btn btn-secondary">הוספה</button>
+    </div>
+</form> -->
 
 {% endblock %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     #own apps
     'crispy_forms',
     'accounts',
+    'widget_tweaks',
     
 ]
 

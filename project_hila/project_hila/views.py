@@ -21,8 +21,11 @@ def home(request):
 
 def login_view(request):
     """ If user tried to access a member page without logging in first, 
-        redirect to login page and upon login success, 
-        redirect to the requested page. """
+        redirect to login page and upon login success, redirect to the requested page.
+        If the user is already logged in, redirect to home page. """
+
+    if request.user.is_authenticated:
+        return home(request)
 
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
