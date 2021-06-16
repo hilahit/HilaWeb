@@ -6,6 +6,10 @@ from django.core.validators import validate_email
 
 class DoctorRegisterForm(UserCreationForm):
 
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    email = forms.EmailField()
+
     # first_name = forms.CharField(forms.TextInput(
     #     attrs={'class': 'form-control', 'placeholder': 'שם פרטי'}))
     
@@ -28,21 +32,21 @@ class DoctorRegisterForm(UserCreationForm):
     class Meta:
 
         model = User
+        fields = ('first_name', 'last_name',
+                  'email', 'password1', 'password2')
 
-        labels = {
-            'first_name': "שם פרטי",
-            'last_name': "שם משפחה",
-            'email': "אימייל",
-        }
-
-        fields = ('first_name', 'last_name', 'email',)
+        # labels = {
+        #     'first_name': "שם פרטי",
+        #     'last_name': "שם משפחה",
+        #     'email': "אימייל",
+        # }
 
 
-        widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.TextInput(attrs={'class': 'form-control'}),
-        }
+        # widgets = {
+        #     'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+        #     'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        #     'email': forms.TextInput(attrs={'class': 'form-control'}),
+        # }
 
 class PatientRegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

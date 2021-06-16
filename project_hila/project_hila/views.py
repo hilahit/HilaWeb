@@ -8,7 +8,6 @@ from django import forms
 from django.views.decorators.cache import cache_control
 
 
-
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def home(request):
@@ -16,7 +15,6 @@ def home(request):
         return render(request, 'dashboard.html')
     else:
         return login_view(request)
-
 
 
 def login_view(request):

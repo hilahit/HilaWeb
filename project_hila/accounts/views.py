@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
-from pyasn1.type.univ import Null
 from .forms import PatientRegisterForm, DoctorRegisterForm
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Patient
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
 from django.contrib.auth.decorators import login_required
@@ -12,7 +10,60 @@ from project_hila.views import home
 from operator import itemgetter
 from django.views.decorators.cache import cache_control
 
+# TODO test email functionality
+# TODO show messages
+@login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
+def register_doctor_view(request):
+    """ Function to register a new user.
+        email is used to send the credentials """
+    if request.method == 'POST':
+   
+        # print(email)
 
+        form = DoctorRegisterForm(request.POST)
+
+        if form.is_valid():
+
+            # email = request.POST.get('email')
+            # user_name = request.POST.get('user_name')
+            
+            user = form.save()
+            user.username = user.get_full_name()
+            user = form.save()
+            print("############################")
+            print(user.username)
+            print("############################")
+
+           
+            # send_mail(
+            #     'Your Hila account', # subject
+            #     'Your username and password:', # message
+            #     'hila.project.hit@gmail.com', # from email
+            #     ['btlltk13@gmail.com'], # to email
+            # )
+
+            messages.success(
+                request, 
+                "Succesfully created ")
+
+            return render(
+                request,
+                'accounts/doctors/register_doctor.html',
+                {'form': form})
+
+    else:
+        form = DoctorRegisterForm
+
+    return render(
+        request,
+        'accounts/doctors/register_doctor.html',
+        {'form': form})
+
+
+# TODO show user deleted successfully
+# TODO need to handle on back pressed
+# TODO need to show deletion error
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def delete_patient_view(request, key):
@@ -22,14 +73,11 @@ def delete_patient_view(request, key):
     isDeleted = delete_patient(key)
     if isDeleted:
         db.child("Patients").child(key).remove()
-        # show user deleted successfully
-        # need to handle on back pressed
         return search_patients_view(request)
 
-    # need to show deletion error
     return home(request)
 
-
+# TODO implement inside a dialog
 @login_required(login_url="login")
 def patient_questionnaires_view(request, key):
     form = Question()
@@ -38,6 +86,7 @@ def patient_questionnaires_view(request, key):
         'accounts/patients/patient_questionnaires.html',
         {'question_form': form})
 
+# TODO characterize questionnaires
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def create_questionnaire_view(request, key):
@@ -69,6 +118,7 @@ def create_questionnaire_view(request, key):
 
             return patient_view(request, key)
 
+# TODO implement 'update patient' button
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def patient_view(request, key):
@@ -94,12 +144,12 @@ def patient_view(request, key):
         'accounts/patients/patient.html', 
         {'patient': patient_to_show})
 
-
+# TODO configure view according to finalized database
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def search_patient_by_keyword_view(request):
-    """ This function searches through the real time database 
-        patients that hhave a name or an email that contains the given keyword."""
+    """ This function searches patients that have
+         a name or an email that contains the given keyword."""
 
     if request.method == 'GET':
         keyword = request.GET.get('search')
@@ -136,9 +186,12 @@ def search_patient_by_keyword_view(request):
         {'search_results': patient_list_to_show})
 
 
+# TODO configure view according to finalized database
+# TODO implement pagination 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def search_patients_view(request):
+    """ Shows all patients """
 
     patients_from_db = db.child("Patients").get()
     print(patients_from_db)
@@ -176,7 +229,7 @@ def search_patients_view(request):
         'accounts/patients/search_patients.html', 
         {'patients': patient_list})
 
-
+# TODO configure patient according to finalized database
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def add_patients(response):
@@ -232,25 +285,3 @@ def add_patients(response):
             response, 
             "accounts/patients/add_patients.html", 
             {'form': patient_form})
-
-
-@login_required(login_url="login")
-@cache_control(no_cache=False, must_revalidate=True, no_store=True)
-def register_doctor_view(request):
-    if request.method == 'POST':
-
-        form = UserCreationForm(request.POST)
-
-        if form.is_valid():
-            user = form.save()
-            # login(request, user)
-
-            return redirect('home')
-    else:
-        form = UserCreationForm
-
-    return render(
-        request, 
-        'accounts/doctors/register_doctor.html', 
-        {'form': form})
-
