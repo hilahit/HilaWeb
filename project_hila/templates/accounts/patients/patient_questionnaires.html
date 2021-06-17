@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+<html dir="rtl" lang="">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>יצירת שאלון</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        
+        <!-- <label for="pets">סוג שאלה:</label>
+        <select id="questionType">
+            <option value="openQ">פתוחה</option>
+            <option value="americanQ">אמריקאית</option>
+        </select> -->
+
+        <div class="col-md-12 text-right" id="questions-container"></div>
+
+        <div class="col-md-12 text-center">
+        <button id="btn_add_question" class="btn btn-secondary form-control w-25">הוספת שאלה</button>
+        </div>
+
+        
+
+    
+
+    <script type="text/javascript" src="{% static 'questionnaire/scripts.js' %}"></script>
+    {% endblock content %}
+    {% block footer_scripts %}
+    {% endblock footer_scripts %}
+</body>
+
+</html>
