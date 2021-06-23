@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+<html dir="rtl" lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    {% block content %}
+    <div class="container-fluid">
+        
+        <table class="table" style="text-align: right" dir="rtl">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">סוג</th>
+                    <th scope="col">שאלה</th>
+                    <th scope="col">תשובות</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pat in search_results %}
+                <tr>
+                    <td scope="row"> {{forloop.counter}}</td>
+                    <td scope="row">{{ pat.name }}</td>
+                    <td scope="row">{{ pat.date_of_birth }}</td>
+                    <td scope="row">{{ pat.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="col-md-12 text-center">
+        <!-- <button id="btn_add_question" class="btn btn-secondary form-control w-25">הוספת שאלה</button> -->
+        <button id="btn_finish_questionnaire" class="btn btn-primary form-control w-25">סיום</button>
+        </div>
+
+    <!-- <script type="text/javascript" src="{% static 'questionnaire/scripts.js' %}"></script> -->
+    {% endblock content %}
+    {% block footer_scripts %}
+    {% endblock footer_scripts %}
+</body>
+
+</html>

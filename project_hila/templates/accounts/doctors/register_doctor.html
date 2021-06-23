@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success">
+            <li class=" {{ message.tags }}">{{ message|safe }}</li>
+        </div>
+        {% endif %}
+        <!-- {% if message.tags == 'warning' %}
+        <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div> -->
+
+<br />
+
+<div class="container-fluid ">
+    <div class="row h-100 justify-content-center align-items-center ">
+        <div class="form-group w-50">
+                <form method="post" style="text-align: right " dir="rtl">
+
+                    {% if form.errors %}
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% csrf_token %}
+               
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                        <label class="label">שם פרטי</label>
+                        {% render_field form.first_name class="form-control" %}                  
+                    </div>
+                    
+
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                        <label class="label">שם משפחה</label>
+                        {% render_field form.last_name class="form-control" %}
+                    </div>
+                    
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                        <label class="label">אמייל</label>
+                        {% render_field form.email class="form-control" %}
+                    </div>
+
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                        <label class="label">סיסמא</label>
+                        {% render_field form.password1 class="form-control" %}
+                    </div>
+
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                        <label class="label">אישור סיסמא</label>
+                        {% render_field form.password2 class="form-control" %}
+                    </div>
+                    
+                    <div class="col-md-12 text-center ">
+                        <button class="btn btn-secondary">הוספה</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

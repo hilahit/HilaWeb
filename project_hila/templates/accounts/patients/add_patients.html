@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+<html dir="rtl" lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הוספת מטופלים</title>
+</head>
+<body>
+    {% block content %}
+
+    <div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class="alert alert-success">
+                <li class=" {{ message.tags }}">{{ message|safe }}</li>
+            </div>
+            {% endif %}
+            {% if message.tags == 'warning' %}
+            <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    <div class="container-fluid ">
+    
+        <div class="row h-100 justify-content-center align-items-center ">
+            <div class="form-group w-50 ">
+    
+                <form method="post" style="text-align: right " dir="rtl">
+                    {% csrf_token %}
+
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        {{ form.first_name|as_crispy_field }}
+                    </div>
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        {{ form.last_name|as_crispy_field }}
+                    </div>
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded " dir="ltr">
+                        {{ form.email|as_crispy_field }}
+                    </div>
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        {{ form.password|as_crispy_field }}
+                    </div>
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                        {{ form.phone_number|as_crispy_field }}
+                    </div>
+                    <br><br>
+    
+                    <div class="col-md-12 text-center ">
+                        <button class="btn btn-secondary">אישור</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock content %}
+    {% block footer_scripts %}
+    {% endblock footer_scripts %}
+</body>
+</html>
