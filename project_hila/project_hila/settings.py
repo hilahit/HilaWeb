@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'widget_tweaks',
     'django_extensions',
+    'questions',
     
 ]
 

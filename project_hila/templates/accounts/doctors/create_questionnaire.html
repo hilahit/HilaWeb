@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
+    <div class="col-md-12 text-center ">
+        <form action="{% url 'send_questionnaire' %}" method="POST">
+            {% csrf_token %}
+            <table class="table" style="text-align: right" dir="rtl">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">סוג שאלה</th>
+                        <th scope="col">שאלה</th>
+                        <th scope="col">תשובות</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in questions %}
+                    <tr>
+                        <td scope="row"> {{forloop.counter}}</td>
+                        <td scope="row">{{ q.question_type }}</td>
+                        <td scope="row">{{ q.question }}</td>
+                        <td scope="row">{{ q.answers }}</td>
+                        <td><input type="checkbox" name="check{{forloop.counter}}" />&nbsp;</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-success">שליחת שאלות</button>
+        </form>
+
+    </div>
+    <br>
+    
+</div>
+
+
+
+
+{% endblock %}

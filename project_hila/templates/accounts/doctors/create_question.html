@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success">
+            <li class=" {{ message.tags }}">{{ message|safe }}</li>
+        </div>
+        {% endif %}
+        {% if message.tags == 'warning' %}
+        <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<br>
+
+<div class="container-fluid">
+
+    <div class="form-group w-50">
+        <form action="{% url 'create_question' %}" method="POST" style="text-align: right">
+
+            {% if form.errors %}
+            {% for field in form %}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
+           
+            {% csrf_token %}
+
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label">סוג שאלה</label>
+                {% render_field form.question_type class="form-control" %}
+            </div>
+
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label">שאלה</label>
+                {% render_field form.question class="form-control" %}
+            </div>
+
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label">תשובות</label>
+                {% render_field form.answers class="form-control" %}
+                <small><label class="label">יש להפריד תשובות בפסיק ורווח</label></small>
+            </div>
+
+            <div class="col-md-12 text-center ">
+                <button class="btn btn-secondary">הוספה</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

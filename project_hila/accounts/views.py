@@ -5,7 +5,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
 from django.contrib.auth.decorators import login_required
-from .forms import Question
 from project_hila.views import home
 from operator import itemgetter
 from django.views.decorators.cache import cache_control
@@ -76,47 +75,6 @@ def delete_patient_view(request, key):
         return search_patients_view(request)
 
     return home(request)
-
-# TODO implement inside a dialog
-@login_required(login_url="login")
-def patient_questionnaires_view(request, key):
-    form = Question()
-    return render(
-        request,
-        'accounts/patients/patient_questionnaires.html',
-        {'question_form': form})
-
-# TODO characterize questionnaires
-@login_required(login_url="login")
-@cache_control(no_cache=False, must_revalidate=True, no_store=True)
-def create_questionnaire_view(request, key):
-    if request.method == "POST":
-        answers = {}
-        form = Question(request.POST)
-
-        if form.is_valid():
-
-            title = form.cleaned_data['title']
-            choice_type = form.cleaned_data['choice_type']
-            if choice_type != 'OpenQuestion':
-
-                number_of_answers = int(request.POST.get("number_of_answers", 0)) + 1
-                for i in range(number_of_answers):
-                    answers[str(i)] = request.POST.get(str(i))
-                
-            if choice_type == 'SingleChoice' or choice_type == 'MultipleChoice':
-                type = 'MultipleChoiceQuestion'
-            else:
-                type = 'OpenQuestion'
-            
-            data = {
-                'title': title,
-                'choiceType': choice_type,
-                'choices': answers,
-                'type': type
-            }
-
-            return patient_view(request, key)
 
 # TODO implement 'update patient' button
 @login_required(login_url="login")

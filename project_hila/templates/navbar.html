@@ -29,6 +29,10 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'questions_repository' %}">מאגר שאלות</a>
+                    </li>
+
+                    <li class="nav-item">
                         <form class="logout-link" action="{% url 'logout' %}" method="POST">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger">יציאה</button>
