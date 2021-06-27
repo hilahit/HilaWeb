@@ -3,14 +3,14 @@
 {% load widget_tweaks %}
 {% block content %}
 
-
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
     <div class="col-md-12 text-center ">
+        <br>
         <form action="{% url 'create_question' %}" method="GET">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">הוספת שאלה</button>
+            {% csrf_token %}       
+            <a href="{% url 'create_questionnaire' %}" class='btn btn-outline-success'>שליחת שאלון</a>
+            <button type="submit" class="btn btn-outline-success">הוספת שאלה</button>
         </form>
-        
     </div>
     <br>
     <table class="table" style="text-align: right" dir="rtl">
@@ -35,8 +35,5 @@
         </tbody>
     </table>
 </div>
-
-
-
 
 {% endblock %}

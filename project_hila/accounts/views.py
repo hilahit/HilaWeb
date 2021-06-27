@@ -220,10 +220,9 @@ def add_patients(response):
                 'phone_number': phone_number,
             }
 
-            db.child("Patients").child(new_patient.uid).set(
-                {'name': first_name + " " + last_name})
-            db.child("Patients").child(new_patient.uid).child(
-                "patient_details").set(patient_details)
+            db.child("Patients").child(new_patient.uid).set({'name': first_name + " " + last_name})
+            
+            db.child("Patients").child(new_patient.uid).child("patient_details").set(patient_details)
 
             messages.success(response, "Successfully created " +
                              first_name + " " + last_name)
@@ -232,10 +231,7 @@ def add_patients(response):
             messages.warning(response, "bad credentails")
 
         patient_form = PatientRegisterForm()
-        return render(
-            response, 
-            "accounts/patients/add_patients.html", 
-            {'form': patient_form})
+        return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
     else:
         patient_form = PatientRegisterForm()

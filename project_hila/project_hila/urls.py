@@ -24,5 +24,6 @@ urlpatterns = [
     path('questions/', include('questions.urls')),
     path('', home, name="home"),
     path('login/', login_view, name="login"),
-    path('logout/', logout_view, name="logout")
+    path('logout/', logout_view, name="logout"),
+    path('chat/', include('chat.urls')),
 ]

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_extensions',
     'questions',
+    'chat'
     
 ]
 

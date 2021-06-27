@@ -35,13 +35,16 @@
 
     <br>
     <div class="row">
-        <div class="col">
-            <div class="card card-body w-25">
-                <a href="{% url 'create_questionnaire' patient.key %}" class='btn btn-lg'>שליחת שאלון</a>
+        <div class="col-md">
+            <div class="card card-body">
+                <a href="{% url 'create_questionnaire' %}" class='btn btn-outline-primary'>שליחת שאלון</a>
             </div>
         </div>
-
-
+        <div class="col-md">
+            <div class="card card-body">
+                <a href="{% url 'chat_view' patient.key %}" class='btn btn-outline-primary'>יצירת קשר</a>
+            </div>
+        </div>
     </div>
     <br>
 
@@ -54,7 +57,6 @@
                         <th>תאריך</th>
                         <th>סטאטוס</th>
                     </tr>
-
                 </table>
             </div>
         </div>

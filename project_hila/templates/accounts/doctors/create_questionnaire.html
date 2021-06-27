@@ -5,8 +5,26 @@
 
 
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
+
+    <div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class="alert alert-success">
+                <li class=" {{ message.tags }}">{{ message|safe }}</li>
+            </div>
+            {% endif %}
+            {% if message.tags == 'warning' %}
+            <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
     <div class="col-md-12 text-center ">
-        <form action="{% url 'send_questionnaire' %}" method="POST">
+        <form action="{% url 'create_questionnaire' %}" method="POST">
             {% csrf_token %}
             <table class="table" style="text-align: right" dir="rtl">
                 <thead>
