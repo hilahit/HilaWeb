@@ -1,0 +1,57 @@
+html {
+    font-size: 16px;
+}
+
+.chat-container {
+    height: 20rem;
+    width: 100%;
+}
+
+main {
+    padding: 0rem 8rem;
+
+}
+
+@media screen and (max-width: 1024px) {
+    main {
+        padding: 0rem;
+    }
+}
+
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color:gray;
+
+}
+
+.accordion-button {
+    font-size: 1.4rem;
+    border: 0.5px grey solid;
+}
+
+.chat-input-field input {
+    width: 80%;
+    display: inline;
+}
+
+.chat-input-field button {
+    width: 15%;
+    display: inline;
+}
+
+.chat-input-field {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-messages {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+}

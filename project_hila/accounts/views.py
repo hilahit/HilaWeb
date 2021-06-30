@@ -9,57 +9,6 @@ from project_hila.views import home
 from operator import itemgetter
 from django.views.decorators.cache import cache_control
 
-# TODO test email functionality
-# TODO show messages
-@login_required(login_url="login")
-@cache_control(no_cache=False, must_revalidate=True, no_store=True)
-def register_doctor_view(request):
-    """ Function to register a new user.
-        email is used to send the credentials """
-    if request.method == 'POST':
-   
-        # print(email)
-
-        form = DoctorRegisterForm(request.POST)
-
-        if form.is_valid():
-
-            # email = request.POST.get('email')
-            # user_name = request.POST.get('user_name')
-            
-            user = form.save()
-            user.username = user.get_full_name()
-            user = form.save()
-            print("############################")
-            print(user.username)
-            print("############################")
-
-           
-            # send_mail(
-            #     'Your Hila account', # subject
-            #     'Your username and password:', # message
-            #     'hila.project.hit@gmail.com', # from email
-            #     ['btlltk13@gmail.com'], # to email
-            # )
-
-            messages.success(
-                request, 
-                "Succesfully created ")
-
-            return render(
-                request,
-                'accounts/doctors/register_doctor.html',
-                {'form': form})
-
-    else:
-        form = DoctorRegisterForm
-
-    return render(
-        request,
-        'accounts/doctors/register_doctor.html',
-        {'form': form})
-
-
 # TODO show user deleted successfully
 # TODO need to handle on back pressed
 # TODO need to show deletion error
@@ -239,3 +188,52 @@ def add_patients(response):
             response, 
             "accounts/patients/add_patients.html", 
             {'form': patient_form})
+
+
+# TODO test email functionality
+# TODO show messages
+@login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
+def register_doctor_view(request):
+    """ Function to register a new user.
+        email is used to send the credentials """
+    if request.method == 'POST':
+
+        form = DoctorRegisterForm(request.POST)
+
+        if form.is_valid():
+
+            user = form.save()
+            user.username = user.get_full_name()
+            user = form.save()
+            print("############################")
+            print(user.username)
+            print("############################")
+
+       
+
+            email = request.POST.get('email')
+
+            new_doctor = {
+                'name': user.username,
+                'id' : user.id
+            }
+
+            db.child("Doctors").child(user.id).set(new_doctor)
+
+            messages.success(
+                request,
+                "Succesfully created ")
+
+            return render(
+                request,
+                'accounts/doctors/register_doctor.html',
+                {'form': form})
+
+    else:
+        form = DoctorRegisterForm
+
+    return render(
+        request,
+        'accounts/doctors/register_doctor.html',
+        {'form': form})

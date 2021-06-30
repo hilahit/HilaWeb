@@ -10,8 +10,9 @@
                 <h5>מטופל/ת: {{ patient.name }}</h5>
                 <hr>
                 <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
+                <a class='btn btn-outline-primary  btn-sm btn-block'  href="{% url 'create_questionnaire' %}" >שליחת שאלון</a>
+                <br>
                 <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'delete_patient' patient.key %}">מחיקת משתמש</a>
-
             </div>
         </div>
 
@@ -34,20 +35,32 @@
     </div>
 
     <br>
-    <div class="row">
-        <div class="col-md">
-            <div class="card card-body">
-                <a href="{% url 'create_questionnaire' %}" class='btn btn-outline-primary'>שליחת שאלון</a>
-            </div>
-        </div>
-        <div class="col-md">
-            <div class="card card-body">
-                <a href="{% url 'chat_view' patient.key %}" class='btn btn-outline-primary'>יצירת קשר</a>
+    <br>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed"  type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    צ'אט עם {{ patient.name }} &nbsp; &nbsp;
+                </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <div class="chat-container overflow-scroll">
+                        <div class = "chat-messages">
+                        </div>
+                    </div>
+                    <br>
+                    <div class = "chat-input-field">
+                        <input type="text" class="form-control" id="msg_input" placeholder="כתוב הודעה">
+                        <button id="send_btn" class="btn btn-outline-success" onclick="sendMsg('{{ patient.key }}')" href="#">שליחה</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <br>
-
     <div class="row">
         <div class="col-md">
             <div class="card card-body">
@@ -62,4 +75,74 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    // send message on Enter click
+    var input = document.getElementById("msg_input");
+    input.addEventListener("keyup", function(event){
+        if (event.keyCode == 13) { // number 13 is the "Enter" key on the keyboard
+           event.preventDefault();
+           document.getElementById("send_btn").click(); // activate "send_btn"
+        }
+    });
+
+    // wait for page to load and start listening to chat messages.
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+        $.ajax({
+            headers: { 'X-CSRFToken': token },
+            type: 'POST',
+            url: '{% url "listen_to_chat" %}',
+            data: {
+                'patientKey': '{{ patient.key }}'
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+            }
+        });
+    });
+
+    function sendMsg(patientKey) {
+
+        const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+        msg = document.getElementById("msg_input").value.trim();
+
+        if (msg == "") {
+            console.log("empty message");
+            window.alert("cannot send an empty message");
+        }
+        else {
+            $.ajax({
+                headers: { 'X-CSRFToken': token },
+                type: 'POST',
+                url: '{% url "send_message" %}',
+                data: {
+                    'message': msg,
+                    'patientKey': patientKey
+                },
+                dataType: 'json',
+                success: function (data) {
+                    updateChat(data)
+                }
+            });
+        }
+
+        document.getElementById("msg_input").value = "";
+
+    }
+
+    //TODO show messages in chat window.
+    function updateChat(data) {
+        chatContainer = document.getElementById("chat-messages");
+        var tag = document.createElement("p");
+        tag.innerHTML = data.senderName + ": " + data.message;
+        chatContainer.appendChild(tag);
+    }
+
+</script>
 {% endblock %}

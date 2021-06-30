@@ -1,13 +1,14 @@
-<!DOCTYPE html>
 {% extends 'main.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
+{% load crispy_forms_tags %}
 <html dir="rtl" lang="">
 
 <head>
+ 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 </head>
 
 <body>
@@ -15,32 +16,78 @@
     <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
         <h1>CHAT BOARD</h1><br><br>
         
+        <!-- CUSTOME -->
         
-        <div id="chat-container h-50"></div>
+        <!-- <div id="chat-container">
+            <ul id="chat-messages">
+
+            </ul>
+        </div> -->
         <div class="row">
             <input class="form-control w-50" id="msg_input" name="msg_input">
-            <a id="send_btn" href="#" class='btn btn-success' onclick="sendMsg()">send</a>
+            <button id="send_btn" href="#" clbuttonss='btn btn-success' onclick="sendMsg('{{ patientKey }}')">send</button>
         </div>
     </div>
 
     <script>
-        
-        function sendMsg(){
 
-            var token = $('input[name="csrfmiddlewaretoken"]').attr('value')
+        document.addEventListener("DOMContentLoaded", function(){
 
-            msg = document.getElementById("msg_input").value
-            console.log("sending message: " + msg)
+            const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
             $.ajax({
-            headers: { 'X-CSRFToken': token },
-            type: 'POST',    
-            url: '{% url "send_message" %}',
-            data: { 'message': msg },
-            dataType: 'json',
-            success: function (data) {
-                console.log(data.message)
-            }
+                headers: { 'X-CSRFToken': token },
+                type: 'POST',
+                url: '{% url "listen_to_chat" %}',
+                data: {
+                    'patientKey': '{{ patientKey }}'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                }
+            });
         });
+        
+        function sendMsg(patientKey){
+
+            const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+            msg = document.getElementById("msg_input").value.trim();
+        
+            if (msg == ""){
+                console.log("empty message");
+                window.alert("cannot send an empty message");
+            }
+            else{
+                $.ajax({
+                    headers: { 'X-CSRFToken': token },
+                    type: 'POST',
+                    url: '{% url "send_message" %}',
+                    data: {
+                        'message': msg,
+                        'patientKey': patientKey
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        updateChat(data)
+                    }
+                });
+            } 
+
+            document.getElementById("msg_input").value = "";
+
+        }
+
+        function updateChat(data){
+            console.log(data)
+            chatContainer = document.getElementById("chat-messages");
+            var html = "";
+            html += "<li id='message-" + data.timestamp + "'>";
+            html += data.senderName + ": " + data.message;
+            html += "</li>";
+
+            chatContainer.innerHTML += html;
         }
 
     </script>
