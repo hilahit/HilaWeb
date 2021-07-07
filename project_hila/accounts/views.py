@@ -1,13 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from .forms import PatientRegisterForm, DoctorRegisterForm
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
 from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
 from django.contrib.auth.decorators import login_required
 from project_hila.views import home
 from operator import itemgetter
 from django.views.decorators.cache import cache_control
+from chat.views import listen_to_chat
 
 # TODO show user deleted successfully
 # TODO need to handle on back pressed
@@ -31,6 +30,7 @@ def delete_patient_view(request, key):
 def patient_view(request, key):
 
     patient = db.child("Patients").order_by_key().equal_to(key).get()
+    doctor_id = request.user.id
 
     if not patient.val(): # patient.val() is of type list
         messages.warning(request, "error, no such user")
@@ -40,16 +40,16 @@ def patient_view(request, key):
     details = patient_obj[list(patient_obj.keys())[0]]
     patient_key = list(patient_obj.keys())[0]
 
-    patient_to_show = {
+    context = {
         "name": details['name'],
         "email": details['patient_details']['email'],
-        "key": patient_key
+        "key": patient_key,
+        "doctor_id" : doctor_id
     }
 
-    return render(
-        request, 
-        'accounts/patients/patient.html', 
-        {'patient': patient_to_show})
+    listen_to_chat(request, key)
+
+    return render(request, 'accounts/patients/patient.html', {'context': context})
 
 # TODO configure view according to finalized database
 @login_required(login_url="login")

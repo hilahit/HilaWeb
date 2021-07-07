@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block content %}
@@ -6,10 +7,11 @@
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
     <div class="col-md-12 text-center ">
         <br>
-    
+        <form action="{% url 'create_question' %}" method="POST">
+            {% csrf_token %}
             <a href="{% url 'create_questionnaire' %}" class='btn btn-outline-success'>שליחת שאלון</a>
-            <a href="{% url 'create_question' %}" type="submit" class="btn btn-outline-success">הוספת שאלה</a>
-     
+            <button type="submit" class="btn btn-outline-success">יצירת שאלון</button>
+        </form>
     </div>
     <br>
     <table class="table" style="text-align: right" dir="rtl">

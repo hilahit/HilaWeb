@@ -17,7 +17,8 @@ def create_question_view(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            form.save()
+            # form.save()
+            print("saving question")
 
         return redirect('accounts/doctors/questions_repository.html')
 
@@ -37,16 +38,32 @@ def questions_repository_view(request):
     return render(request, 'accounts/doctors/questions_repository.html', context)
 
 
+# @login_required(login_url="login")
+# @cache_control(no_cache=False, must_revalidate=True, no_store=True)
+# def create_questionnaire(request):
+
+#     if request.method == 'POST':
+#         return send_questionnaire(request)
+#     else:
+#         questions = Question.objects.all().values()
+#         context = {'questions' : questions}
+#         return render(request, 'accounts/doctors/create_questionnaire.html', context)
+
+
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def create_questionnaire(request):
 
     if request.method == 'POST':
-        return send_questionnaire(request)
+        send_questionnaire(request)
     else:
         questions = Question.objects.all().values()
-        context = {'questions' : questions}
+        context = {'questions': questions}
         return render(request, 'accounts/doctors/create_questionnaire.html', context)
+
+
+
+
 
 
 def get_question_by_pk(primary_key):
