@@ -23,7 +23,7 @@ class ChatConsumer(WebsocketConsumer):
                     "senderName": value["senderName"],
                     "timestamp": value["timestamp"]
                 }
-            self.send(json.dumps(json_to_send))
+            self.send(json.dumps(json_to_send)) # This throws an error
         else:
-            self.send(text_data)
+            self.send(text_data) # This is working
           
