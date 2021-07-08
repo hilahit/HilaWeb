@@ -1,10 +1,11 @@
 import json
-from chat.consumers import ChatConsumer
+from .consumers import ChatConsumer
 from django.shortcuts import render
 from accounts.firebase_repo import db
 from django.http import JsonResponse
 import calendar
 import time
+
 
 # Create your views here.
 def chat_view(request, key):
@@ -32,6 +33,22 @@ def stream_handler(event):
 
         cc = ChatConsumer()
         cc.receive(event["data"])
+
+
+        # json_to_send = {}
+
+        # for key, value in data_dict.items():
+        #     # key is the timestamp, so that means it fetches all of the messages
+        #     if key.isdigit():
+        #         json_to_send[value["timestamp"]] = {
+        #             "message": value["message"],
+        #             "senderId": value["senderId"],
+        #             "senderName": value["senderName"],
+        #             "timestamp": value["timestamp"]
+        #         }
+
+        # cc.send(json.dumps(json_to_send))
+
 
         # else:
         #     if key == 'message': ### fetching latest message
