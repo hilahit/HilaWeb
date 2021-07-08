@@ -89,19 +89,24 @@
     );
 
     chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        recieved_msg = data.message;
-        console.log("message received: " + recieved_msg);
-        const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
 
-        chatContainer = document.getElementById("chat-messages-window");
+        console.log("progress okease thank you")
+        console.log(e.data)
+        const data = JSON.parse(e.data);
+        const recieved_msg = data.message
+        
+        
+        const chatContainer = document.getElementById("chat-messages-window");
         let message = document.createElement("p");
         message.innerHTML = recieved_msg;
         message.classList.add('doctor-message');
-        message.style.color = "white";
+        message.style.color = "black";
         message.style.fontSize = "1.3rem";
+        
         chatContainer.appendChild(message);
-
+        
+        const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+        
         $.ajax({
             headers: { 'X-CSRFToken': token },
             type: 'POST',
@@ -111,8 +116,8 @@
                 'patientKey': '{{ context.key }}'
             },
             dataType: 'json',
-            success: function (data) {
-                console.log("got message");
+            success: function (payload) {
+                console.log("got message" + payload.message);
             }
         });
     };

@@ -2,32 +2,3 @@
     text-align: center;
 }
 
-.doctor-message {
-    display: flex;
-    background: #5b5e6c;
-    padding: 10px 10px 0 10px;
-    border-radius: 6px 0px 0px 6px;
-    max-width: 80%;
-    width: auto;
-    float: right;
-    box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
-}
-
-.patient-message {
-    display: flex;
-    background: #5b5e6c;
-    padding: 10px 10px 0 10px;
-    border-radius: 0 6px 6px 0;
-    max-width: 80%;
-    width: auto;
-    float: right;
-    box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
-}
-
-.msg-container {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    margin: 0 0 10px 0;
-    padding: 0;
-}

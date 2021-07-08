@@ -1,4 +1,5 @@
 import json
+from chat.consumers import ChatConsumer
 from django.shortcuts import render
 from accounts.firebase_repo import db
 from django.http import JsonResponse
@@ -23,26 +24,20 @@ def listen_to_chat(request, patient_key):
     chat_id = f"{patient_key}_{doctor_id}"
     db.child("Chats").child(chat_id).stream(stream_handler)  
 
+
 def stream_handler(event):
     data_dict = event["data"]
+
     if data_dict is not None:
-        
-        for key, value in data_dict.items():  
-            if key.isdigit(): ### key is the timestamp, so that means it fetches all of the messages
-                print(value["message"])
 
-            else:
-                if key == 'message': ### fetching latest message
-                    print(value)
+        cc = ChatConsumer()
+        cc.receive(event["data"])
 
-        
-            # "cvcYQFcqXdNtpw9TnjeoiC5TpcH3_1"
-            # ChatConsumer.receive(self= ChatConsumer.self, text_data= value['message'])
-            # channel_layer = get_channel_layer()
-            # channel_layer.send(
-            #     'cvcYQFcqXdNtpw9TnjeoiC5TpcH3_1',
-            #     {"text": value['message']})
-        
+        # else:
+        #     if key == 'message': ### fetching latest message
+        #         print(value)
+        #         cc = ChatConsumer()
+        #         cc.receive(text_data = value)
 
 
 def send_message(request):
