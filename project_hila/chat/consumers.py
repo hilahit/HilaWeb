@@ -45,7 +45,7 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         """
         When "self.send()" is called from inside the backend
-        via the "stream_handler" function, the 'self' paremeter 
+        via the "stream_handler" method, the 'self' paremeter 
         DOES NOT have a 'base_send' method. A 'no attribute' exception
         is raised because of that.
 
