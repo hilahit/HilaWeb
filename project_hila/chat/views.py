@@ -1,11 +1,13 @@
 import json
-from .consumers import ChatConsumer
+from .consumers import AsyncChatConsumer
 from django.shortcuts import render
 from accounts.firebase_repo import db
 from django.http import JsonResponse
 import calendar
 import time
-
+from project_hila.bcolors import bcolors
+import asyncio
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 
 # Create your views here.
 def chat_view(request, key):
@@ -20,42 +22,18 @@ def chat_view(request, key):
 
 
 def listen_to_chat(request, patient_key):
-    print("getting ready to listen")
+    print(f"getting ready to listen")
     doctor_id = request.user.id
     chat_id = f"{patient_key}_{doctor_id}"
     db.child("Chats").child(chat_id).stream(stream_handler)  
 
 
 def stream_handler(event):
-    data_dict = event["data"]
 
-    if data_dict is not None:
+    acc = AsyncChatConsumer()
 
-        cc = ChatConsumer()
-        cc.receive(event["data"])
-
-
-        # json_to_send = {}
-
-        # for key, value in data_dict.items():
-        #     # key is the timestamp, so that means it fetches all of the messages
-        #     if key.isdigit():
-        #         json_to_send[value["timestamp"]] = {
-        #             "message": value["message"],
-        #             "senderId": value["senderId"],
-        #             "senderName": value["senderName"],
-        #             "timestamp": value["timestamp"]
-        #         }
-
-        # cc.send(json.dumps(json_to_send))
-
-
-        # else:
-        #     if key == 'message': ### fetching latest message
-        #         print(value)
-        #         cc = ChatConsumer()
-        #         cc.receive(text_data = value)
-
+    asyncio.run(acc.receive(event['data']))
+    # cc = ChatConsumer()
 
 def send_message(request):
 

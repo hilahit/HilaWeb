@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project_hila.wsgi.application'
+# WSGI_APPLICATION = 'project_hila.wsgi.application'
 
 
 # Database

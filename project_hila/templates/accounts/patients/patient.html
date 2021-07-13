@@ -79,18 +79,20 @@
 
 <script>
 
+
+
     const roomName = "{{ context.key }}" + "_" + "{{ context.doctor_id }}";
-    const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/chat/'
-        + roomName
-        + '/'
-    );
+
+    const loc = window.location;
+    let wsStart = 'ws://'
+    if (loc.protocol == 'https:'){
+        wsStart = 'wss://'
+    }
+
+    const chatSocket = new WebSocket(wsStart+ loc.host+ '/ws/chat/'+ roomName+ '/');
 
     chatSocket.onmessage = function (e) {
 
-        console.log("progress ok thank you")
         console.log(e.data)
         const data = JSON.parse(e.data);
         const recieved_msg = data.message
@@ -145,25 +147,25 @@
         else {
 
             document.getElementById("msg_input").value = "";
-            console.log("sending message: " + msg);
-            chatSocket.send(JSON.stringify({
-                'message': msg
-            }));
+            // chatSocket.send(JSON.stringify({
+            //     'message': msg
+            // }));
+            
             const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
 
-            // $.ajax({
-            //     headers: { 'X-CSRFToken': token },
-            //     type: 'POST',
-            //     url: '{% url "send_message" %}',
-            //     data: {
-            //         'message': msg,
-            //         'patientKey': '{{ context.key }}'
-            //     },
-            //     dataType: 'json',
-            //     success: function (payload) {
-            //         console.log("got message: " + payload.message);
-            //     }
-            // });
+            $.ajax({
+                headers: { 'X-CSRFToken': token },
+                type: 'POST',
+                url: '{% url "send_message" %}',
+                data: {
+                    'message': msg,
+                    'patientKey': '{{ context.key }}'
+                },
+                dataType: 'json',
+                success: function (payload) {
+                    console.log("got message: " + payload.message);
+                }
+            });
         }
     }
 </script>
