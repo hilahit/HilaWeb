@@ -23,6 +23,7 @@ def chat_view(request, key):
 
 def listen_to_chat(request, patient_key):
     print(f"getting ready to listen")
+    print("###############", request.user)
     doctor_id = request.user.id
     chat_id = f"{patient_key}_{doctor_id}"
     db.child("Chats").child(chat_id).stream(stream_handler)  

@@ -57,7 +57,9 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
         """
         json_to_send = {}
 
+
         print(f"{bcolors.OKGREEN}consumer received a {type(text_data)} type message{bcolors.ENDC}")
+        print(text_data)
 
         if 'message' not in text_data:
             print(f"{bcolors.OKCYAN}received all messages from firebase{bcolors.ENDC}")
@@ -65,5 +67,5 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
             # await self.send(text_data)
         else:
             print(f"{bcolors.OKCYAN}received a message from firebase{bcolors.ENDC}")
-
-            # await self.send(text_data)
+            print(self.room_name)
+            await self.send(text_data)

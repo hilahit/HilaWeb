@@ -76,98 +76,12 @@
         </div>
     </div>
 </div>
-
+<script src="{% static 'js/chat.js' %}"></script>
 <script>
-
-
-
     const roomName = "{{ context.key }}" + "_" + "{{ context.doctor_id }}";
 
-    const loc = window.location;
-    let wsStart = 'ws://'
-    if (loc.protocol == 'https:'){
-        wsStart = 'wss://'
-    }
-
-    const chatSocket = new WebSocket(wsStart+ loc.host+ '/ws/chat/'+ roomName+ '/');
-
-    chatSocket.onmessage = function (e) {
-
-        console.log(e.data)
-        const data = JSON.parse(e.data);
-        const recieved_msg = data.message
-        
-        const chatContainer = document.getElementById("chat-messages-window");
-        let message = document.createElement("p");
-        message.innerHTML = recieved_msg;
-        message.classList.add('doctor-message');
-        message.style.color = "black";
-        message.style.fontSize = "1.3rem";
-        
-        chatContainer.appendChild(message);
-        
-        // const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
-        
-        // $.ajax({
-        //     headers: { 'X-CSRFToken': token },
-        //     type: 'POST',
-        //     url: '{% url "send_message" %}',
-        //     data: {
-        //         'message': recieved_msg,
-        //         'patientKey': '{{ context.key }}'
-        //     },
-        //     dataType: 'json',
-        //     success: function (payload) {
-        //         console.log("got message: " + payload.message);
-        //     }
-        // });
-    };
-
-    chatSocket.onclose = function (e) {
-        console.error('Chat socket closed unexpectedly');
-    };
-
-    // send message on Enter click
-    const input = document.getElementById("msg_input");
-    input.addEventListener("keyup", function (event) {
-        if (event.keyCode == 13) { // number 13 is the "Enter" key on the keyboard
-            event.preventDefault();
-            document.getElementById("send_btn").click(); // activate "send_btn"
-        }
+     window.addEventListener('DOMContentLoaded', (event) => {
+            initializeSocket("{{ context.key }}", "{% url 'send_message' %}");
     });
-
-    function sendMsg(patientKey) {
-        const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
-        const msg = document.getElementById("msg_input").value.trim();
-
-        if (msg == "") {
-            console.log("empty message");
-            window.alert("cannot send an empty message");
-        }
-        else {
-
-            document.getElementById("msg_input").value = "";
-            // chatSocket.send(JSON.stringify({
-            //     'message': msg
-            // }));
-            
-            const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
-
-            $.ajax({
-                headers: { 'X-CSRFToken': token },
-                type: 'POST',
-                url: '{% url "send_message" %}',
-                data: {
-                    'message': msg,
-                    'patientKey': '{{ context.key }}'
-                },
-                dataType: 'json',
-                success: function (payload) {
-                    console.log("got message: " + payload.message);
-                }
-            });
-        }
-    }
 </script>
-
 {% endblock %}
