@@ -44,7 +44,8 @@ def patient_view(request, key):
         "name": details['name'],
         "email": details['patient_details']['email'],
         "key": patient_key,
-        "doctor_id" : doctor_id
+        "doctor_id" : doctor_id,
+        "phone_number": details['patient_details']['phone_number']
     }
 
     listen_to_chat(request, key)
@@ -207,7 +208,7 @@ def register_doctor_view(request):
             user.username = user.get_full_name()
             user = form.save()
             print("############################")
-            print(user.username)
+            print(f"Created new user: ${user.username}")
             print("############################")
 
        

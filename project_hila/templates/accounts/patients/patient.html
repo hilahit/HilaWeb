@@ -3,14 +3,14 @@
 
 {% block content %}
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
-
+    
     <div class="row">
         <div class="col-md">
             <div class="card card-body h-100">
                 <h5>מטופל/ת: {{ context.name }}</h5>
                 <hr>
                 <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
-                <a class='btn btn-outline-primary  btn-sm btn-block'  href="{% url 'create_questionnaire' %}" >שליחת שאלון</a>
+                <a class="btn btn-outline-primary  btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
                 <br>
                 <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'delete_patient' context.key %}">מחיקת משתמש</a>
             </div>
@@ -20,8 +20,19 @@
             <div class="card card-body h-100">
                 <h5>פרטי התקשרות</h5>
                 <hr>
-                <p>אימייל: {{ context.email }}</p>
-                <p>טלפון: </p>
+                
+                <p>אימייל: <span id = patient_email>{{ context.email }}&nbsp;&nbsp;</span>
+                    <a target="_self" href="#">
+                        <span title="copy email"><img id="copy_img_email" src="{% static 'images/copy.png' %} " width="6%" height="10%" class="img-fluid"></span>
+                    </a>
+                </p>
+               
+                <p>
+                    טלפון: <span id = patient_phone>{{ context.phone_number }}&nbsp;&nbsp;</span>
+                    <a target="_self" href="#">
+                        <span title="copy phone number"><img id="copy_img_phone" src="{% static 'images/copy.png' %} " width="6%" height="6%" class="img-fluid"></span>
+                    </a>
+                </p>
             </div>
         </div>
 
@@ -77,11 +88,16 @@
     </div>
 </div>
 <script src="{% static 'js/chat.js' %}"></script>
+<script src="{% static 'js/patient.js' %}"></script>
 <script>
-    const roomName = "{{ context.key }}" + "_" + "{{ context.doctor_id }}";
 
      window.addEventListener('DOMContentLoaded', (event) => {
-            initializeSocket("{{ context.key }}", "{% url 'send_message' %}");
+        initializeSocket(
+            "{{ context.key }}", 
+            "{{ context.doctor_id }}",  
+            "{% url 'send_message' %}"
+        );
     });
+    
 </script>
 {% endblock %}

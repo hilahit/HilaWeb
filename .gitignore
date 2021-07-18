@@ -2,3 +2,4 @@ env
 db.sqlite3
 playground-private-key.json
 manage.py
+.env

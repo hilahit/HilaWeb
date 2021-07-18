@@ -1,11 +1,13 @@
+from accounts.views import patient_view
 from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from .forms import QuestionForm
-from .models import Question
 from django.contrib import messages
 import pdb
+from .models import Questionnaire, Question
+from accounts.firebase_repo import db
 
 
 @login_required(login_url="login")
@@ -29,14 +31,38 @@ def create_question_view(request):
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
-def questions_repository_view(request):
+def questions_repository_view(request, key):
+    
+    context = {}
+    if request.method == 'POST':
+        print(key)
+        return patient_view(request, key)
+    else:
 
-    questions = Question.objects.all().values()
-    print(questions)
-    context = {'questions' : questions}
+        patient = db.child("Patients").order_by_key().equal_to(key).get()
+        patient_obj = patient.val()
+        questionnaires = []
 
-    return render(request, 'accounts/doctors/questions_repository.html', context)
+        if patient_obj:
 
+            details = patient_obj[list(patient_obj.keys())[0]]
+            context['patient_name'] = details['name']
+            context['patient_key'] = key
+
+        db_questions = Questionnaire.objects.all()
+        
+        for q_set in db_questions:
+            db_questions = Question.objects.filter(questionnaire = q_set)
+
+            questionnaires.append({
+                'questions': db_questions,
+                'title' : q_set.title,
+            })
+
+        context['questionnaires'] = questionnaires
+        context['count'] = len(questionnaires)
+        
+        return render(request, 'accounts/doctors/questions_repository.html', context)
 
 # @login_required(login_url="login")
 # @cache_control(no_cache=False, must_revalidate=True, no_store=True)
