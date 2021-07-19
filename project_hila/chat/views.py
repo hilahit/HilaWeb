@@ -9,8 +9,14 @@ import calendar
 import time
 from project_hila.bcolors import bcolors
 import asyncio
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
+
+
+channel_layer = get_channel_layer()
 # Create your views here.
+
 
 
 def chat_view(request, key):
@@ -26,7 +32,7 @@ def chat_view(request, key):
 
 class MyTracker(object):
     my_stuff: dict = None
-    my_consumer = None
+    user_id = None
 
     @property
     def is_ready(self) -> bool:
@@ -37,46 +43,44 @@ class MyTracker(object):
         return self.my_stuff is not None
 
     def stream_handler(self, message):
-        print("Got some update from the Firebase")
         # We only care if something changed
         if message["event"] in ("put", "patch"):
             print("Something changed")
             if message["path"] == "/":
                 print("Seems like a fresh data or everything have changed, just grab it!")
                 self.my_stuff = message["data"]
-                print(dir(self.my_consumer))
-                asyncio.run(self.my_consumer.websocket_connect())
-                asyncio.run(self.my_consumer.websocket_receive(self.my_stuff))
+                async_to_sync(channel_layer.group_send)(
+                    'chat_RSHz7RZI5pgkXNbpXgQzgdpF2OX2_1',
+                    {
+                        'type': 'chat_message',
+                        'message': self.my_stuff
+                    }
+                )
+            else:
+                async_to_sync(channel_layer.group_send)(
+                    'chat_RSHz7RZI5pgkXNbpXgQzgdpF2OX2_1',
+                    {
+                        'type': 'chat_message',
+                        'message': message['data']['message']
+                    }
+                )
                 
 
-            else:
-                self.my_stuff = message["data"]
-                asyncio.run(self.my_consumer.websocket_receive(self.my_stuff))
+  
 
-                # print(self.my_stuff)
-
-    def __init__(self) -> None:
+    def __init__(self, user) -> None:
         """Start tracking my stuff changes in Firebase"""
         super().__init__()
-        self.my_consumer = AsyncChatConsumer()
+        self.user = user
 
 
 def listen_to_chat(request, patient_key):
-    print(f"getting ready to listen")
-    print("###############", request.user)
     doctor_id = request.user.id
     chat_id = f"{patient_key}_{doctor_id}"
 
-    tracker = MyTracker()
+    tracker = MyTracker(request.user.id)
     db.child("Chats").child(chat_id).stream(tracker.stream_handler)
 
-
-# def stream_handler(event):
-
-#     acc = AsyncChatConsumer()
-#     print(type(event))
-#     asyncio.run(acc.receive(event['data']))
-#     # cc = ChatConsumer()
 
 def send_message(request):
 
@@ -88,8 +92,12 @@ def send_message(request):
     # print("PATIENT_KEY: ", patient_key)
     # save to database
 
-    gmt = time.gmtime()
-    timestamp = calendar.timegm(gmt)
+
+    # gmt = time.gmtime()
+    # timestamp = calendar.timegm(gmt)
+
+    timestamp = current_milli_time()
+    print("### sending_message function ###", timestamp)
 
     payload = {
         'message': message,
@@ -98,8 +106,10 @@ def send_message(request):
         'senderName': request.user.username,
         'isDoctor': True
     }
-
     db.child("Chats").child(f"{patient_key}_{doctor_id}").child(
         timestamp).set(payload)
 
     return JsonResponse(payload)
+
+def current_milli_time():
+    return int(round(time.time() * 1000))
