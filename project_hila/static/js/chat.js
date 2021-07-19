@@ -38,20 +38,20 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
 
         const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
 
-        // request to post message to Firebase
-        $.ajax({
-            headers: { 'X-CSRFToken': token },
-            type: 'POST',
-            url: sendMessagePath,
-            data: {
-                'message': recieved_msg,
-                'patientKey': patientID
-            },
-            dataType: 'json',
-            success: function (payload) {
-                console.log("got message: " + payload.message);
-            }
-        });
+        // // request to post message to Firebase
+        // $.ajax({
+        //     headers: { 'X-CSRFToken': token },
+        //     type: 'POST',
+        //     url: sendMessagePath,
+        //     data: {
+        //         'message': recieved_msg,
+        //         'patientKey': patientID
+        //     },
+        //     dataType: 'json',
+        //     success: function (payload) {
+        //         console.log("got message: " + payload.message);
+        //     }
+        // });
     };
 
     chatSocket.onclose = function (e) {
@@ -69,22 +69,38 @@ input.addEventListener("keyup", function (event) {
 });
 
 async function sendMsg(patientKey, path) {
+    console.log(path);
     const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
     const msg = document.getElementById("msg_input").value.trim();
-
     if (msg == "") {
 
         console.log("empty message");
         window.alert("cannot send an empty message");
     }
     else {
+        // $.ajax({
+        //     headers: { 'X-CSRFToken': token },
+        //     type: 'POST',
+        //     url: path,
+        //     data: {
+        //         'message': msg,
+        //         'patientKey': patientKey
+        //     },
+        //     dataType: 'json',
+        //     success: function (payload) {
+        //         // console.log("got message: " + payload.message);
+        //     }
+        // });
 
-        document.getElementById("msg_input").value = "";
+        document.getElementById("msg_input").value = ""; 
+
         chatSocket.send(JSON.stringify({
             'message': msg
         }));
     }
 
+    // request to post message to Firebase
+   
     // in the odd case of sending messages super fast.
     preventMessageOverride();
 }

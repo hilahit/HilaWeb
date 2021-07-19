@@ -35,38 +35,26 @@ from project_hila.bcolors import bcolors
 
 class AsyncChatConsumer(AsyncWebsocketConsumer):
     
-    async def connect(self): 
+    async def websocket_connect(self):
         self.room_name = self.scope['path']
         await self.accept()
 
     async def disconnect(self, message):
         pass
 
-    async def receive(self, text_data=None, bytes_data=None):
-        """
-        When "self.send()" is called from inside the backend
-        via the "stream_handler" method, the 'self' paremeter 
-        DOES NOT have a 'base_send' method. A 'no attribute' exception
-        is raised because of that.
-
-        When "self.send()" is called from the frontend 
-        via the 'chatSocket.send()' method, the 'self' parameter 
-        DOES have a 'base_send' method, and everything works as expected. 
-        
-        I don't get it...
-        """
+    async def websocket_receive(self, text_data=None, bytes_data=None):
         json_to_send = {}
 
-
         print(f"{bcolors.OKGREEN}consumer received a {type(text_data)} type message{bcolors.ENDC}")
-        print(text_data)
 
         if text_data is not None:
             if 'message' not in text_data:
-                print(f"{bcolors.OKCYAN}received all messages from firebase{bcolors.ENDC}")
-
+                print(f"{bcolors.OKCYAN}received all messages from firebase:{bcolors.ENDC}")
+                # print(type(self))
+                await self.send(text_data)
                 # await self.send(text_data)
             else:
-                print(f"{bcolors.OKCYAN}received a message from firebase{bcolors.ENDC}")
-                print(self.room_name)
+                print(f"{bcolors.OKCYAN}received a message from firebase:{bcolors.ENDC}")
+
                 # await self.send(text_data)
+                
