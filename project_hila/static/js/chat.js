@@ -20,56 +20,11 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
     const roomName = patientID + "_" + doctorID;
     chatSocket = new WebSocket(wsStart + loc.host + '/ws/chat/' + roomName + '/');
 
-
     const chatContainer = document.getElementById("chat-messages-window");
-
-    function createTimeStamp() {
-        
-        let timeStamp = document.createElement("p")
-        let d = new Date(Date.now());
-        timeStamp.innerHTML = d.toLocaleString();
-        timeStamp.classList.add('text-start');
-        timeStamp.classList.add('align-text-bottom');
-        timeStamp.style.color = "black";
-        timeStamp.style.fontSize = "0.8rem";
-
-        return timeStamp;
-    }
-
-    function createTimeStampFromMilli(millis) {
-
-        const d = new Date(millis);
-        timeStamp.innerHTML = d.toLocaleString();
-        timeStamp.classList.add('text-start');
-        timeStamp.classList.add('align-text-bottom');
-        timeStamp.style.color = "black";
-        timeStamp.style.fontSize = "0.8rem";
-        
-        return timeStamp;
-    }
-
-    function createMessageElement(message, senderName, isDoctor) {
-
-        let msgElement = document.createElement("p");
-
-        if (isDoctor) {
-            msgElement.innerHTML = message + " :" + senderName;
-        }
-        else {
-            msgElement.innerHTML = senderName + " :" + message;
-        }
-        
-        msgElement.classList.add('text-end');
-        msgElement.style.color = "black";
-        msgElement.style.fontSize = "1.3rem";
-
-        return msgElement;
-    }
 
     chatSocket.onmessage = function (event) {
 
         const data = JSON.parse(event.data);
-
         let messages = data['payload']['message'];
 
         if (messages) {
@@ -80,13 +35,16 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                 msgElement.innerHTML = messages + " :";
                 
                 // web user incoming message does not contain a timestamp.
-                const timestamp = createTimeStamp();
+                const timestamp = createTimeElement();
+                const hr = document.createElement('hr');
+                hr.setAttribute("width", "100%");
 
                 chatContainer.appendChild(msgElement);
                 chatContainer.appendChild(timestamp);
                 chatContainer.appendChild(hr);
             }
             else {
+
                 Object.keys(messages).forEach(key => {
 
                     let value = messages[key];
@@ -102,7 +60,7 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                     if (isDoctor) {
                       
                         timeStamp =
-                            createTimeStampFromMilli(parseInt(key));
+                            createTimeElementFromMilli(parseInt(key));
                         
                         msgElement =
                             createMessageElement(
@@ -154,6 +112,8 @@ async function sendMsg(patientKey, path) {
         window.alert("cannot send an empty message");
     }
     else {
+
+        // send message to Firebase
         $.ajax({
             headers: { 'X-CSRFToken': token },
             type: 'POST',
@@ -170,14 +130,9 @@ async function sendMsg(patientKey, path) {
 
         document.getElementById("msg_input").value = ""; 
 
-        // chatSocket.send(JSON.stringify({
-        //     msg
-        // }));
     }
 
-    // request to post message to Firebase
-   
-    // in the odd case of sending messages super fast.
+    // in the odd case of sending messages super fastr
     preventMessageOverride();
 }
 
@@ -189,5 +144,50 @@ async function preventMessageOverride() {
     $('#msg_input').attr("disabled", true);
     await sleep(1);
     $('#msg_input').attr("disabled", false);
+}
+
+function createTimeElement() {
+
+    let timeStamp = document.createElement("p")
+    let d = new Date(Date.now());
+    timeStamp.innerHTML = d.toLocaleString();
+    timeStamp.classList.add('text-start');
+    timeStamp.classList.add('align-text-bottom');
+    timeStamp.style.color = "black";
+    timeStamp.style.fontSize = "0.8rem";
+
+    return timeStamp;
+}
+
+function createTimeElementFromMilli(millis) {
+
+    let timeStamp = document.createElement("p")
+
+    const d = new Date(millis);
+    timeStamp.innerHTML = d.toLocaleString();
+    timeStamp.classList.add('text-start');
+    timeStamp.classList.add('align-text-bottom');
+    timeStamp.style.color = "black";
+    timeStamp.style.fontSize = "0.8rem";
+
+    return timeStamp;
+}
+
+function createMessageElement(message, senderName, isDoctor) {
+
+    let msgElement = document.createElement("p");
+
+    if (isDoctor) {
+        msgElement.innerHTML = message + " :" + senderName;
+    }
+    else {
+        msgElement.innerHTML = senderName + " :" + message;
+    }
+
+    msgElement.classList.add('text-end');
+    msgElement.style.color = "black";
+    msgElement.style.fontSize = "1.3rem";
+
+    return msgElement;
 }
 
