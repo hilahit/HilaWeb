@@ -1,6 +1,10 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+
 }
+
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -33,7 +37,21 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation 'org.jetbrains:annotations:15.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'com.google.firebase:firebase-database:20.0.0' //For realtime databse
+    implementation 'com.google.firebase:firebase-auth:21.0.1' //For user authentication
+    implementation 'com.google.firebase:firebase-messaging:22.0.0' //For cloud messaging and
+
+    implementation 'com.firebaseui:firebase-ui-database:7.2.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:7.2.0'
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
+
+    implementation "com.google.dagger:hilt-android:2.35"
+    annotationProcessor "com.google.dagger:hilt-compiler:2.35"
 }

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Hila App</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="forget_password">Forgot my password</string>
+    <string name="provide_email_and_password">Please provide an email and a password</string>
+    <string name="wrong_credentials">Wrong credentials</string>
+    <string name="user_error">User error</string>
+    <string name="type_message_here">Type Message here...</string>
 </resources>

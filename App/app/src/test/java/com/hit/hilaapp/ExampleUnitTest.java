@@ -1,4 +1,4 @@
-package com.esporject.hilaapp;
+package com.hit.hilaapp;
 
 import org.junit.Test;
 
