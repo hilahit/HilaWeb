@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1095635729692",
+    "project_id": "hilaproject-76c5d",
+    "storage_bucket": "hilaproject-76c5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095635729692:android:29bfaae8057e848a3bced9",
+        "android_client_info": {
+          "package_name": "com.example.hilaproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1095635729692-23vq5ef87omg2jmp2ngj86fhpvfdt7g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTbdEGZwQGMV_0NXJNg6w9OhBEftqVG4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1095635729692-23vq5ef87omg2jmp2ngj86fhpvfdt7g2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

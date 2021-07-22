@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/aqua_marine</color>
+    <color name="colorPrimary50">#8041CEA5</color>
+    <color name="colorPrimaryDark">@color/bright_cyan_two</color>
+    <color name="colorAccent">#80d4d4d4</color>
+
+    <color name="transparent">#00000000</color>
+
+
+
+    <color name="black">#333333</color>
+    <color name="black_two">#333333</color>
+    <color name="black_three">#121212</color>
+    <color name="black_10">#16000000</color>
+    <color name="black_20">#32000000</color>
+    <color name="black_40">#66000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="black_70">#B3000000</color>
+    <color name="black_80">#CC000000</color>
+    <color name="black_86">#db000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_30">#4Dffffff</color>
+    <color name="white_10">#16ffffff</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="white_60">#90ffffff</color>
+    <color name="white_70">#b3ffffff</color>
+    <color name="white_80">#CCffffff</color>
+    <color name="almost_black">#0a0b12</color>
+    <color name="almost_black_30">#4c0a0b12</color>
+    <color name="almost_black_10">#160a0b12</color>
+    <color name="grey">#b4b5b7</color>
+    <color name="brownish_grey">#676767</color>
+    <color name="gray_black">#2D2D2E</color>
+    <color name="gray_black_light">#E64A4A4A</color>
+
+
+    <color name="brown">#404040</color>
+    <color name="dark_blue">#335a75</color>
+    <color name="aqua_marine">#41cea5</color>
+    <color name="bright_cyan">#4ae4d9</color>
+    <color name="brownish_grey_two">#6a6a6a</color>
+    <color name="bright_cyan_two">#56CCF2</color>
+    <color name="very_light_pink_50">#80d4d4d4</color>
+    <color name="slate">#3f675f</color>
+    <color name="pale_teal">#7dccbd</color>
+    <color name="pale_teal_20">#327dccbd</color>
+    <color name="pale_teal_10">#167dccbd</color>
+    <color name="brown_grey_50">#80979797</color>
+    <color name="cool_grey">#9b9c9d</color>
+    <color name="light_blue_grey">#d4d4d5</color>
+
+
+    <color name="light_green">#B3F2CD</color>
+    <color name="light_red">#e5455c</color>
+    <color name="light_blue">#E1F1ED</color>
+    <color name="light_yellow">#faedbe</color>
+
+
+
+
+
+</resources>

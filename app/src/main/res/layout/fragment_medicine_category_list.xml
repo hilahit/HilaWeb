@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_blue"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:elevation="8dp"
+        app:cardElevation="10dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <ImageButton
+                android:id="@+id/medicineCategoryFragExitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_round"
+                android:padding="23dp"
+                android:background="@null"/>
+
+            <TextView
+                style="@style/Title25White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/assistant_extrabold"
+                android:gravity="start"
+                android:paddingHorizontal="23dp"
+                android:paddingVertical="17dp"
+                android:paddingEnd="50dp"
+                android:text="בחר קטגוריה"
+                android:textSize="30sp" />
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/medicineCategoryFragRecycler"
+      android:layout_width="match_parent"
+      android:paddingHorizontal="23dp"
+      android:layout_height="0dp"
+      android:layout_weight="1"/>
+
+
+</LinearLayout>

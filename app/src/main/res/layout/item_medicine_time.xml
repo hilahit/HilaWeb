@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/itemMedicineTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SemiBold15Black"
+        android:text="00:00"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp"
+        android:background="@drawable/shape_white_black_stock"/>
+
+
+</FrameLayout>

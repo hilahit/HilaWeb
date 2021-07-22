@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/light_blue"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/singleQueFragQueTitle"
+        style="@style/Bold21Black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="23dp"
+        android:paddingVertical="20dp"
+        tools:text="שאלה מספר 1"
+        android:minLines="2"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/singleQueFragQueRecycler"
+        android:layout_width="match_parent"
+        android:paddingHorizontal="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadingEdgeLength="10dp"
+        android:requiresFadingEdge="vertical" />
+
+</LinearLayout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_on_boarding"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.parkinson.features.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_mainFragment_to_questionnaireFragment"
+            app:destination="@id/questionnaireFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit">
+            <argument
+                android:name="isNewQuestionnaire"
+                app:argType="boolean" />
+        </action>
+
+        <action
+            android:id="@+id/action_mainFragment_to_myMedicinesFragment"
+            app:destination="@id/myMedicinesFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_MyMedicCaseFragment"
+            app:destination="@id/MyMedicCaseFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/questionnaireFragment"
+        android:name="com.example.parkinson.features.questionnaire.QuestionnaireFragment"
+        android:label="QuestionnaireFragment"
+        tools:layout="@layout/fragment_questionnaire">
+
+        <argument
+            android:name="isNewQuestionnaire"
+            app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/myMedicinesFragment"
+        android:name="com.example.parkinson.features.medicine.MyMedicinesFragment"
+        android:label="MyMedicinesFragment"
+        tools:layout="@layout/fragment_my_medicines">
+        <action
+            android:id="@+id/action_medicineFragment_to_MedicineCategoryFragment"
+            app:destination="@id/MedicineCategoryFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+        <action
+            android:id="@+id/action_myMedicinesFragment_to_singleMedicineFrag"
+            app:destination="@id/singleMedicineFrag"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit">
+            <argument
+                android:name="medicine"
+                app:argType="com.example.parkinson.model.general_models.Medicine" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/MyMedicCaseFragment"
+        android:name="com.example.parkinson.features.medic_case.MyMedicCaseFragment"
+        android:label="MyMedicCaseFragment"
+        tools:layout="@layout/fragment_medic_case">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/MedicineCategoryFragment"
+        android:name="com.example.parkinson.features.medicine.add_new_medicine.medication_categories.MedicineCategoryFragment"
+        android:label="MedicineCategoryFragment"
+        tools:layout="@layout/fragment_medicine_category_list">
+        <action
+            android:id="@+id/action_MedicineCategoryFragment_to_MedicineListFragment"
+            app:destination="@id/MedicineListFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/MedicineListFragment"
+        android:name="com.example.parkinson.features.medicine.add_new_medicine.medication_list.MedicineListFragment"
+        android:label="MedicineListFragment"
+        tools:layout="@layout/fragment_medicine_list">
+        <action
+            android:id="@+id/action_MedicineListFragment_to_singleMedicineFrag"
+            app:destination="@id/singleMedicineFrag"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit">
+            <argument
+                android:name="medicine"
+                app:argType="com.example.parkinson.model.general_models.Medicine" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/singleMedicineFrag"
+        android:name="com.example.parkinson.features.medicine.add_new_medicine.single_medicine.SingleMedicineFragment"
+        android:label="SingleMedicineFrag"
+        tools:layout="@layout/fragment_single_medicine">
+        <argument
+            android:name="medicine"
+            app:argType="com.example.parkinson.model.general_models.Medicine" />
+    </fragment>
+
+</navigation>

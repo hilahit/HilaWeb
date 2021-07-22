@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HilaProject</string>
+    <string name="login">כניסה</string>
+    <string name="password">סיסמה</string>
+    <string name="user_name">שם משתמש</string>
+    <string name="login_screen">מסך התחברות</string>
+    <string name="one_and_a_half"> <sup>1</sup>/<sub>2</sub>     1      כדור  </string>
+</resources>

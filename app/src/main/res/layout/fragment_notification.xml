@@ -1,0 +1,132 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#B3707171"
+    android:paddingHorizontal="23dp"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Bold23White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_light_green_top_corners"
+            android:gravity="center"
+            android:textSize="26sp"
+            android:paddingVertical="10dp"
+            android:shadowColor="@color/gray_black"
+            android:text="דיווח חדש" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_light_green_stroke_borrom_cornners"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="23dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:paddingHorizontal="10dp">
+
+
+                <RadioGroup
+                    android:id="@+id/reportRG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <RadioButton
+                        android:id="@+id/notificationOnBtn"
+                        style="@style/SemiBold17Black"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_light_green_stroke"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:paddingVertical="20dp"
+                        android:text="On" />
+
+                    <RadioButton
+                        android:id="@+id/notificationDyskinesiaBtn"
+                        style="@style/SemiBold17Black"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_light_green_stroke"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:paddingVertical="20dp"
+                        android:text="דסקנזיה" />
+
+                    <RadioButton
+                        android:id="@+id/notificationOffBtn"
+                        style="@style/SemiBold17Black"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_light_green_stroke"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:paddingVertical="20dp"
+                        android:text="Off" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.3"
+               android:layout_marginVertical="15dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="#9BA59D"/>
+
+            <TextView
+                android:id="@+id/notificationHallucinationsBtn"
+                style="@style/SemiBold17Black"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/shape_light_green_stroke_selectable"
+                android:paddingHorizontal="30dp"
+                android:paddingVertical="20dp"
+                android:text=" הזיות  " />
+
+            <TextView
+                android:id="@+id/notificationReportBtn"
+                style="@style/Bold21White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_rectangle_blue"
+                android:gravity="center"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="15dp"
+                android:text="שלח דיווח" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>

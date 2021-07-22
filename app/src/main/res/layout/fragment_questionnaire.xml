@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_blue"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:elevation="8dp"
+        app:cardElevation="10dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <ImageButton
+                android:id="@+id/questionnaireExitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_round"
+                android:padding="23dp"
+                android:background="@null"/>
+
+            <TextView
+                style="@style/Title25White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/assistant_extrabold"
+                android:gravity="start"
+                android:paddingHorizontal="23dp"
+                android:paddingVertical="17dp"
+                android:paddingEnd="50dp"
+                android:text="אפיון המחלה"
+                android:textSize="30sp" />
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/questionnaireFragViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingHorizontal="13dp"
+        android:paddingTop="5dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/questionnaireBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="start"
+            android:elevation="8dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="8dp">
+
+            <TextView
+                style="@style/Bold21White"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center"
+                android:background="@drawable/btn_rectangle_blue"
+                android:drawableStart="@drawable/ic_arrow_left"
+                android:gravity="center|start"
+                android:paddingEnd="45dp"
+                android:paddingStart="15dp"
+                android:paddingVertical="15dp"
+                android:text="הקודם" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/questionnaireNextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="30dp"
+            android:elevation="8dp"
+            android:layout_gravity="end"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="8dp">
+
+            <TextView
+                style="@style/Bold21White"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center"
+                android:background="@drawable/btn_rectangle_blue"
+                android:drawableEnd="@drawable/ic_rrow_right"
+                android:gravity="end|center"
+                android:paddingVertical="15dp"
+                android:paddingStart="50dp"
+                android:paddingEnd="20dp"
+                android:text="הבא" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/questionnaireFinishBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="30dp"
+            android:elevation="8dp"
+            android:layout_gravity="end"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="8dp">
+
+            <TextView
+                style="@style/Bold21White"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center"
+                android:background="@drawable/btn_rectangle_blue"
+                android:drawableEnd="@drawable/ic_rrow_right"
+                android:gravity="end|center"
+                android:paddingVertical="15dp"
+                android:paddingStart="50dp"
+                android:paddingEnd="20dp"
+                android:text="סיום" />
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

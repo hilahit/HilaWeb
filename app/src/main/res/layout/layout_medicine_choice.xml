@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="23dp">
+
+            <RadioGroup
+                android:id="@+id/rg_exponent_top"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/radio0.25"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_light_green_stroke"
+                    android:button="@null"
+                    android:paddingVertical="20dp"
+                    android:gravity="center"
+                    android:text="1/4  כדור"
+                    style="@style/SemiBold17Black"/>
+
+                <RadioButton
+                    android:id="@+id/radio1_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_light_green_stroke"
+                    android:button="@null"
+                    android:paddingVertical="20dp"
+                    android:gravity="center"
+                    android:text="1/2  כדור"
+                    style="@style/SemiBold17Black"/>
+
+
+            </RadioGroup>
+            <RadioGroup
+                android:id="@+id/rg_exponent_middle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/radio3_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_light_green_stroke"
+                    android:button="@null"
+                    android:paddingVertical="20dp"
+                    android:gravity="center"
+                    android:text="3/4 כדור"
+                    style="@style/SemiBold17Black"/>
+
+                <RadioButton
+                    android:id="@+id/radio1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_light_green_stroke"
+                    android:button="@null"
+                    android:paddingVertical="20dp"
+                    android:gravity="center"
+                    android:text="כדור בודד"
+                    style="@style/SemiBold17Black"/>
+
+            </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg_exponent_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <RadioButton
+            android:id="@+id/radio1_1_4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_light_green_stroke"
+            android:button="@null"
+            android:paddingVertical="10dp"
+            android:gravity="center"
+            android:text="1.25 כדור"
+            style="@style/SemiBold17Black"/>
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_light_green_stroke"
+            android:button="@null"
+            android:paddingVertical="20dp"
+            android:gravity="center"
+            android:text="שתי כדורים"
+            style="@style/SemiBold17Black"/>
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg_exponent_bott2om"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <RadioButton
+            android:id="@+id/radio1_1_22"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_light_green_stroke"
+            android:button="@null"
+            android:paddingVertical="10dp"
+            android:gravity="center"
+            android:text="כדור וחצי"
+            style="@style/SemiBold17Black"/>
+
+        <RadioButton
+            android:id="@+id/radio22"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_light_green_stroke"
+            android:button="@null"
+            android:paddingVertical="20dp"
+            android:gravity="center"
+            android:text="שתי כדורים"
+            style="@style/SemiBold17Black"/>
+
+    </RadioGroup>
+
+</LinearLayout>

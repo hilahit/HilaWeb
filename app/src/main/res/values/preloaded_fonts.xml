@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/amatica_sc_bold</item>
+        <item>@font/assistant_bold</item>
+        <item>@font/assistant_extrabold</item>
+        <item>@font/rubik_black</item>
+        <item>@font/rubik_regular</item>
+        <item>@font/rubik_bold</item>
+        <item>@font/rubik_thin</item>
+        <item>@font/rubik_semi_bold</item>
+        <item>@font/suez_one</item>
+    </array>
+</resources>
