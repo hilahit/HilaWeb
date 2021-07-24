@@ -1,4 +1,7 @@
 import json
+
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
 from chat.FirebaseListener import FirebaseListener
 from channels.consumer import AsyncConsumer
 from .consumers import AsyncChatConsumer
@@ -11,6 +14,7 @@ from project_hila.bcolors import bcolors
 import asyncio
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from project_hila.bcolors import bcolors
 
 
 
@@ -29,14 +33,19 @@ def chat_view(request, key):
 
     return render(request, 'accounts/patients/chat.html', {"patientKey": key})
 
+
+@login_required(login_url="login")
 def listen_to_chat(request, patient_key):
     doctor_id = request.user.id
     chat_id = f"{patient_key}_{doctor_id}"
 
-    listener = FirebaseListener(request.user.id)
+    listener = FirebaseListener(chat_id)
+    print(f"{bcolors.BOLD}listener id: {listener}{bcolors.ENDC}")
     db.child("Chats").child(chat_id).stream(listener.stream_handler)
 
 
+@login_required(login_url="login")
+@cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def send_message(request):
 
     message = request.POST.get('message', None)
@@ -52,7 +61,7 @@ def send_message(request):
     # timestamp = calendar.timegm(gmt)
 
     timestamp = current_milli_time()
-    print("### sending_message function ###", timestamp)
+    print(f"{bcolors.OKBLUE}posting message to firebase{bcolors.ENDC}")
 
     payload = {
         'message': message,

@@ -26,7 +26,7 @@ def delete_patient_view(request, key):
 
 # TODO implement 'update patient' button
 @login_required(login_url="login")
-@cache_control(no_cache=False, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def patient_view(request, key):
 
     patient = db.child("Patients").order_by_key().equal_to(key).get()

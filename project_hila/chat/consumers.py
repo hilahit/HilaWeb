@@ -59,8 +59,8 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data=None, bytes_data=None):
         json_to_send = {}
-        print("########## receiving ##########")
-        print(f"{bcolors.OKGREEN}consumer received a {type(text_data)} type message{bcolors.ENDC}")
+        # print("########## receiving ##########")
+        # print(f"{bcolors.OKGREEN}consumer received a {type(text_data)} type message{bcolors.ENDC}")
 
         if text_data is not None:
             text = json.loads(text_data)
@@ -76,7 +76,7 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
                 
     # Receive message from room group
     async def chat_message(self, event):
-        print("### chat_message function ###")
+        print(f"{bcolors.OKGREEN}sending message to front end{bcolors.ENDC}")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'payload': event

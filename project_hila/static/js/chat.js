@@ -1,4 +1,4 @@
-let chatSocket;
+
 
 /**
  * A socket is needed in order to keep the connection open.
@@ -18,7 +18,7 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
     }
 
     const roomName = patientID + "_" + doctorID;
-    chatSocket = new WebSocket(wsStart + loc.host + '/ws/chat/' + roomName + '/');
+    let chatSocket = new WebSocket(wsStart + loc.host + '/ws/chat/' + roomName + '/');
 
     const chatContainer = document.getElementById("chat-messages-window");
 
