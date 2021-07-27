@@ -3,7 +3,7 @@
 ## Moderator: Eran Katsav
 
 ### Developed By:
-Marko Katziv
+Marko
 
 
 #### work in progress
