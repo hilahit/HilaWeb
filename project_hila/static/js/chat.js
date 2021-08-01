@@ -26,13 +26,22 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
 
         const data = JSON.parse(event.data);
         let messages = data['payload']['message'];
+        console.log(data['payload']);
 
         if (messages) {
             if (typeof messages === 'string') {
-                console.log(messages);
 
-                let msgElement = document.createElement("p");
-                msgElement.innerHTML = messages + " :";
+                // let msgElement = document.createElement("p");
+
+                if (data['payload']['isDoctor']) {
+                    msgElement = createMessageElement(messages, data['payload']['contact_name'], true)
+                    // msgElement.innerHTML = messages + " :" + data['payload']['contact_name'];
+                }
+                else {
+                    msgElement = createMessageElement(messages, data['payload']['patient_name'], false)
+
+                    // msgElement.innerHTML = messages + " :" + data['payload']['patient_name'];
+                }
                 
                 // web user incoming message does not contain a timestamp.
                 const timestamp = createTimeElement();
@@ -47,11 +56,14 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
 
                 Object.keys(messages).forEach(key => {
 
-                    let value = messages[key];
+                    if (key === 'contact') {
+                        return;
+                    }
 
+                    let value = messages[key];
                     let message = value['message'];
                     let isDoctor = value['isDoctor'];
-                    let senderName = value['senderName'];
+                    const timeStamp = createTimeElementFromMilli(parseInt(key));
 
                     const br = document.createElement('br');
                     const hr = document.createElement('hr');
@@ -59,13 +71,13 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
 
                     if (isDoctor) {
                       
-                        timeStamp =
-                            createTimeElementFromMilli(parseInt(key));
+                        // timeStamp =
+                        //     createTimeElementFromMilli(parseInt(key));
                         
                         msgElement =
                             createMessageElement(
                                 message,
-                                senderName,
+                                data['payload']['contact_name'],
                                 true);
                      
                         // add message and timestamp to chat window
@@ -74,15 +86,17 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                         chatContainer.appendChild(hr);
                     }
                     else {
-                        msgElement.createMessageElement(
+                        msgElement = createMessageElement(
                             message,
-                            senderName,
+                            data['payload']['patient_name'],
                             false)
 
                         // add message to chat window
                         chatContainer.appendChild(msgElement);
-                        chatContainer.appendChild(br);
+                        chatContainer.appendChild(timeStamp);
+                        // chatContainer.appendChild(br);
                         chatContainer.appendChild(hr);
+
                     }
                 })
             } 
@@ -90,7 +104,7 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
     };
 
     chatSocket.onclose = function (e) {
-        console.error('Chat socket closed unexpectedly');
+        console.log("closing stream");
     };
 }
 
@@ -178,10 +192,12 @@ function createMessageElement(message, senderName, isDoctor) {
     let msgElement = document.createElement("p");
 
     if (isDoctor) {
-        msgElement.innerHTML = message + " :" + senderName;
+        msgElement.innerHTML = senderName + " :" + message;
+        msgElement.classList.add('text-end');
     }
     else {
-        msgElement.innerHTML = senderName + " :" + message;
+        msgElement.innerHTML = message + " :" + senderName;
+        msgElement.classList.add('text-left');
     }
 
     msgElement.classList.add('text-end');

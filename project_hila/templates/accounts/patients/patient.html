@@ -98,6 +98,24 @@
             "{% url 'send_message' %}"
         );
     });
+
+    window.addEventListener('beforeunload', function(event){
+        const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+           $.ajax({
+            headers: { 'X-CSRFToken': token },
+            type: 'POST',
+            url: `{% url 'close_stream' %}`,
+            data: {
+                'event': 'closing stream',
+            },
+            dataType: 'json',
+            success: function (event) {
+                console.log("the stream should be closed now");
+            }
+        });
+
+    });
     
 </script>
 {% endblock %}

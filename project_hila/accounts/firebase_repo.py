@@ -5,13 +5,13 @@ from pyasn1.type.univ import Null
 from pyrebase import pyrebase
 from firebase_admin import auth
 
-GOOGLE_APPLICATION_CREDENTIALS = os.path.join('playground-private-key.json')
+GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject_service_private_key.json')
 
 config = {
-    "apiKey": "AIzaSyBCaITU13eD_ls29FmCjxSR969NFwlhUz8",
-    "authDomain": "playground-79f75.firebaseapp.com",
-    "databaseURL": "https://playground-79f75-default-rtdb.firebaseio.com",
-    "storageBucket": "playground-79f75.appspot.com",
+    "apiKey": "AIzaSyBBxecsVnTegPnRNNgC0AFd2UX6keoyIQw",
+    "authDomain": "hilaproject-76c5d.firebaseapp.com",
+    "databaseURL": "https://hilaproject-76c5d-default-rtdb.firebaseio.com",
+    "storageBucket": "hilaproject-76c5d.appspot.com",
     "serviceAccount": GOOGLE_APPLICATION_CREDENTIALS
 }
 

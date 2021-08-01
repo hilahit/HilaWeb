@@ -22,7 +22,6 @@ channel_layer = get_channel_layer()
 # Create your views here.
 
 
-
 def chat_view(request, key):
 
     # chat_id = str(key) + "_" + str(request.user.id)
@@ -33,16 +32,25 @@ def chat_view(request, key):
 
     return render(request, 'accounts/patients/chat.html', {"patientKey": key})
 
+my_stream = None
 
 @login_required(login_url="login")
-def listen_to_chat(request, patient_key):
+def listen_to_chat(request, patient_key, patient_name):
     doctor_id = request.user.id
     chat_id = f"{patient_key}_{doctor_id}"
 
-    listener = FirebaseListener(chat_id)
+    listener = FirebaseListener(chat_id, request.user.username, patient_name)
     print(f"{bcolors.BOLD}listener id: {listener}{bcolors.ENDC}")
-    db.child("Chats").child(chat_id).stream(listener.stream_handler)
+    global my_stream
+    my_stream = db.child("Chats").child(chat_id).stream(listener.stream_handler)
+    
 
+@login_required(login_url="login")
+def close_stream(request):
+    if my_stream is not None:
+        my_stream.close()
+
+    return JsonResponse({'event' : "close event"})
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
@@ -66,12 +74,12 @@ def send_message(request):
     payload = {
         'message': message,
         'timestamp': timestamp,
-        'senderId': doctor_id,
+        'senderId': f"{doctor_id}",
         'senderName': request.user.username,
         'isDoctor': True
     }
-    db.child("Chats").child(f"{patient_key}_{doctor_id}").child(
-        timestamp).set(payload)
+    db.child("Chats").child(f"{patient_key}_{doctor_id}").update({'contact': request.user.username})
+    db.child("Chats").child(f"{patient_key}_{doctor_id}").child(timestamp).set(payload)
 
     return JsonResponse(payload)
 
