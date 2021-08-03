@@ -171,12 +171,13 @@ def add_patients(response):
 
             patient_details = {
                 'email': email,
-                'phone_number': phone_number,
+                'mobile_phone': phone_number,
+                'country': 'Israel'
             }
 
             db.child("Patients").child(new_patient.uid).set({'name': first_name + " " + last_name})
             
-            db.child("Patients").child(new_patient.uid).child("patient_details").set(patient_details)
+            db.child("Patients").child(new_patient.uid).child("user_details").set(patient_details)
 
             messages.success(response, "Successfully created " +
                              first_name + " " + last_name)

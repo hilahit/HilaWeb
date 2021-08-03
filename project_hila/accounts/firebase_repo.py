@@ -1,9 +1,9 @@
 import os
 
 import firebase_admin
-from pyasn1.type.univ import Null
 from pyrebase import pyrebase
 from firebase_admin import auth
+from pyfcm import FCMNotification
 
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject_service_private_key.json')
 
@@ -22,6 +22,21 @@ default_app = firebase_admin.initialize_app()
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
+push_service = FCMNotification(
+    api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
+
+def sendPushNotification(title, msg, registration_token, dataObject):
+
+    result = push_service.notify_single_device(
+
+        registration_id = registration_token, 
+        message_title = title, 
+        message_body = msg, 
+        data_message = dataObject
+        
+        )
+        
+    print(result)
 
 def create_user_without_sign_in(email, password):
 

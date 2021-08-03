@@ -1,5 +1,5 @@
 env
 db.sqlite3
-playground-private-key.json
+hilaproject_service_private_key.json
 manage.py
 .env

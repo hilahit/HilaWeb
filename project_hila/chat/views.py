@@ -15,6 +15,7 @@ import asyncio
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from project_hila.bcolors import bcolors
+from accounts.firebase_repo import sendPushNotification
 
 
 
@@ -60,6 +61,8 @@ def send_message(request):
     patient_key = request.POST.get('patientKey')
     doctor_id = request.user.id
 
+
+
     # print("PRINTING FROM SERVER", message)
     # print("PATIENT_KEY: ", patient_key)
     # save to database
@@ -71,6 +74,9 @@ def send_message(request):
     timestamp = current_milli_time()
     print(f"{bcolors.OKBLUE}posting message to firebase{bcolors.ENDC}")
 
+    token = db.child("Patients").child(patient_key).child("user_details").get().val()['token']
+    print("token", token)
+
     payload = {
         'message': message,
         'timestamp': timestamp,
@@ -78,8 +84,17 @@ def send_message(request):
         'senderName': request.user.username,
         'isDoctor': True
     }
-    db.child("Chats").child(f"{patient_key}_{doctor_id}").update({'contact': request.user.username})
-    db.child("Chats").child(f"{patient_key}_{doctor_id}").child(timestamp).set(payload)
+    # db.child("Chats").child(f"{patient_key}_{doctor_id}").update({'contact': request.user.username})
+    # db.child("Chats").child(f"{patient_key}_{doctor_id}").child(timestamp).set(payload)
+
+    sendPushNotification(
+        "title", 
+        'hello there', 
+        [token], 
+        {
+            'notif_type': 'message'
+        }
+    )
 
     return JsonResponse(payload)
 
