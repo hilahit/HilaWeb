@@ -4,6 +4,7 @@ import firebase_admin
 from pyrebase import pyrebase
 from firebase_admin import auth
 from pyfcm import FCMNotification
+import json
 
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject_service_private_key.json')
 

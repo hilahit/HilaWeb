@@ -73,10 +73,7 @@ def send_message(request):
 
     timestamp = current_milli_time()
     print(f"{bcolors.OKBLUE}posting message to firebase{bcolors.ENDC}")
-
-    token = db.child("Patients").child(patient_key).child("user_details").get().val()['token']
-    print("token", token)
-
+  
     payload = {
         'message': message,
         'timestamp': timestamp,
@@ -84,19 +81,61 @@ def send_message(request):
         'senderName': request.user.username,
         'isDoctor': True
     }
+
+    db.child("Chats").child(f"{patient_key}_{doctor_id}").update({timestamp : payload, 'contact': request.user.username})
+
+
     # db.child("Chats").child(f"{patient_key}_{doctor_id}").update({'contact': request.user.username})
     # db.child("Chats").child(f"{patient_key}_{doctor_id}").child(timestamp).set(payload)
 
-    sendPushNotification(
-        "title", 
-        'hello there', 
-        [token], 
-        {
-            'notif_type': 'message'
-        }
-    )
+    token_obj = db.child("Patients").child(patient_key).child("user_details").get()
+
+    if 'token' in token_obj.val():
+        token = db.child("Patients").child(patient_key).child(
+            "user_details").get().val()['token']
+
+        title = "הודעה חדשה"
+        msg = f"{payload['senderName']}: {payload['message']}" 
+
+        data = {'notif_type': 'message',
+                'room_key': f"{patient_key}_{doctor_id}",
+                'contact_name': request.user.username
+                }
+        
+        # push_notification(title=title, msg=msg, token=token, data=data)
+
+        sendPushNotification(
+            title, msg, token, {'notif_type': 'message',
+                                'room_key': f"{patient_key}_{doctor_id}",
+                                'contact_name': request.user.username
+                                })
+        
 
     return JsonResponse(payload)
+
+
+@login_required(login_url="login")
+def push_notification(request):
+    message = request.POST.get("message")
+    patient_key = request.POST.get('patient_key')
+
+    print("#### pushing", message)
+    print("#### pushing", patient_key)
+    
+    token_obj = db.child("Patients").child(
+        patient_key).child("user_details").get()
+
+    if 'token' in token_obj.val():
+        token = db.child("Patients").child(patient_key).child(
+            "user_details").get().val()['token']
+
+        print("#### pushing", message)
+        print("#### pushing", patient_key)
+
+        sendPushNotification(
+            "מודעה", message, token, {'notif_type': 'announcement' })
+
+    return JsonResponse({'message': message})
 
 def current_milli_time():
     return int(round(time.time() * 1000))

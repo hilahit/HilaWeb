@@ -1,8 +1,6 @@
+import datetime
 from django.core.validators import RegexValidator
 from django.db import models
-from django.contrib.auth.models import User
-from django.forms.widgets import PasswordInput
-
 
 class Patient(models.Model):
     first_name = models.CharField(blank=False, max_length=255)
@@ -15,4 +13,8 @@ class Patient(models.Model):
 
     phone_number = models.CharField(
         validators=[phone_regex], blank=False, max_length=10)
+
+    birth_date = models.DateField()
+
+    
     

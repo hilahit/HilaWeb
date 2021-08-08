@@ -11,6 +11,7 @@
                 <hr>
                 <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
                 <a class="btn btn-outline-primary  btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
+                <a class="btn btn-outline-warning  btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}" ">שליחת מודעה</a>
                 <br>
                 <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'delete_patient' context.key %}">מחיקת משתמש</a>
             </div>
@@ -47,31 +48,32 @@
 
     <br>
     <br>
-    <div class="accordion accordion-flush" id="accordionFlushExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="flush-headingOne">
-                <button id="collapsebutton" class="accordion-button collapsed"  type="button" data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    צ'אט עם {{ context.name }} &nbsp; &nbsp;
-                </button>
-            </h2>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button id="collapsebutton" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        צ'אט עם {{ context.name }} &nbsp; &nbsp;
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
                         <div class="chat-container overflow-scroll">
-                            <div id = "chat-messages-window">
+                            <div id="chat-messages-window">
                             </div>
                         </div>
                         <br>
-                        <div class = "chat-input-field">
+                        <div class="chat-input-field">
                             <input type="text" class="form-control" id="msg_input" placeholder="כתוב הודעה">
-                            <button id="send_btn" class="btn btn-outline-success" onclick="sendMsg('{{ context.key }}', `{% url 'send_message' %}`)" href="#">שליחה</button>
+                            <button id="send_btn" class="btn btn-outline-success"
+                                onclick="sendMsg('{{ context.key }}', `{% url 'send_message' %}`)" href="#">שליחה</button>
                         </div>
-                    </article>
+                        </article>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <br>
     <div class="row">
         <div class="col-md">
@@ -86,10 +88,87 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">שליחת התראה ל {{ context.name }}</h5>
+            
+                </div>
+                <div class="modal-body">
+                    <form>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <h6 id="count"></h6>
+                            <label for="message-text" class="col-form-label">מודעה:</label>
+                            <textarea name="message-text" maxlength="240" class="form-control" id="message-text" placeholder="יש לכתוב את המודעה כאן"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">יציאה</button>
+                    <button type="button"  class="btn btn-primary" onclick="sendAnnouncement()">שליחת מודעה</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+
+
+
 <script src="{% static 'js/chat.js' %}"></script>
 <script src="{% static 'js/patient.js' %}"></script>
 <script>
+
+//TODO: get chars 
+//TODO: trim
+//TODO: on error
+    function sendAnnouncement(){
+          const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+          const message = document.getElementById("message-text")
+          console.log(message.value.trim())
+
+        $.ajax({
+            headers: { 'X-CSRFToken': token },
+            type: 'POST',
+            url: `{% url 'push_notification' %}`,
+            data: {
+                'message': message.value.trim(),
+                'patient_key' : '{{ context.key }}'
+            },
+            dataType: 'json',
+            success: function (event) {
+                console.log("i pushed the thing");
+            },
+            error: function(event){
+                //TODO: code stub
+            }
+        });
+    }
+
+    document.getElementById('message-text').onkeyup = function () {
+            document.getElementById('count').innerHTML = "240/" + (240 - this.value.length);
+        };
+
+    // const myModal = document.getElementById("exampleModal");
+    // myModal.addEventListener("show.bs.modal", function (event){
+    //     var button = $(event.relatedTarget); // Button that triggered the modal
+    //     var recipient = button.data('whatever'); // Extract info from data-* attributes
+    //     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    //     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    //     var modal = $(this);
+    //     modal.find('.modal-title').text('New message to ' + recipient);
+    //     modal.find('.modal-body input').val(recipient);
+
+        
+    // });
 
      window.addEventListener('DOMContentLoaded', (event) => {
         initializeSocket(

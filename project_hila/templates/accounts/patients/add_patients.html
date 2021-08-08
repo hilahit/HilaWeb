@@ -12,22 +12,34 @@
 <body>
     {% block content %}
 
-    <div>
+    <div dir="rtl">
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
             {% if message.tags == 'success' %}
             <div class="alert alert-success">
-                <li class=" {{ message.tags }}">{{ message|safe }}</li>
+                <li class=" {{ message.tags }} text-right">{{ message|safe }}</li>
             </div>
             {% endif %}
             {% if message.tags == 'warning' %}
-            <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+            <li class="alert alert-danger {{ message.tags }} text-right">{{ message }}</li>
             {% endif %}
             {% endfor %}
         </ul>
         {% endif %}
+
+        {% if form.errors %}
+        <ul>
+            {% for error in form.errors %}
+                <li class="alert alert-danger text-right">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
     </div>
+
+
+
 
     <div class="container-fluid ">
     
@@ -37,6 +49,8 @@
             
                 <form method="post" style="text-align: right " dir="rtl">
                     {% csrf_token %}
+
+              
 
                     <div class="shadow-sm p-3 mb-5 bg-body rounded">
                         {{ form.first_name|as_crispy_field }}
@@ -52,6 +66,12 @@
                     </div>
                     <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
                         {{ form.phone_number|as_crispy_field }}
+                    </div>
+                    <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                        <label for="datepicker: " >תאריך לידה&nbsp; &nbsp;</label>
+                        <div>
+                        <input name="birth_date" id='datepicker' class="form-control" type="date">
+                        </div>
                     </div>
                     <br><br>
     

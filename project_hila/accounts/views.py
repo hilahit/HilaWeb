@@ -1,5 +1,6 @@
 import datetime
 from django.shortcuts import render
+from pyasn1.type.univ import Null
 from .forms import PatientRegisterForm, DoctorRegisterForm
 from django.contrib import messages
 from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
@@ -8,6 +9,13 @@ from project_hila.views import home
 from operator import itemgetter
 from django.views.decorators.cache import cache_control
 from chat.views import listen_to_chat
+from django.utils.dateparse import parse_date
+
+def create_announcement(request):
+    title = "test title"
+    short_description = "some description"
+    return render
+
 
 # TODO show user deleted successfully
 # TODO need to handle on back pressed
@@ -15,11 +23,11 @@ from chat.views import listen_to_chat
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def delete_patient_view(request, key):
-    """ This function will delete a user from the authenticated users list.
+    """ This function will delete a user from the Firebase authenticated users list.
         Upon success, all of the user's data in the realtime databse will be deleted."""
 
-    isDeleted = delete_patient(key)
-    if isDeleted:
+    is_deleted = delete_patient(key)
+    if is_deleted:
         db.child("Patients").child(key).remove()
         return search_patients_view(request)
 
@@ -148,44 +156,64 @@ def add_patients(response):
     if response.method == "POST":
         patient_form = PatientRegisterForm(response.POST)
         if patient_form.is_valid():
+
+            date_milli = None
+
             first_name = patient_form.cleaned_data["first_name"]
             last_name = patient_form.cleaned_data["last_name"]
             email = patient_form.cleaned_data["email"]
             password = patient_form.cleaned_data["password"]
             phone_number = patient_form.cleaned_data["phone_number"]
 
-            # new_patient = auth_fb.create_user_with_email_and_password(email=email, password=password)
+            birth_date_string = response.POST.get('birth_date').strip()
+            if not birth_date_string:
 
-            patient_in_db = get_patient_by_email(email)
-            if (patient_in_db is not None):
-                messages.warning(
-                    response, 
-                    "This email already exists")
+                messages.warning(response, "יש להזין תאריך לידה")
+            else:
 
-                return render(
-                    response, 
-                    "accounts/patients/add_patients.html", 
-                    {'form': patient_form})
+                date = birth_date_string.split("-")
 
-            new_patient = create_user_without_sign_in(email, password)
+                day = int(date[2].strip())
+                month = int(date[1].strip())
+                year = int(date[0].strip())
+           
+                date_obj = datetime.datetime(year,month,day)
+                date_milli = date_obj.timestamp() * 1000
+                patient_in_db = get_patient_by_email(email)
 
-            patient_details = {
-                'email': email,
-                'mobile_phone': phone_number,
-                'country': 'Israel'
-            }
+                if (patient_in_db is not None):
+                    messages.warning(response, "This email already exists")
 
-            db.child("Patients").child(new_patient.uid).set({'name': first_name + " " + last_name})
-            
-            db.child("Patients").child(new_patient.uid).child("user_details").set(patient_details)
+                    return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
-            messages.success(response, "Successfully created " +
-                             first_name + " " + last_name)
+
+                new_patient = create_user_without_sign_in(email, password)
+
+                patient_details = {
+                    'email': email,
+                    'mobile_phone': phone_number,
+                    'country': 'Israel',
+                    'first_name': first_name,
+                    'last_name' : last_name,
+                    'date_of_birth': date_milli
+                }
+
+                db.child("Patients").child(new_patient.uid).set({'name': first_name + " " + last_name})
+                db.child("Patients").child(new_patient.uid).child("user_details").set(patient_details)
+
+                messages.success(response, "Successfully created " +
+                                first_name + " " + last_name)
+
+            return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
         else:
-            messages.warning(response, "bad credentails")
+            print(patient_form['first_name'].errors)
+            print(patient_form['last_name'].errors)
+            print(patient_form['email'].errors)
+            print(patient_form['password'].errors)
+            print(patient_form['phone_number'].errors)
+            messages.warning(response, "הוזנו נתונים שגויים")
 
-        patient_form = PatientRegisterForm()
         return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
     else:

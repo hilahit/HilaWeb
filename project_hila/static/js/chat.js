@@ -21,6 +21,9 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
     let chatSocket = new WebSocket(wsStart + loc.host + '/ws/chat/' + roomName + '/');
 
     const chatContainer = document.getElementById("chat-messages-window");
+    const bottomHolder = document.getElementById("contentBottom")
+
+    chatContainer.addEventListener
 
     chatSocket.onmessage = function (event) {
 
@@ -51,6 +54,9 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                 chatContainer.appendChild(msgElement);
                 chatContainer.appendChild(timestamp);
                 chatContainer.appendChild(hr);
+
+               
+                
             }
             else {
 
@@ -69,6 +75,7 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                     const hr = document.createElement('hr');
                     hr.setAttribute("width", "100%");
 
+
                     if (isDoctor) {
                       
                         // timeStamp =
@@ -79,11 +86,13 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                                 message,
                                 data['payload']['contact_name'],
                                 true);
+                        
                      
                         // add message and timestamp to chat window
                         chatContainer.appendChild(msgElement);
                         chatContainer.appendChild(timeStamp);
                         chatContainer.appendChild(hr);
+       
                     }
                     else {
                         msgElement = createMessageElement(
@@ -91,15 +100,18 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
                             data['payload']['patient_name'],
                             false)
 
+
                         // add message to chat window
                         chatContainer.appendChild(msgElement);
                         chatContainer.appendChild(timeStamp);
-                        // chatContainer.appendChild(br);
+                        chatContainer.appendChild(br);
                         chatContainer.appendChild(hr);
 
                     }
                 })
-            } 
+
+                scrollToLastItem();
+            }
         }
     };
 
@@ -108,18 +120,31 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
     };
 }
 
+function scrollToLastItem() {
+
+    const list = document.querySelectorAll('.msg-class')
+    if (list.length > 0) {
+        const last = list[list.length - 1];
+        last.scrollIntoViewIfNeeded({ behavior: 'smooth' });
+    }
+}
+
+
 // send message on 'Enter'
 const input = document.getElementById("msg_input");
 input.addEventListener("keyup", function (event) {
     if (event.keyCode == 13) { // number 13 is the "Enter" key on the keyboard
         event.preventDefault();
         document.getElementById("send_btn").click();
+        this.focus();
     }
 });
+
 
 async function sendMsg(patientKey, path) {
     const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
     const msg = document.getElementById("msg_input").value.trim();
+    const chatContainer = document.getElementById("chat-messages-window");
     if (msg == "") {
 
         console.log("empty message");
@@ -143,8 +168,15 @@ async function sendMsg(patientKey, path) {
         });
 
         document.getElementById("msg_input").value = ""; 
-
+        
+        $(document).ready(function () {
+            $("#msg_input").focus();
+            
+        });
     }
+
+  
+
 
     // in the odd case of sending messages super fastr
     preventMessageOverride();
@@ -155,9 +187,9 @@ function sleep(ms) {
 }
 
 async function preventMessageOverride() {
-    $('#msg_input').attr("disabled", true);
+    // $('#msg_input').attr("disabled", true);
     await sleep(1);
-    $('#msg_input').attr("disabled", false);
+    // $('#msg_input').attr("disabled", false);
 }
 
 function createTimeElement() {
@@ -200,7 +232,7 @@ function createMessageElement(message, senderName, isDoctor) {
         msgElement.classList.add('text-left');
     }
 
-    msgElement.classList.add('text-end');
+    msgElement.classList.add('msg-class');
     msgElement.style.color = "black";
     msgElement.style.fontSize = "1.3rem";
 

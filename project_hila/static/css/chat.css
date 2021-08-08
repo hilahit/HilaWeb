@@ -5,6 +5,7 @@ html {
 .chat-container {
     height: 30rem;
     width: 100%;
+    overflow-y: auto
 }
 
 main {

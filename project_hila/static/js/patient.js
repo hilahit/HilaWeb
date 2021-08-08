@@ -30,4 +30,3 @@ function copyTextToClipBoard(text, element) {
 
     alert("copied " + element);
 }
-
