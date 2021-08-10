@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 
 FCM_DJANGO_SETTINGS = {
     # default: _('FCM Django')
-    "FCM_SERVER_KEY": "AAAA_xj6fRw:APA91bHWujUyy12dQqPDEcr_hyWE3VTmnX-9BXWdQ0YsKFhZ4uK0oYAgLhdARpP0_8CSrJd6wMSOOp8JrcMKG-Tbf9L1EzvoqwC0JF3CJaAss1kCq7Zg2vdDJCVc-_R1gdcG8X-cmTw9",
+    "FCM_SERVER_KEY": env('CLOUD_MESSAGING_SERVER_KEY'),
     # true if you want to have only one active device per registered user at a time
     # default: False
     "ONE_DEVICE_PER_USER": False,
