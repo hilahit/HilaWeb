@@ -22,10 +22,8 @@
                
                 <button type="submit" class="btn btn-dark">התחברות</button>
             </div>
-            <!-- If user tried to access a member page without logging in first, 
-                    redirect to login page, and upon login success, redirect to the requested page -->
             {% if request.GET.next %}
-            <input type="hidden" name="next" value="{{request.GET.next}}">
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
             {% endif %}
         </form>
     </div>

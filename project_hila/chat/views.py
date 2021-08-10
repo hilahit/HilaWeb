@@ -119,18 +119,12 @@ def push_notification(request):
     message = request.POST.get("message")
     patient_key = request.POST.get('patient_key')
 
-    print("#### pushing", message)
-    print("#### pushing", patient_key)
-    
     token_obj = db.child("Patients").child(
         patient_key).child("user_details").get()
 
     if 'token' in token_obj.val():
         token = db.child("Patients").child(patient_key).child(
             "user_details").get().val()['token']
-
-        print("#### pushing", message)
-        print("#### pushing", patient_key)
 
         sendPushNotification(
             "מודעה", message, token, {'notif_type': 'announcement' })

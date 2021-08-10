@@ -49,7 +49,7 @@
 
             <div>
                 <div id="checkboxes">
-                <input type="checkbox" id="checkbox{{ forloop.counter }}" class="questionnaireCb" name="checkbox{{ forloop.counter }}">
+                <input type="checkbox" value="{{ forloop.counter }}" id="checkbox{{ forloop.counter }}" class="questionnaireCb" name="q_checkboxes">
                 </div>
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
@@ -78,35 +78,6 @@
     {% endif %}
 </div>
 
-<!-- <div class="col-md-12 text-center ">
-        <form action="{% url 'create_questionnaire' %}" method="POST">
-            {% csrf_token %}
-            <table class="table" style="text-align: right" dir="rtl">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">סוג שאלה</th>
-                        <th scope="col">שאלה</th>
-                        <th scope="col">תשובות</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for q in questions %}
-                    <tr>
-                        <td scope="row"> {{forloop.counter}}</td>
-                        <td scope="row">{{ q.question_type }}</td>
-                        <td scope="row">{{ q.question }}</td>
-                        <td scope="row">{{ q.answers }}</td>
-                        <td><input type="checkbox" name="check{{forloop.counter}}" />&nbsp;</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <button type="submit" class="btn btn-success">שליחה</button>
-        </form>
-
-    </div> -->
 <script src="{% static 'js/questionnaire.js' %}"></script>
 <script>
 
