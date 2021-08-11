@@ -11,7 +11,7 @@
                 <hr>
                 <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
                 <a class="btn btn-outline-primary  btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
-                <a class="btn btn-outline-warning  btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}" ">שליחת מודעה</a>
+                <a class="btn btn-outline-warning  btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}">שליחת מודעה</a>
                 <br>
                 <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'delete_patient' context.key %}">מחיקת משתמש</a>
             </div>
@@ -126,9 +126,6 @@
 <script src="{% static 'js/patient.js' %}"></script>
 <script>
 
-//TODO: get chars 
-//TODO: trim
-//TODO: on error
     function sendAnnouncement(){
           const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
 

@@ -8,7 +8,7 @@ from .models import Questionnaire, Question
 from accounts.firebase_repo import db
 import json
 import time
-from accounts.firebase_repo import sendPushNotification
+from accounts.firebase_repo import send_important_notification
 
 
 @login_required(login_url="login")
@@ -93,7 +93,8 @@ def questions_repository_view(request, key):
                 
                 questionnaires_to_post.append({
                     'questionnaireName': questionnaire_name,
-                    'questionList':  questions_list
+                    'questionList':  questions_list,
+                    'date_sent' : current_milli_time()
                 })
 
         # push questionnaires
@@ -108,10 +109,7 @@ def questions_repository_view(request, key):
             title = "שאלונים"
             msg = "התקבל שאלון חדש"
 
-            sendPushNotification(
-                title, msg, token, {'notif_type': 'questionnaire',
-                                    'contact_name': request.user.username
-                                    })
+            send_important_notification(title, msg, token)
 
         # return render(request, 'accounts/doctors/questions_repository.html', context)
         return redirect('patient', key)

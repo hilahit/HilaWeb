@@ -15,7 +15,7 @@ import asyncio
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from project_hila.bcolors import bcolors
-from accounts.firebase_repo import sendPushNotification
+from accounts.firebase_repo import send_message_notification, send_important_notification
 
 
 
@@ -99,16 +99,14 @@ def send_message(request):
 
         data = {'notif_type': 'message',
                 'room_key': f"{patient_key}_{doctor_id}",
-                'contact_name': request.user.username
+                'contact_name': request.user.username,
+                'message' : msg,
+                'title' : title
                 }
         
         # push_notification(title=title, msg=msg, token=token, data=data)
 
-        sendPushNotification(
-            title, msg, token, {'notif_type': 'message',
-                                'room_key': f"{patient_key}_{doctor_id}",
-                                'contact_name': request.user.username
-                                })
+        send_message_notification(token, data)
         
 
     return JsonResponse(payload)
@@ -118,6 +116,7 @@ def send_message(request):
 def push_notification(request):
     message = request.POST.get("message")
     patient_key = request.POST.get('patient_key')
+    title = "הודעה חשובה!"
 
     token_obj = db.child("Patients").child(
         patient_key).child("user_details").get()
@@ -126,8 +125,7 @@ def push_notification(request):
         token = db.child("Patients").child(patient_key).child(
             "user_details").get().val()['token']
 
-        sendPushNotification(
-            "מודעה", message, token, {'notif_type': 'announcement' })
+        send_important_notification(token, message, title)
 
     return JsonResponse({'message': message})
 

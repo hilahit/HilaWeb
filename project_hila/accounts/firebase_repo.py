@@ -26,17 +26,28 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 push_service = FCMNotification(
     api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
-def sendPushNotification(title, msg, registration_token, dataObject):
+def send_message_notification(registration_token, dataObject):
 
     result = push_service.notify_single_device(
 
         registration_id = registration_token, 
-        message_title = title, 
-        message_body = msg, 
+        # message_title = title, 
+        # message_body = msg, 
         data_message = dataObject
         
         )
         
+    print(result)
+
+
+def send_important_notification(registration_token, body, title):
+
+    result = push_service.notify_single_device(
+        message_body = body, 
+        message_title = title,
+        registration_id = registration_token,
+    )
+
     print(result)
 
 def create_user_without_sign_in(email, password):
