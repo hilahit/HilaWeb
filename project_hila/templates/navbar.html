@@ -1,48 +1,67 @@
-    {% load static %}
+{% load static %}
 
-    <head>
-        <title>Linguist</title>
-    </head>
+<head>
+    <title>Linguist</title>
+</head>
 
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow-sm p-3 mb-5 bg-body rounded">
-        <a target="_self" href="{% url 'home' %}">
-            <img src="{% static 'images/logo_hila_50.png' %} " class="img-fluid">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav align-items-end ml-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register_doctor' %}">הוספת רופאים</a>
-                    </li>
+<nav
+    class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow-sm p-3 mb-5 bg-body rounded">
+    <a target="_self" href="{% url 'home' %}">
+        <img id="hila_logo" src="{% static 'images/logo_high_rez_no_bg.png' %} " class="img-fluid">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse menuNavBar" id="navbarNav">
+        <ul class="navbar-nav mr-auto navBarList ">
+            {% if user.is_authenticated %}
+           
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url 'register_doctor' %}">הוספת רופאים</a>
+                </li>
+         
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'add_patients' %}">הוספת מטופלים</a>
-                    </li>
+           
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add_patients' %}">הוספת מטופלים</a>
+                </li>
+            
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'search_patients' %}">חיפוש מטופלים</a>
-                    </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'search_patients' %}">חיפוש מטופלים</a>
+                </li>
+          
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'questions_repository' 'key' %}">מאגר שאלונים</a>
-                    </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'questions_repository' 'key' %}">מאגר שאלונים</a>
+                </li>
+      
 
-                    <li class="nav-item">
+    
+                <li class="nav-item">
+                  <a class="nav-link text-danger" href="{% url 'logout' %}">יציאה</a>
+                </li>
+        
+
+            <!-- <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                <li class="nav-item">
+                    <div class="buttons">
                         <form class="logout-link" action="{% url 'logout' %}" method="POST">
                             {% csrf_token %}
+
                             <button type="submit" class="btn btn-danger">יציאה</button>
                         </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">התחבר</a>
-                    </li>
-                {% endif %}
-            </ul>
-
-        </div>
-    </nav>
+                    </div>
+                </li>
+            </div> -->
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">התחבר</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

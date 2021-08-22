@@ -9,11 +9,11 @@
             <div class="card card-body h-100">
                 <h5>מטופל/ת: {{ context.name }}</h5>
                 <hr>
-                <a class="btn btn-outline-info  btn-sm btn-block" href="">עדכון פרטים</a>
-                <a class="btn btn-outline-primary  btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
-                <a class="btn btn-outline-warning  btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}">שליחת מודעה</a>
+                <a class="btn btn-outline-info btn-sm btn-block" href="">עדכון פרטים</a>
+                <a class="btn btn-outline-primary btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
+                <a class="btn btn-outline-warning btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}">שליחת מודעה</a>
                 <br>
-                <a class="btn btn-outline-danger  btn-sm btn-block" href="{% url 'delete_patient' context.key %}">מחיקת משתמש</a>
+                <a class="btn btn-outline-danger btn-sm btn-block" href="{% url 'delete_patient' context.key %}">מחיקת משתמש</a>
             </div>
         </div>
 
@@ -22,16 +22,16 @@
                 <h5>פרטי התקשרות</h5>
                 <hr>
                 
-                <p>אימייל: <span id = patient_email>{{ context.email }}&nbsp;&nbsp;</span>
+                <p>אימייל: <span id = patient_email>{{ context.email }}</span>
                     <a target="_self" href="#">
-                        <span title="copy email"><img id="copy_img_email" src="{% static 'images/copy.png' %} " width="6%" height="10%" class="img-fluid"></span>
+                        <span title="copy email"><img id="copy-img-email" src="{% static 'images/copy.png' %} " class="img-fluid"></span>
                     </a>
                 </p>
                
                 <p>
-                    טלפון: <span id = patient_phone>{{ context.phone_number }}&nbsp;&nbsp;</span>
+                    טלפון: <span id = patient_phone>{{ context.phone_number }}</span>
                     <a target="_self" href="#">
-                        <span title="copy phone number"><img id="copy_img_phone" src="{% static 'images/copy.png' %} " width="6%" height="6%" class="img-fluid"></span>
+                        <span title="copy phone number"><img id="copy-img-phone" src="{% static 'images/copy.png' %} " class="img-fluid"></span>
                     </a>
                 </p>
             </div>

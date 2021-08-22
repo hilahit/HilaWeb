@@ -1,5 +1,5 @@
 
-document.getElementById("copy_img_email").
+document.getElementById("copy-img-email").
     addEventListener("click", function () {
 
     const span = document.getElementById("patient_email");
@@ -9,7 +9,7 @@ document.getElementById("copy_img_email").
     })
 
 
-document.getElementById("copy_img_phone").
+document.getElementById("copy-img-phone").
     addEventListener("click", function () {
 
         const span = document.getElementById("patient_phone");

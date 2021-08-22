@@ -10,3 +10,15 @@
     position: absolute;
     bottom: 0;
 }
+
+#copy-img-email {
+    width: 5%;
+    height: auto;
+    float: left;
+}
+
+#copy-img-phone {
+    width: 5%;
+    height: auto;
+    float: left;
+}
