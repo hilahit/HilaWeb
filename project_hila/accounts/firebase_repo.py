@@ -47,7 +47,7 @@ def send_important_notification(registration_token, body, title):
         message_title = title,
         registration_id = registration_token,
     )
-
+    print("#### token: ", registration_token)
     print(result)
 
 def create_user_without_sign_in(email, password):
