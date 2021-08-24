@@ -17,8 +17,6 @@
             <h5 id="title">יש לסמן שאלונים לשליחה</h5><br>
     {% endif %}
 
-    
-
     <div>
         {% if messages %}
         <ul class="messages">
@@ -59,21 +57,22 @@
                 {% endif %}
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-heading{{forloop.counter}}">
+                        <h2 class="accordion-header" id="flush-heading{{ forloop.counter }}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#flush-collapse{{forloop.counter}}" aria-expanded="false" aria-controls="flush-collapse{{forloop.counter}}">
-                                {{ questionnaire.title }}&nbsp;&nbsp;
+                                data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
+                            {{ questionnaire.index }}. &nbsp;&nbsp;{{ questionnaire.title }}&nbsp;&nbsp;
                             </button>
                         </h2>
-                        <div id="flush-collapse{{forloop.counter}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{forloop.counter}}"
+                        <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                                 {% for q in questionnaire.questions %}
-                                    <p><span style="font-size:150%;">{{forloop.counter}}.&nbsp;</span> <span style="font-size:150%;">{{ q.question }}</span> <span style="color:grey">{{ q.question_type }}</span></p>
-                                    <p><b>תשובות:</b> {{ q.answers }}</p>
+                                    <p><span class="qIndex">{{ forloop.counter }}.&nbsp;</span> <span class="qQuestion">{{ q.question }}</span> <span
+                                            class="qType">{{ q.question_type }}</span></p>
+                                    <p><span class="qAnswers"><b>תשובות:</b></span> {{ q.answers }}</p>
                                     <hr>
                                 {% endfor %}
-                                <button type="button" name="add_question" class="btn btn-outline-primary">הוספת שאלה</button>
+                                <a href="{% url 'create_question' questionnaire.index %}" class='btn btn-outline-success'>הוספת שאלה</a>
                             </div>
                         </div>
                     </div>

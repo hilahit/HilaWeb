@@ -23,45 +23,36 @@
 
 <br>
 
-<div class="container-fluid">
-
-    <div id="question-list">
-
+<div class="container-fluid d-flex justify-content-center">
+    <div class="form-group w-50">
+        <form action="{% url 'create_question' 'index' %}" method="POST" style="text-align: right " dir="rtl">
+            {% csrf_token %}
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">שאלון</label>
+                {% render_field form.questionnaire value="1" class="form-control" %}
+            </div>
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">סוג שאלה</label>
+                {% render_field form.question_type class="form-control" %}
+            </div>
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">שאלה</label>
+                {% render_field form.question class="form-control" %}
+            </div>
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">תשובות</label>
+                {% render_field form.answers class="form-control" %}
+                <small><label class="label rtl">יש להפריד תשובות בפסיק ורווח</label></small>
+            </div>
+            <div class="col-md-12 text-center ">
+                <button type="submit" class="btn btn-secondary">הוספה</button>
+            </div>
+        </form>
     </div>
-
-    
-     <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
-        <label class="label rtl">סוג שאלה</label>
-        {% render_field form.question_type class="form-control" %}
-    </div>
-
-    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
-        <label class="label rtl">שאלה</label>
-        {% render_field form.question class="form-control" %}
-    </div>
-
-    <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
-        <label class="label rtl">תשובות</label>
-        {% render_field form.answers class="form-control" %}
-        <small><label class="label rtl">יש להפריד תשובות בפסיק ורווח</label></small>
-    </div>
-
-    <div class="col-md-12 text-center ">
-        <button class="btn btn-secondary" onclick="addQuestion()">הוספה</button>
-    </div>
-
-
-    
 </div>
 
 <script>
 
-    let html = "<h3>question added</h3>"
-
-    function addQuestion(){
-        console.log("question added")
-        document.getElementById("question-list").innerHTML+= html
-    }
 
 </script>
 

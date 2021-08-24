@@ -1,4 +1,20 @@
+.qAnswers {
+    color: red;
+}
 
+.qQuestion {
+    color: rgb(4, 4, 139);
+    font-size:150%;
+}
+
+.qIndex {
+    color: rgb(4, 4, 139);
+    font-size:120%;
+}
+
+.qType {
+    color:grey;
+}
 
 #accordionFlushExample {
      z-index: 10;

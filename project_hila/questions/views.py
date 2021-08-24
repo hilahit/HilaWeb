@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from accounts.views import patient_view
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -7,24 +8,29 @@ from django.contrib import messages
 from .models import Questionnaire, Question
 from accounts.firebase_repo import db
 import time
+import json
 from accounts.firebase_repo import send_important_notification
 
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
-def create_question_view(request):
-
-    form = QuestionForm()
+def create_question_view(request, index):
+    print("IN CREATE QUESTION VIEW")
 
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            # form.save()
-            print("saving question")
+ 
+            form.save()
+            questionnaire_name =  form.cleaned_data["questionnaire"]
+            messages.success(request, f"השאלה נוספה בהצלחה לשאלון '{questionnaire_name}'")
+        else:
+            print(form.errors.as_data())
+            messages.warning(request, "שמירת השאלה נכשלה. יש לוודא שכל השדות הוזנו כראוי.")
+    else:
+        form = QuestionForm(initial={'questionnaire': index})
 
-        return redirect('accounts/doctors/questions_repository.html')
-
-    context = {'form' : form}
+    context = {'form': form}
 
     return render(request, 'accounts/doctors/create_question.html', context)
 
@@ -115,9 +121,12 @@ def handle_questionnaires_send(request, key):
 def questions_repository_view(request, key):
     
     context = {}
+    print("######################################################")
+    db_questionnaires = Questionnaire.objects.all()
+    print(db_questionnaires)
+    print("######################################################")
 
-    db_questions = Questionnaire.objects.all()
-    questionnaires = fetch_questions(db_questions)
+    questionnaires = fetch_questions(db_questionnaires)
 
     if not key == "key":
 
@@ -162,16 +171,17 @@ def fetch_patient_by_key(key):
 
     return details
 
-def fetch_questions(db_questions):
+def fetch_questions(db_questionnaire):
 
     questionnaires = []
 
-    for q_set in db_questions:
+    for q_set in db_questionnaire:
         db_questions = Question.objects.filter(questionnaire=q_set)
 
         questionnaires.append({
             'questions': db_questions,
             'title': q_set.title,
+            'index': q_set.pk
         })
     
     return questionnaires
@@ -194,19 +204,6 @@ def questionnaires_view(request):
     context['count'] = len(questionnaires)
 
     return render(request, 'accounts/doctors/questionnaires.html', context)
-
-
-
-# @login_required(login_url="login")
-# @cache_control(no_cache=False, must_revalidate=True, no_store=True)
-# def create_questionnaire(request):
-
-#     if request.method == 'POST':
-#         return send_questionnaire(request)
-#     else:
-#         questions = Question.objects.all().values()
-#         context = {'questions' : questions}
-#         return render(request, 'accounts/doctors/create_questionnaire.html', context)
 
 
 def current_milli_time():
