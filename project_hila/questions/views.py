@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
 from accounts.views import patient_view
 from django.shortcuts import render, redirect
@@ -8,14 +9,15 @@ from django.contrib import messages
 from .models import Questionnaire, Question
 from accounts.firebase_repo import db
 import time
-import json
 from accounts.firebase_repo import send_important_notification
 
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def create_question_view(request, index):
-    print("IN CREATE QUESTION VIEW")
+    """
+    
+    """
 
     if request.method == 'POST':
         form = QuestionForm(request.POST)
@@ -35,9 +37,9 @@ def create_question_view(request, index):
     return render(request, 'accounts/doctors/create_question.html', context)
 
 
-def get_question_type(type):
+def get_question_type(type: str) -> str:
     """
-    returns a string representation of the question type in the real time database.
+    Returns a string representation of the question type in the real time database.
     """
 
     if type == 'בחירה יחידה':
@@ -121,10 +123,7 @@ def handle_questionnaires_send(request, key):
 def questions_repository_view(request, key):
     
     context = {}
-    print("######################################################")
     db_questionnaires = Questionnaire.objects.all()
-    print(db_questionnaires)
-    print("######################################################")
 
     questionnaires = fetch_questions(db_questionnaires)
 
@@ -164,14 +163,13 @@ def questions_repository_view(request, key):
         return render(request, 'accounts/doctors/questions_repository.html', context)
 
 
-def fetch_patient_by_key(key):
+def fetch_patient_by_key(key: str) -> QuerySet:
     patient = db.child("Patients").order_by_key().equal_to(key).get()
     patient_obj = patient.val()
     details = patient_obj[list(patient_obj.keys())[0]]
-
     return details
 
-def fetch_questions(db_questionnaire):
+def fetch_questions(db_questionnaire: QuerySet)-> list:
 
     questionnaires = []
 
@@ -184,6 +182,7 @@ def fetch_questions(db_questionnaire):
             'index': q_set.pk
         })
     
+    print(type(questionnaires))
     return questionnaires
 
 def questionnaires_view(request):
@@ -206,7 +205,7 @@ def questionnaires_view(request):
     return render(request, 'accounts/doctors/questionnaires.html', context)
 
 
-def current_milli_time():
+def current_milli_time()-> int:
     return int(round(time.time() * 1000))
 
 @login_required(login_url="login")
@@ -222,6 +221,7 @@ def create_questionnaire(request):
 
 
 def get_question_by_pk(primary_key):
+
     questionRow = Question.objects.filter(pk=primary_key).values()
     return questionRow[0]
 
@@ -250,7 +250,6 @@ def send_questionnaire(request):
         questions = Question.objects.all().values()
 
         context = {'questions': questions}
-        print("tryin to redirect to create_questionnaire")
         return render(request, 'accounts/doctors/create_questionnaire.html', context)
     else:
         return render(request, 'accounts/doctors/send_questionnaire.html', {'questions' : questions_list})
