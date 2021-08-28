@@ -14,7 +14,7 @@
             <h6 style="text-align:center"><span id="questionnaireCount">0</span> שאלונים נבחרו</h6>
         </div>
             <br>
-            <h5 id="title">יש לסמן שאלונים לשליחה</h5><br>
+            <h5 style="text-align:center" id="title">יש לסמן שאלונים לשליחה</h5><br>
     {% endif %}
 
     <div>
@@ -36,10 +36,14 @@
 
     {% if patient_name %}
     <form action="{% url 'questions_repository' patient_key %}" method="POST">
-        <div class="row">
-            <div class="col text-center">
-                <button type="submit" name="send_questionnaire" class="btn btn-primary form-control w-50">שליחה</button>
-                <br><br>
+        <div class="sticky-md-top shadow p-3 mb-5 bg-body rounded">
+            <div class="d-flex justify-content-center">      
+                <div class="col text-center">
+                    <button type="submit" name="send_questionnaire" class="btn btn-primary form-control w-50" id="sendQuestionnairesBtn" disabled>שליחה</button>
+                </div>
+                <div class="col text-center">
+                    <button type="button" name="create_questionnaire" class="btn btn-primary form-control w-50 createQuestionnaireBtn" data-toggle="modal" data-target="#newQmodal">שאלון חדש</button>
+                </div>
             </div>
         </div>
     {% else %}
@@ -52,16 +56,31 @@
             <div class="questionnaire-container">
                 {% if patient_name %}
                     <div id="checkboxes">
-                    <input type="checkbox" value="{{ forloop.counter }}" id="checkbox{{ forloop.counter }}" class="questionnaireCb" name="q_checkboxes">
-                    </div>
+                        {% if questionnaire.questions|length == 0 %}
+                            <input type="checkbox" value="{{ forloop.counter }}" id="checkbox{{ forloop.counter }}" class="questionnaireCb"
+                                name="q_checkboxes" disabled>
+                        {% else %}
+                            <input type="checkbox" value="{{ forloop.counter }}" id="checkbox{{ forloop.counter }}" class="questionnaireCb"
+                                name="q_checkboxes">
+                        {% endif %}
+                    </div>             
                 {% endif %}
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-heading{{ forloop.counter }}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
-                            {{ questionnaire.index }}. &nbsp;&nbsp;{{ questionnaire.title }}&nbsp;&nbsp;
-                            </button>
+                            {% if questionnaire.questions|length == 0 %}
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false"
+                                    aria-controls="flush-collapse{{forloop.counter }}">
+                                    {{ questionnaire.index }}. &nbsp;&nbsp;{{ questionnaire.title }}&nbsp;&nbsp;&nbsp;&nbsp;<span class="emptyQuestionnaire">השאלון ריק. יש להוסיף לפחות שאלה אחת כדי לשלוח.</span>&nbsp;&nbsp;
+                                </button>
+                            {% else %}
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false"
+                                    aria-controls="flush-collapse{{forloop.counter }}">
+                                    {{ questionnaire.index }}. &nbsp;&nbsp;{{ questionnaire.title }}&nbsp;&nbsp;
+                                </button>
+                            {% endif %}
                         </h2>
                         <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}"
                             data-bs-parent="#accordionFlushExample">
@@ -69,7 +88,12 @@
                                 {% for q in questionnaire.questions %}
                                     <p><span class="qIndex">{{ forloop.counter }}.&nbsp;</span> <span class="qQuestion">{{ q.question }}</span> <span
                                             class="qType">{{ q.question_type }}</span></p>
-                                    <p><span class="qAnswers"><b>תשובות:</b></span> {{ q.answers }}</p>
+                                    {% if q.answers|length == 0  %}
+
+                                    {% else %}
+                                        <p><span class="qAnswers"><b>תשובות:</b></span> {{ q.answers }}</p>
+                                    {% endif %}
+                                    
                                     <hr>
                                 {% endfor %}
                                 <a href="{% url 'create_question' questionnaire.index %}" class='btn btn-outline-success'>הוספת שאלה</a>
@@ -81,12 +105,77 @@
             </div> 
         {% endfor %}
     </form>
+
+    <div class="modal fade" id="newQmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">יצירת שאלון חדש</h5>
+    
+                </div>
+                <div class="modal-body">
+                    <form>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <h6 id="count"></h6>
+                            <label for="questionnaire-title" class="col-form-label">שם השאלון:</label>
+                            <input name="questionnaire-title" maxlength="50" class="form-control" id="questionnaire-title"
+                                placeholder="יש להזין את שם השאלון"></input>
+                            <h6 id="alert-empty">שם השאלון לא יכול להיות ריק!</h6>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ביטול</button>
+                    <button type="button" class="btn btn-primary" onclick="createNewQuestionnaire()">יצירת שאלון</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="{% static 'js/questionnaire.js' %}"></script>
 <script>
 
     updateQuestionnaireCounter();
+
+    function createNewQuestionnaire() {
+
+            var alertEmpty = document.getElementById("alert-empty");
+            var titleInput = document.getElementById("questionnaire-title");
+            const qTitle = titleInput.value.trim();
+
+            if (qTitle.length == 0) {
+                alertEmpty.style.display = "block";
+            }
+            else {
+                alertEmpty.style.display = "none";
+                pushQuestionnaire(qTitle)
+            }
+        }
+
+    function pushQuestionnaire(qTitle) {
+
+            const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+            $.ajax({
+                headers: { 'X-CSRFToken': token },
+                type: 'POST',
+                url: `{% url 'push_questionnaire' %}`,
+                data: {
+                    'qTitle': qTitle
+                },
+                dataType: 'json',
+                success: function (event) {
+                   window.location.reload();
+                },
+                error: function (event) {
+                    //TODO: code stub
+                }
+            });
+        }
 
 </script>
 

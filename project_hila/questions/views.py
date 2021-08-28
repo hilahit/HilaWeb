@@ -1,3 +1,4 @@
+import datetime
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
 from accounts.views import patient_view
@@ -9,7 +10,17 @@ from django.contrib import messages
 from .models import Questionnaire, Question
 from accounts.firebase_repo import db
 import time
+from django.http import JsonResponse
 from accounts.firebase_repo import send_important_notification
+
+
+def push_questionnaire(request):
+    questionnaire_title = request.POST.get("qTitle")
+    date = datetime.date.today()
+    questionnaire = Questionnaire(date_created=date, title=questionnaire_title)
+    print(questionnaire)
+    questionnaire.save()
+    return JsonResponse({'message': "Questionnaire created successfully!"})
 
 
 @login_required(login_url="login")
@@ -159,7 +170,6 @@ def questions_repository_view(request, key):
             #TODO implement add question. consider modal
             return render(request, 'accounts/doctors/questions_repository.html', context)
     else:
-
         return render(request, 'accounts/doctors/questions_repository.html', context)
 
 

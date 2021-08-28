@@ -13,6 +13,31 @@ function updateQuestionnaireCounter() {
                     .map(i => i.value) // Use Array.map to extract only the checkbox values from the array of objects.
 
             counter.textContent = enabledCheckboxes.length;
+
+            if (enabledCheckboxes.length > 0) {
+                document.getElementById("sendQuestionnairesBtn").disabled = false;
+            }
+            else if (enabledCheckboxes.length == 0) {
+                document.getElementById("sendQuestionnairesBtn").disabled = true;
+            }
         })
     });
+
+}
+
+function createNewQuestionnaire() {
+
+    var alertEmpty = document.getElementById("alert-empty");
+    var titleInput = document.getElementById("questionnaire-title");
+    const qTitle = titleInput.value;
+ 
+    if (qTitle.length == 0) {
+        alertEmpty.style.display = "block";
+        console.log("empty");
+    }
+    else {
+        alertEmpty.style.display = "none";
+        console.log("not empty");
+        
+    }
 }

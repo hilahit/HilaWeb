@@ -16,8 +16,24 @@
     color:grey;
 }
 
+.emptyQuestionnaire {
+    font-size: 1rem;
+    color: grey;
+}
+
+.submitSendForm {
+    padding: 10px;
+}
+
+
 #accordionFlushExample {
      z-index: 10;
+}
+
+#alert-empty {
+    display: none;
+    color: red;
+    padding: 5px;
 }
 
 
