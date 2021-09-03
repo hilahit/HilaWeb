@@ -2,6 +2,7 @@ import datetime
 from django.core.validators import RegexValidator
 from django.db import models
 
+
 class Patient(models.Model):
     first_name = models.CharField(blank=False, max_length=255)
     last_name = models.CharField(blank=False, max_length=255)
@@ -15,6 +16,8 @@ class Patient(models.Model):
         validators=[phone_regex], blank=False, max_length=10)
 
     birth_date = models.DateField()
+
+
 
     
     

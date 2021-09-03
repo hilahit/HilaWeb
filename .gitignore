@@ -2,3 +2,4 @@ env
 db.sqlite3
 hilaproject_service_private_key.json
 .env
+

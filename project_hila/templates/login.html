@@ -5,6 +5,31 @@
 
 <div class="container-fluid">
     <h1 class="text-center">התחברות</h1>
+    <div dir="rtl">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class="alert alert-success">
+                <li class=" {{ message.tags }} text-right">{{ message|safe }}</li>
+            </div>
+            {% endif %}
+            {% if message.tags == 'warning' %}
+            <li class="alert alert-danger {{ message.tags }} text-right">{{ message }}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    
+        {% if form.errors %}
+        <ul>
+            {% for error in form.errors %}
+            <li class="alert alert-danger text-right">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    
+    </div>
     <br />
     <div class="row justify-content-center">
 
@@ -18,6 +43,7 @@
             <br>
             {{ form.password}}
             <br><br>
+        
             <div class="d-flex justify-content-center"​>
                
                 <button type="submit" class="btn btn-dark">התחברות</button>

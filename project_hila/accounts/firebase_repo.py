@@ -7,6 +7,7 @@ from pyfcm import FCMNotification
 import json
 
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject_service_private_key.json')
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
 config = {
     "apiKey": "AIzaSyBBxecsVnTegPnRNNgC0AFd2UX6keoyIQw",
@@ -21,7 +22,6 @@ auth_fb = firebase.auth()
 db = firebase.database()
 default_app = firebase_admin.initialize_app()
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
 push_service = FCMNotification(
     api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])

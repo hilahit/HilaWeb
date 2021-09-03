@@ -48,6 +48,15 @@
         </div>
     {% else %}
     <form action="{% url 'questions_repository' 'key' %}" method="POST">
+        <div class="sticky-md-top shadow p-3 mb-5 bg-body rounded">
+            <div class="d-flex justify-content-center">
+                <div class="col text-center">
+                    <button type="button" name="create_questionnaire"
+                        class="btn btn-primary form-control w-50 createQuestionnaireBtn" data-toggle="modal"
+                        data-target="#newQmodal">שאלון חדש</button>
+                </div>
+            </div>
+        </div>
     {% endif %}
        
         {% for questionnaire in questionnaires %}

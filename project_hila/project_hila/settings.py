@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'questions',
     'chat',
     'channels',
-    'fcm_django'
+    'fcm_django',
+
 ]
 
 FCM_DJANGO_SETTINGS = {
@@ -75,6 +76,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+]
+
+AUTHENTICATION_BACKENDS = [
+    'project_hila.EmailBackend.EmailBackend',
 ]
 
 ROOT_URLCONF = 'project_hila.urls'
@@ -169,3 +175,4 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
