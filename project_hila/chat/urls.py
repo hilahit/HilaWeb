@@ -10,5 +10,6 @@ urlpatterns = [
     path('send_message/', views.send_message, name='send_message'),
     path('listen_to_chat', views.listen_to_chat, name='listen_to_chat'),
     path('close_stream', views.close_stream, name='close_stream'),
-    path('push_notification', views.push_notification, name='push_notification')
+    path('push_notification', views.push_notification, name='push_notification'),
+    path('fetch_chats_data/', views.fetch_chats_data, name='fetch_chats_data')
 ]

@@ -1,4 +1,5 @@
 import json
+from .models import ChatData
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
@@ -11,8 +12,8 @@ from django.http import JsonResponse
 import calendar
 import time
 from project_hila.bcolors import bcolors
-import asyncio
 from channels.layers import get_channel_layer
+from asgiref.sync import sync_to_async
 from asgiref.sync import async_to_sync
 from project_hila.bcolors import bcolors
 from accounts.firebase_repo import send_message_notification, send_important_notification
@@ -51,7 +52,92 @@ def close_stream(request):
     if my_stream is not None:
         my_stream.close()
 
+    patient_key = request.POST.get('patient_key')
+    patient_name = request.POST.get('patient_name')
+    save_msg_count(request, patient_key, patient_name)
+
     return JsonResponse({'event' : "close event"})
+
+
+def save_msg_count(request, p_key, p_name):
+
+    chat_id = f"{p_key}_{request.user.id}"
+    f_chat = db.child("Chats").child(chat_id).get()
+
+    chat_values = f_chat.val().values()
+    chat_count = len(list(chat_values)) - 1
+
+    chat, created = ChatData.objects.update_or_create(
+        chat_id = f"{p_key}_{request.user.id}",
+        defaults={'patient_name': p_name, 'chat_message_count': chat_count}
+    )
+
+@login_required(login_url="login")
+def fetch_chats_data(request):
+    """
+    Gets all the chat rooms that contain new messages.
+    Chat data objects in the database are filtered by a suffix: '_{doctor_id}'
+    """
+
+    chat_list = [] 
+
+    suffix = f"_{request.user.id}"
+
+    firebase_chats = db.child("Chats").child().get()
+
+    # Traverse all firebase chat rooms
+    for f_chat in firebase_chats.each():
+
+        # Search for current user chats
+        if suffix in f_chat.key():
+           
+            # The size is the amount of all the fields in the current chat room
+            # minus the 'contact' field
+            f_chat_size = (len(f_chat.val()) - 1)
+
+            db_chat_id = get_db_chat_id(f_chat)
+            db_chat_size = get_db_chat_size(f_chat)   
+            print("firebase chat size: ", f_chat_size)
+            print("db chat size: ", db_chat_size)
+
+            # If chat exists
+            if db_chat_size is not None and db_chat_id is not None:
+
+                # The amount of message in the firebase is greater
+                # then the amount in the local db. That means that
+                # there are new unread messages, so get this chat room
+                if (db_chat_size < f_chat_size):
+
+                    patient_key = db_chat_id.removesuffix(suffix)
+                    patient = db.child("Patients").order_by_key().equal_to(patient_key).get()
+                    patient_obj = patient.val()
+                    details = patient_obj[list(patient_obj.keys())[0]]
+                    name = details['name']
+                    
+                    print("#############################################")
+
+                    chat_list.append({
+                        'patient_name': name,
+                        'patient_key': patient_key
+                    })
+
+    new_messages = {'messages': chat_list}
+    return JsonResponse(new_messages)
+
+
+def get_db_chat_id(chat):
+    db_chat_data = ChatData.objects.filter(chat_id=chat.key()).first()
+    if hasattr(db_chat_data, 'chat_id'):
+        return db_chat_data.chat_id
+    else:
+        return None
+
+def get_db_chat_size(chat):
+    db_chat_data = ChatData.objects.filter(chat_id=chat.key()).first()
+    if hasattr(db_chat_data, 'chat_message_count'):
+        return db_chat_data.chat_message_count
+    else:
+        return None
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)

@@ -10,6 +10,7 @@ from django.views.decorators.cache import cache_control
 from django.core.management.utils import get_random_secret_key
 from django.contrib.auth.models import User
 from django.contrib import messages
+from chat.views import fetch_chats_data
 
 
 
@@ -17,7 +18,8 @@ from django.contrib import messages
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def home(request):
     if request.user.is_authenticated:
-
+        # TODO make 'fetch_chats_data' load on html ready
+        # fetch_chats_data(request)
         return render(request, 'dashboard.html')
     else:
         return login_view(request)
@@ -48,7 +50,6 @@ def login_view(request):
         else:
             
             messages.warning(request, "יש להזין שם משתמש וסיסמה נכונים")
-            print(form.errors)
             return redirect('login')
     else:
         form = AuthenticationForm()

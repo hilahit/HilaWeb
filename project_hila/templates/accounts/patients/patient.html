@@ -138,7 +138,7 @@
             url: `{% url 'push_notification' %}`,
             data: {
                 'message': message.value.trim(),
-                'patient_key' : '{{ context.key }}'
+                'patient_key' : '{{ context.key }}',
             },
             dataType: 'json',
             success: function (event) {
@@ -183,6 +183,8 @@
             type: 'POST',
             url: `{% url 'close_stream' %}`,
             data: {
+                'patient_key': '{{ context.key }}',
+                'patient_name': '{{ context.name }}',
                 'event': 'closing stream',
             },
             dataType: 'json',

@@ -10,14 +10,12 @@
         <div class="col-md-6 shadow-sm p-3 mb-5 bg-white rounde">
             <h5 class="text-center">הודעות חדשות</h5>
             <hr>
-            <div class="card card-body">
-                <table class="table table-sm">
-                    <tr class="text-center text-secondary">
-                        <th>מטופל</th>
-                        <th>נושא</th>
-                        <th>תאריך</th>
-                    </tr>
-                </table>
+            <div id="spinner-container">
+                <div class="d-flex p-2 bd-highlight justify-content-center">
+                    <div class="spinner-border text-primary m-5" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -38,4 +36,35 @@
     </div>
 </div>
 
+<script>
+
+    const spinner = document.getElementById('spinner-container');
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+      
+       
+       const token = "{{ csrf_token }}";
+       $.ajax({
+            headers: { 'X-CSRFToken': token },
+            type: 'POST',
+            url: `{% url 'fetch_chats_data' %}`,
+            data: {
+                'event': 'fetch_chats_data'
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                spinner.style.display = "none";
+            },
+            error: function (event) {
+            }
+        });
+    });
+   
+
+</script>
+
 {% endblock %}
+
+
+ 
