@@ -39,7 +39,6 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
         print("###############", self.room_group_name)
-      
         print("########## connecting ##########")
 
         # Join room group
@@ -77,7 +76,7 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
                 
     # Receive message from room group
     async def chat_message(self, event):
-        print(f"{bcolors.OKGREEN}sending message to front end{bcolors.ENDC}")
+        # print(f"{bcolors.OKGREEN}sending message to front end{bcolors.ENDC}")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'payload': event

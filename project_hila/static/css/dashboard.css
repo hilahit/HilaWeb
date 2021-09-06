@@ -1,0 +1,32 @@
+h6 {
+    color: rgb(4, 4, 139);
+    text-align: center;
+}
+
+.icon-container {
+    position: relative;
+}
+
+.icon-btn {
+    background-color: Transparent;
+    border: none;
+    outline:none;
+    margin-right: auto;
+    left: 0;
+    position: absolute;
+     direction: rtl;
+     top: 50%;
+     color: rgb(4, 4, 139);
+     -ms-transform: translateY(-50%);
+     transform: translateY(-50%);
+}
+
+.icon-no-msg {
+    font-size: 2.5rem;
+    text-align: center;
+    color: rgb(4, 4, 139);
+}
+
+.blue-everything {
+     color: rgb(4, 4, 139);
+}

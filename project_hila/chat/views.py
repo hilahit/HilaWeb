@@ -4,12 +4,9 @@ from .models import ChatData
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from chat.FirebaseListener import FirebaseListener
-from channels.consumer import AsyncConsumer
-from .consumers import AsyncChatConsumer
 from django.shortcuts import render
 from accounts.firebase_repo import db
 from django.http import JsonResponse
-import calendar
 import time
 from project_hila.bcolors import bcolors
 from channels.layers import get_channel_layer
@@ -63,14 +60,18 @@ def save_msg_count(request, p_key, p_name):
 
     chat_id = f"{p_key}_{request.user.id}"
     f_chat = db.child("Chats").child(chat_id).get()
+    if f_chat.val() is not None:
 
-    chat_values = f_chat.val().values()
-    chat_count = len(list(chat_values)) - 1
-
-    chat, created = ChatData.objects.update_or_create(
-        chat_id = f"{p_key}_{request.user.id}",
-        defaults={'patient_name': p_name, 'chat_message_count': chat_count}
-    )
+        chat_values = f_chat.val().values()
+        print(chat_values)
+        chat_count = len(list(chat_values)) - 1
+        print("updating message count")
+        chat, created = ChatData.objects.update_or_create(
+            chat_id = f"{p_key}_{request.user.id}",
+            defaults={'patient_name': p_name, 'chat_message_count': chat_count}
+        )
+    else:
+        print(f"{bcolors.WARNING}tried to acces chat {chat_id} with {p_name} but chat is None .{bcolors.ENDC}")
 
 @login_required(login_url="login")
 def fetch_chats_data(request):
@@ -114,12 +115,14 @@ def fetch_chats_data(request):
                     details = patient_obj[list(patient_obj.keys())[0]]
                     name = details['name']
                     
-                    print("#############################################")
 
                     chat_list.append({
                         'patient_name': name,
                         'patient_key': patient_key
                     })
+                elif db_chat_size > f_chat_size:
+                    msg = f"{bcolors.OKGREEN}{db_chat_size-f_chat_size} messages missing from local db"
+                    print(msg)
 
     new_messages = {'messages': chat_list}
     return JsonResponse(new_messages)

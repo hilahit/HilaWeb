@@ -2,6 +2,22 @@
 
 {% block content %}
 
+<div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success">
+            <li class=" {{ message.tags }}">{{ message|safe }}</li>
+        </div>
+        {% endif %}
+        {% if message.tags == 'warning' %}
+        <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
 
@@ -51,7 +67,5 @@
         </tbody>
     </table>
 </div>
-
-
 
 {% endblock %}

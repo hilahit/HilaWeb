@@ -38,11 +38,8 @@ class FirebaseListener(object):
     def stream_handler(self, message):
         # We only care if something changed
         if message["event"] in ("put", "patch"):
-            print(f"{bcolors.OKBLUE}Something changed{bcolors.ENDC}")
             if message["path"] == "/":
                 self.my_stuff = message["data"]
-                print(f"{bcolors.OKBLUE}sending all messages from firebase listener{bcolors.ENDC}")
-                print(self.my_stuff)
                 async_to_sync(channel_layer.group_send)(
                     f"chat_{self.chat_id}",
                     {
@@ -53,7 +50,6 @@ class FirebaseListener(object):
                     }
                 )
             else:
-                print(f"{bcolors.OKBLUE}sending a message from firebase listener{bcolors.ENDC}")
 
                 async_to_sync(channel_layer.group_send)(
                      f"chat_{self.chat_id}",

@@ -10,25 +10,37 @@ from operator import itemgetter
 from django.views.decorators.cache import cache_control
 from chat.views import listen_to_chat
 from django.utils.dateparse import parse_date
+from django.http import JsonResponse
 
 def create_announcement(request):
     title = "test title"
     short_description = "some description"
     return render
 
+def navigate_to_patient(request):
+    p_key = request.POST.get('patient_key')
+    print(p_key)
+
+    response = {'patient_key': p_key}
+
+    return JsonResponse(response)
+
 
 # TODO show user deleted successfully
-# TODO need to handle on back pressed
 # TODO need to show deletion error
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
-def delete_patient_view(request, key):
+def delete_patient_view(request):
+
     """ This function will delete a user from the Firebase authenticated users list.
         Upon success, all of the user's data in the realtime databse will be deleted."""
-
+    key = request.POST.get('patient_key')
+    name = request.POST.get('patient_name')
+    print(f"deleting patient {key}")
     is_deleted = delete_patient(key)
     if is_deleted:
         db.child("Patients").child(key).remove()
+        messages.success(request, f"המשתמש {name} הוסר בהצלחה")
         return search_patients_view(request)
 
     return home(request)
@@ -41,7 +53,7 @@ def patient_view(request, key):
     patient = db.child("Patients").order_by_key().equal_to(key).get()
     doctor_id = request.user.id
 
-    if not patient.val(): # patient.val() is of type list
+    if not patient.val(): 
         messages.warning(request, "error, no such user")
         return search_patients_view(request)
 

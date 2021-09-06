@@ -8,7 +8,7 @@
     <div class="row">
 
         <div class="col-md-6 shadow-sm p-3 mb-5 bg-white rounde">
-            <h5 class="text-center">הודעות חדשות</h5>
+            <h5 class="text-center blue-everything">הודעות חדשות</h5>
             <hr>
             <div id="spinner-container">
                 <div class="d-flex p-2 bd-highlight justify-content-center">
@@ -17,10 +17,19 @@
                     </div>
                 </div>
             </div>
+            <div id="new-msg-container">
+                <table id="tableBody" class="table table-sm">
+                    <tbody>
+                    <tr class="text-center icon-container">
+                      
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="col-md-6 shadow-sm p-3 mb-5 bg-white rounde">
-            <h5 class="text-center">רשומות אחרונות</h5>
+            <h5 class="text-center blue-everything">רשומות אחרונות</h5>
             <hr>
             <div class="card card-body">
                 <table class="table table-sm">
@@ -38,9 +47,76 @@
 
 <script>
 
+    function showNoNewMessages(){
+
+        console.log("???");
+        let container = document.getElementById('new-msg-container');
+        let div = document.createElement('div');
+        div.classList.add('icon-no-msg');
+        div.classList.add();
+        let span = document.createElement('span');
+        span.classList.add('material-icons');
+        span.classList.add('icon-no-msg');
+        span.innerHTML = "do_not_disturb";
+
+        h6 = document.createElement('h6');
+        h6.innerHTML = "אין הודעות חדשות";
+
+        div.appendChild(span);
+        div.appendChild(h6);
+        container.append(div);
+    }
+
+    function navigateToPatient(key){
+
+        const token = "{{ csrf_token }}";
+        $.ajax({
+            headers: { 'X-CSRFToken': token },
+            type: 'POST',
+            url: "{% url 'navigate_to_patient' %}",
+            data: {
+                'patient_key': key
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(`/accounts/patient/${key}/`);
+                var url = `/accounts/patient/${key}/`;
+                window.location.href = url;
+            
+            },
+            error: function (event) {
+                console.log(event);
+            }
+        });
+    }
+
+
+    function appendNewRow(name,key) {
+
+        let table = document.getElementById('tableBody');
+        let newRow = document.createElement('tr');
+        newRow.classList.add('text-center');
+        newRow.classList.add('icon-container');
+        newRow.innerHTML = `<td>
+                            <div>
+                                <h6>${name}</h6>
+                                <button onclick="navigateToPatient('${key}')" class="mdc-icon-button material-icons icon-btn">
+                                <div class="mdc-icon-button__ripple"></div>
+                                comment
+                                </button>
+                            </div>
+                        </td>`;
+
+        table.appendChild(newRow);
+    }
+
     const spinner = document.getElementById('spinner-container');
 
     window.addEventListener('DOMContentLoaded', (event) => {
+
+    
+        const msgContainer = document.getElementById('new-msg-container');
+        msgContainer.style.display = "none";
       
        
        const token = "{{ csrf_token }}";
@@ -53,8 +129,24 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+
+                if (data.messages != null && data.messages.length != 0 ){
+
+                     for (var i = 0; i < data.messages.length; i++) {
+                        msg = data.messages[i];
+                        appendNewRow(msg.patient_name, msg.patient_key);
+                    }
+                }
+                else {
+                    showNoNewMessages();
+                }
+                
+               
+
+            
+
                 spinner.style.display = "none";
+                msgContainer.style.display = "block";
             },
             error: function (event) {
             }

@@ -13,7 +13,16 @@
                 <a class="btn btn-outline-primary btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
                 <a class="btn btn-outline-warning btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}">שליחת מודעה</a>
                 <br>
-                <a class="btn btn-outline-danger btn-sm btn-block" href="{% url 'delete_patient' context.key %}">מחיקת משתמש</a>
+                <form  method="post" action="{% url 'delete_patient' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" name="patient_name" value="{{ context.name }}">
+                        <input type="hidden" name="patient_key" value="{{ context.key }}">
+                        <div class="col-md-12 text-center form-delete ">
+                            <button type="submit" class="btn btn-outline-danger btn-sm btn-block">מחיקת משתמש</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
