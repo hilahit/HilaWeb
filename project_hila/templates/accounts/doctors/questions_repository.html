@@ -58,7 +58,7 @@
             </div>
         </div>
     {% endif %}
-       
+        <div class="questionnaires-main-container fade-in-row">
         {% for questionnaire in questionnaires %}
         {% csrf_token %}
 
@@ -113,6 +113,7 @@
                 <br>
             </div> 
         {% endfor %}
+        </div>
     </form>
 
     <div class="modal fade" id="newQmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -144,7 +145,7 @@
     </div>
 
 </div>
-
+<script src="{% static 'js/patient.js' %}"></script>
 <script src="{% static 'js/questionnaire.js' %}"></script>
 <script>
 
