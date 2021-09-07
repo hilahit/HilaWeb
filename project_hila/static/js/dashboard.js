@@ -17,6 +17,25 @@ function showNoNewMessages() {
     container.appendChild(liObject);
 }
 
+function showNoEntries() {
+
+    let container = document.getElementById('new-entry-container');
+    let liObject = document.createElement('li');
+    liObject.classList.add('list-group-item');
+
+    let span = document.createElement('span');
+    span.classList.add('material-icons');
+    span.classList.add('icon-no-msg');
+    span.innerHTML = "do_not_disturb";
+
+    h6 = document.createElement('h6');
+    h6.innerHTML = "אין רשומות";
+
+    liObject.appendChild(span);
+    liObject.appendChild(h6);
+    container.appendChild(liObject);
+}
+
 function appendNewMsg(name, key) {
 
     let container = document.getElementById('new-msg-container');
@@ -32,8 +51,28 @@ function appendNewMsg(name, key) {
     container.append(liObject);
 }
 
+function appendNewEntry(entry) {
+    let container = document.getElementById('new-entry-container');
+    let liObject = document.createElement('li');
+    liObject.classList.add('list-group-item');
+    
+    let userAction = document.createElement('h6');
+    userAction.classList.add('user-action');
+    userAction.innerHTML = entry.action;
+
+    let userActionDate = document.createElement('h6');
+    userActionDate.classList.add('user-action-date');
+    userActionDate.innerHTML = entry.action_date;
+
+    liObject.appendChild(userAction);
+    liObject.appendChild(userActionDate);
+
+    container.append(liObject);
+}
+
 function fetchChatData(chatDataUrl, userToken) {
     const spinner = document.getElementById('spinner-container');
+  
 
     const msgContainer = document.getElementById('new-msg-container');
     msgContainer.style.display = "none";
@@ -65,6 +104,50 @@ function fetchChatData(chatDataUrl, userToken) {
             msgContainer.style.display = "block";
         },
         error: function (event) {
+            showNoNewMessages()
         }
     });
 }
+
+function fetchLatestEntries(entryUrl, userToken) {
+    
+    const spinner = document.getElementById('entry-spinner-container');
+    const entryContainer = document.getElementById('new-entry-container');
+    entryContainer.style.display = "none";
+    
+    const token = userToken;
+    $.ajax({
+        headers: { 'X-CSRFToken': token },
+        type: 'POST',
+        url: entryUrl,
+        data: {
+            'event': 'fetch_latest_entries'
+        },
+        dataType: 'json',
+        success: function (data) {
+
+            if (data.entries != null && data.entries.length != 0) {
+
+                for (var i = 0; i < data.entries.length; i++) {
+                    entry = data.entries[i];
+                    appendNewEntry(entry);
+                }
+
+                spinner.style.display = "none";
+                entryContainer.style.display = "block";
+            }
+
+            
+            else {
+                showNoNewMessages();
+            }
+
+        
+        },
+        error: function (event) {
+            showNoEntries()
+        }
+    });
+}
+
+

@@ -19,6 +19,7 @@
         <link rel="stylesheet" , type="text/css" href="{% static '/css/questionnaire.css' %}">
         <link rel="stylesheet" , type="text/css" href="{% static '/css/navbar_style.css' %}">
         <link rel="stylesheet" , type="text/css" href="{% static '/css/dashboard.css' %}">
+        <link rel="stylesheet" , type="text/css" href="{% static '/css/main.css' %}">
     </head>
 
 <body>
@@ -29,10 +30,18 @@
         {% block content %}
         
         {% endblock %}
+        <footer class="text-center fixed-bottom my-footer" style="background-color: rgb(255, 254, 254);">
         
-        <hr>
-        <!-- implement footer -->
-        <h5>footer</h5>
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgb(211, 211, 212);">
+                © 2021 Copyright
+                <a  href="https://hila-clinic.co.il//"> המרכז הישראלי לרפואת הלב</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+    
+      
+
     </main>
 
 </body>

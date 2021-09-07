@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
 
 <div>
@@ -19,7 +19,7 @@
     {% endif %}
 </div>
 
-<div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
+<div class="container-fluid fade-in-row" style="text-align: right" dir="rtl" lang="he">
 
     <div class="form-group mb-3 w-50 mx-auto">
         <form action="{% url 'search_patient_by_keyword' %}">
@@ -67,5 +67,7 @@
         </tbody>
     </table>
 </div>
+
+<script src="{% static 'js/patient.js' %}"></script>
 
 {% endblock %}

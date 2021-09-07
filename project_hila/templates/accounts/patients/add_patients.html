@@ -11,7 +11,6 @@
 </head>
 <body>
     {% block content %}
-
     <div dir="rtl">
         {% if messages %}
         <ul class="messages">
@@ -41,7 +40,7 @@
 
 
 
-    <div class="container-fluid ">
+    <div class="container-fluid fade-in-row">
     
         <div class="row h-100 justify-content-center align-items-center ">
             <h3 id="formTitle">הוספת מטופלים</h3>
@@ -88,4 +87,6 @@
     {% block footer_scripts %}
     {% endblock footer_scripts %}
 </body>
+
+<script src="{% static 'js/patient.js' %}"></script>
 </html>

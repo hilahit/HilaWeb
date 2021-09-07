@@ -29,7 +29,6 @@ function initializeSocket(patientID, doctorID, sendMessagePath) {
 
         const data = JSON.parse(event.data);
         let messages = data['payload']['message'];
-        console.log(data['payload']);
 
         if (messages) {
             if (typeof messages === 'string') {
@@ -147,7 +146,6 @@ async function sendMsg(patientKey, path) {
     const chatContainer = document.getElementById("chat-messages-window");
     if (msg == "") {
 
-        console.log("empty message");
         window.alert("cannot send an empty message");
     }
     else {
@@ -163,7 +161,6 @@ async function sendMsg(patientKey, path) {
             },
             dataType: 'json',
             success: function (payload) {
-                // console.log("got message: " + payload.message);
             }
         });
 
@@ -224,7 +221,7 @@ function createMessageElement(message, senderName, isDoctor) {
     let msgElement = document.createElement("p");
 
     if (isDoctor) {
-        msgElement.innerHTML = senderName + " :" + message;
+        msgElement.innerHTML = message;
         msgElement.classList.add('text-end');
     }
     else {

@@ -1,6 +1,4 @@
-import json
 from .models import ChatData
-
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from chat.FirebaseListener import FirebaseListener
@@ -10,12 +8,14 @@ from django.http import JsonResponse
 import time
 from project_hila.bcolors import bcolors
 from channels.layers import get_channel_layer
-from asgiref.sync import sync_to_async
-from asgiref.sync import async_to_sync
 from project_hila.bcolors import bcolors
 from accounts.firebase_repo import send_message_notification, send_important_notification
+from accounts.models import MedicalAction
 
 
+def saveAction(desc, user):
+    action = MedicalAction(action=desc, user_id= user)
+    action.save()
 
 channel_layer = get_channel_layer()
 # Create your views here.
@@ -98,8 +98,10 @@ def fetch_chats_data(request):
 
             db_chat_id = get_db_chat_id(f_chat)
             db_chat_size = get_db_chat_size(f_chat)   
+            print("#############")
             print("firebase chat size: ", f_chat_size)
             print("db chat size: ", db_chat_size)
+            print("#############")
 
             # If chat exists
             if db_chat_size is not None and db_chat_id is not None:
@@ -150,16 +152,6 @@ def send_message(request):
     patient_key = request.POST.get('patientKey')
     doctor_id = request.user.id
 
-
-
-    # print("PRINTING FROM SERVER", message)
-    # print("PATIENT_KEY: ", patient_key)
-    # save to database
-
-
-    # gmt = time.gmtime()
-    # timestamp = calendar.timegm(gmt)
-
     timestamp = current_milli_time()
     print(f"{bcolors.OKBLUE}posting message to firebase{bcolors.ENDC}")
   
@@ -172,10 +164,6 @@ def send_message(request):
     }
 
     db.child("Chats").child(f"{patient_key}_{doctor_id}").update({timestamp : payload, 'contact': request.user.username})
-
-
-    # db.child("Chats").child(f"{patient_key}_{doctor_id}").update({'contact': request.user.username})
-    # db.child("Chats").child(f"{patient_key}_{doctor_id}").child(timestamp).set(payload)
 
     token_obj = db.child("Patients").child(patient_key).child("user_details").get()
 
@@ -193,11 +181,8 @@ def send_message(request):
                 'title' : title
                 }
         
-        # push_notification(title=title, msg=msg, token=token, data=data)
-
         send_message_notification(token, data)
         
-
     return JsonResponse(payload)
 
 
@@ -211,10 +196,19 @@ def push_notification(request):
         patient_key).child("user_details").get()
 
     if 'token' in token_obj.val():
-        token = db.child("Patients").child(patient_key).child(
-            "user_details").get().val()['token']
+        # token = db.child("Patients").child(patient_key).child(
+        #     "user_details").get().val()['token']
+
+        user_details = db.child("Patients").child(patient_key).child("user_details").get()
+        token = user_details.val()['token']
+
+        user_name = f"{user_details.val()['first_name']} {user_details.val()['last_name']}"
+        print(token)
+        print(user_name)
 
         send_important_notification(token, message, title)
+        saveAction(f"שלחת מודעה חשובה ל {user_name}", request.user)
+        
 
     return JsonResponse({'message': message})
 

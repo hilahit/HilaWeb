@@ -33,11 +33,8 @@ function createNewQuestionnaire() {
  
     if (qTitle.length == 0) {
         alertEmpty.style.display = "block";
-        console.log("empty");
     }
     else {
-        alertEmpty.style.display = "none";
-        console.log("not empty");
-        
+        alertEmpty.style.display = "none";        
     }
 }

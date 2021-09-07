@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container-fluid" style="text-align: right" dir="rtl" lang="he">
     
-    <div class="row">
+    <div class="row fade-in-row">
         <div class="col-md">
             <div class="card card-body h-100">
                 <h5>מטופל/ת: {{ context.name }}</h5>
@@ -139,7 +139,6 @@
           const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
 
           const message = document.getElementById("message-text")
-          console.log(message.value.trim())
 
         $.ajax({
             headers: { 'X-CSRFToken': token },
@@ -151,7 +150,7 @@
             },
             dataType: 'json',
             success: function (event) {
-                console.log("i pushed the thing");
+                console.log(`pushed notif with token ${token}`);
             },
             error: function(event){
                 //TODO: code stub

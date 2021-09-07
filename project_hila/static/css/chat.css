@@ -5,7 +5,7 @@ html {
 .chat-container {
     height: 30rem;
     width: 100%;
-    overflow-y: auto
+    overflow-y: auto;
 }
 
 main {
@@ -56,3 +56,4 @@ main {
     text-overflow: ellipsis;
     display: -webkit-box;
 }
+

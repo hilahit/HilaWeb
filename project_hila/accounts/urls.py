@@ -18,5 +18,6 @@ urlpatterns = [
     path('add_patients/', views.add_patients, name='add_patients'),
     path('patient/<str:key>/', views.patient_view, name='patient'),
     path('register/', views.register_doctor_view, name='register_doctor'),
+    path('fetch_latest_entries/', views.fetch_latest_entries, name='fetch_latest_entries'),
 
 ]

@@ -1,18 +1,9 @@
-from questions.models import Question
-from django.forms import widgets
-from django.forms.widgets import Widget
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django import forms
 from django.views.decorators.cache import cache_control
-from django.core.management.utils import get_random_secret_key
-from django.contrib.auth.models import User
 from django.contrib import messages
-from chat.views import fetch_chats_data
-
-
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)

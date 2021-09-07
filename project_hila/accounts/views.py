@@ -1,6 +1,5 @@
 import datetime
 from django.shortcuts import render
-from pyasn1.type.univ import Null
 from .forms import PatientRegisterForm, DoctorRegisterForm
 from django.contrib import messages
 from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
@@ -9,13 +8,32 @@ from project_hila.views import home
 from operator import itemgetter
 from django.views.decorators.cache import cache_control
 from chat.views import listen_to_chat
-from django.utils.dateparse import parse_date
 from django.http import JsonResponse
+from .models import MedicalAction
 
-def create_announcement(request):
-    title = "test title"
-    short_description = "some description"
-    return render
+
+def fetch_latest_entries(request):
+    db_entries = MedicalAction.objects.filter(user_id=request.user).values()
+
+    entries = []
+
+    for entry in db_entries.values():
+        entries.append(entry)
+
+    last_five_entries = entries[-5:]
+
+    return JsonResponse({'entries': last_five_entries})
+
+
+def saveAction(desc, user):
+
+    action = MedicalAction(action = desc, user_id = user)
+    action.save()
+
+# def create_announcement(request):
+#     title = "test title"
+#     short_description = "some description"
+#     return render
 
 def navigate_to_patient(request):
     p_key = request.POST.get('patient_key')
@@ -41,6 +59,9 @@ def delete_patient_view(request):
     if is_deleted:
         db.child("Patients").child(key).remove()
         messages.success(request, f"המשתמש {name} הוסר בהצלחה")
+
+        saveAction(f"מחקת את משתמש {name}", request.user)
+
         return search_patients_view(request)
 
     return home(request)
@@ -100,12 +121,15 @@ def search_patient_by_keyword_view(request):
 
                 patient_email = patient_details["email"]
                 patient_name = f"{patient_details['first_name']} {patient_details['last_name']}"
+                patient_birthdate = patient_details["date_of_birth"]
 
+                date = datetime.datetime.fromtimestamp(patient_birthdate/1000.0)
+                final_date = date.strftime('%d-%m-%Y')
                 if keyword in patient_email or keyword in patient_name:
 
                     patient_found = {
                         "name": patient_name,
-                        "date_of_birth": date,
+                        "date_of_birth": final_date,
                         "email": patient_email,
                         "key": pat.key()
                     }
@@ -144,11 +168,12 @@ def search_patients_view(request):
             date_of_birth = patient_details["date_of_birth"]
             # date = datetime.strptime(str(date_of_birth), "%d%m%y").date()
             date = datetime.datetime.fromtimestamp(date_of_birth/1000.0)
+            final_date = date.strftime('%d-%m-%Y')
             email = patient_details["email"]
 
         new_patient = {
             "name": f"{patient_details['first_name']} {patient_details['last_name']}",
-            "date_of_birth": date,
+            "date_of_birth": final_date,
             "email": email,
             "key": pat.key()
         }
@@ -216,6 +241,8 @@ def add_patients(response):
                 messages.success(response, "Successfully created " +
                                 first_name + " " + last_name)
 
+                saveAction(f"הוספת מטופל חדש: {first_name} {last_name}", response.user)
+
             return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
         else:
@@ -256,8 +283,6 @@ def register_doctor_view(request):
             print(f"Created new user: ${user.username}")
             print("############################")
 
-       
-
             email = request.POST.get('email')
 
             new_doctor = {
@@ -270,6 +295,8 @@ def register_doctor_view(request):
             messages.success(
                 request,
                 "Succesfully created ")
+
+            saveAction(f"הוספת את משתמש {user.username}", request.user)
 
             return render(
                 request,

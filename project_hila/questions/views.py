@@ -12,14 +12,18 @@ from accounts.firebase_repo import db
 import time
 from django.http import JsonResponse
 from accounts.firebase_repo import send_important_notification
+from accounts.models import MedicalAction
 
+def saveAction(desc, user):
+    action = MedicalAction(action=desc, user_id=user)
+    action.save()
 
 def push_questionnaire(request):
     questionnaire_title = request.POST.get("qTitle")
     date = datetime.date.today()
     questionnaire = Questionnaire(date_created=date, title=questionnaire_title)
-    print(questionnaire)
     questionnaire.save()
+    saveAction(f"יצרת את שאלון {questionnaire_title}", request.user)
     return JsonResponse({'message': "Questionnaire created successfully!"})
 
 
@@ -37,6 +41,7 @@ def create_question_view(request, index):
             form.save()
             questionnaire_name =  form.cleaned_data["questionnaire"]
             messages.success(request, f"השאלה נוספה בהצלחה לשאלון '{questionnaire_name}'")
+            saveAction(f"הוספת שאלה לשאלון {questionnaire_name}", request.user)
         else:
             print(form.errors.as_data())
             messages.warning(request, "שמירת השאלה נכשלה. יש לוודא שכל השדות הוזנו כראוי.")
@@ -69,7 +74,7 @@ def handle_questionnaires_send(request, key):
         return 0
 
 
-    # get all current questionnaires. This is dumb but whatever...
+    # get all current questionnaires.
     questionnaires_to_post = db.child("Patients").child(
         key).child('questionnaires').get().val()
 
@@ -112,6 +117,7 @@ def handle_questionnaires_send(request, key):
                 'questionList':  questions_list,
                 'date_sent': current_milli_time()
             })
+
     # push questionnaires
     db.child("Patients").child(key).child(
         'questionnaires').set(questionnaires_to_post)
@@ -125,7 +131,7 @@ def handle_questionnaires_send(request, key):
         title = "שאלונים"
         msg = "התקבל שאלון חדש"
 
-        send_important_notification(title, msg, token)
+        send_important_notification(token, msg, title)
 
     return 1
 
@@ -164,6 +170,8 @@ def questions_repository_view(request, key):
 
             # return redirect('patient', key)
             messages.success(request, "השאלון נשלח בהצלחה")
+            patient_name = f"{first_name} {last_name}"
+            saveAction(f"שלחת שאלונים ל {patient_name}", request.user)
             return render(request, 'accounts/doctors/questions_repository.html', context)
         elif "add_question" in request.POST:
 

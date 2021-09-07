@@ -1,6 +1,7 @@
 h6 {
     color: rgb(4, 4, 139);
     text-align: center;
+     font-size: 1rem;
 }
 
 .icon-container {
@@ -29,4 +30,66 @@ h6 {
 
 .blue-everything {
      color: rgb(4, 4, 139);
+}
+
+.user-action {
+    display:inline-block;
+    margin-right:10px; 
+    width:200px;
+} 
+
+.user-action-date {display:inline-block; width:200px; } 
+
+.msg-container {
+    height: 12rem;
+    width: 100%;
+    overflow-y: auto;
+}
+
+
+#new-msg-container {
+    overflow-y: auto
+}
+
+#new-entry-container {
+    overflow-y: auto;
+}
+
+.entry-container {
+    height: 12rem;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.fade-in-row {
+  animation: fadeIn  1.2s;
+  -webkit-animation: fadeIn  1.2s;
+  -moz-animation: fadeIn  1.2s;
+  -o-animation: fadeIn  1.2s;
+  -ms-animation: fadeIn  1.2s;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }
