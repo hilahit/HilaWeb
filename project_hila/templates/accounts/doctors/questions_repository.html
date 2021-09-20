@@ -102,7 +102,7 @@
                                     {% else %}
                                         <p><span class="qAnswers"><b>תשובות:</b></span> {{ q.answers }}</p>
                                     {% endif %}
-                                    
+                                    <a href="{% url 'edit_question' q.id %}">עריכת שאלה</a>
                                     <hr>
                                 {% endfor %}
                                 <a href="{% url 'create_question' questionnaire.index %}" class='btn btn-outline-success'>הוספת שאלה</a>

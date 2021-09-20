@@ -39,7 +39,6 @@ def listen_to_chat(request, patient_key, patient_name):
     chat_id = f"{patient_key}_{doctor_id}"
 
     listener = FirebaseListener(chat_id, request.user.username, patient_name)
-    print(f"{bcolors.BOLD}listener id: {listener}{bcolors.ENDC}")
     global my_stream
     my_stream = db.child("Chats").child(chat_id).stream(listener.stream_handler)
     
@@ -87,44 +86,45 @@ def fetch_chats_data(request):
     firebase_chats = db.child("Chats").child().get()
 
     # Traverse all firebase chat rooms
-    for f_chat in firebase_chats.each():
+    if firebase_chats.val() is not None:
+        for f_chat in firebase_chats.each():
 
-        # Search for current user chats
-        if suffix in f_chat.key():
-           
-            # The size is the amount of all the fields in the current chat room
-            # minus the 'contact' field
-            f_chat_size = (len(f_chat.val()) - 1)
+            # Search for current user chats
+            if suffix in f_chat.key():
+            
+                # The size is the amount of all the fields in the current chat room
+                # minus the 'contact' field
+                f_chat_size = (len(f_chat.val()) - 1)
 
-            db_chat_id = get_db_chat_id(f_chat)
-            db_chat_size = get_db_chat_size(f_chat)   
-            print("#############")
-            print("firebase chat size: ", f_chat_size)
-            print("db chat size: ", db_chat_size)
-            print("#############")
+                db_chat_id = get_db_chat_id(f_chat)
+                db_chat_size = get_db_chat_size(f_chat)   
+                print("#############")
+                print("firebase chat size: ", f_chat_size)
+                print("db chat size: ", db_chat_size)
+                print("#############")
 
-            # If chat exists
-            if db_chat_size is not None and db_chat_id is not None:
+                # If chat exists
+                if db_chat_size is not None and db_chat_id is not None:
 
-                # The amount of message in the firebase is greater
-                # then the amount in the local db. That means that
-                # there are new unread messages, so get this chat room
-                if (db_chat_size < f_chat_size):
+                    # The amount of message in the firebase is greater
+                    # then the amount in the local db. That means that
+                    # there are new unread messages, so get this chat room
+                    if (db_chat_size < f_chat_size):
 
-                    patient_key = db_chat_id.removesuffix(suffix)
-                    patient = db.child("Patients").order_by_key().equal_to(patient_key).get()
-                    patient_obj = patient.val()
-                    details = patient_obj[list(patient_obj.keys())[0]]
-                    name = details['name']
-                    
+                        patient_key = db_chat_id.removesuffix(suffix)
+                        patient = db.child("Patients").order_by_key().equal_to(patient_key).get()
+                        patient_obj = patient.val()
+                        details = patient_obj[list(patient_obj.keys())[0]]
+                        name = details['name']
+                        
 
-                    chat_list.append({
-                        'patient_name': name,
-                        'patient_key': patient_key
-                    })
-                elif db_chat_size > f_chat_size:
-                    msg = f"{bcolors.OKGREEN}{db_chat_size-f_chat_size} messages missing from local db"
-                    print(msg)
+                        chat_list.append({
+                            'patient_name': name,
+                            'patient_key': patient_key
+                        })
+                    elif db_chat_size > f_chat_size:
+                        msg = f"{bcolors.OKGREEN}{db_chat_size-f_chat_size} messages missing from local db"
+                        print(msg)
 
     new_messages = {'messages': chat_list}
     return JsonResponse(new_messages)

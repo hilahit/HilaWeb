@@ -15,6 +15,8 @@ function showNoNewMessages() {
     liObject.appendChild(span);
     liObject.appendChild(h6);
     container.appendChild(liObject);
+
+
 }
 
 function showNoEntries() {
@@ -125,9 +127,8 @@ function fetchLatestEntries(entryUrl, userToken) {
         },
         dataType: 'json',
         success: function (data) {
-
+         
             if (data.entries != null && data.entries.length != 0) {
-
                 for (var i = 0; i < data.entries.length; i++) {
                     entry = data.entries[i];
                     appendNewEntry(entry);
@@ -135,14 +136,12 @@ function fetchLatestEntries(entryUrl, userToken) {
 
                 spinner.style.display = "none";
                 entryContainer.style.display = "block";
-            }
-
-            
+            }      
             else {
-                showNoNewMessages();
+                spinner.style.display = "none";
+                entryContainer.style.display = "block";
+                showNoEntries();
             }
-
-        
         },
         error: function (event) {
             showNoEntries()

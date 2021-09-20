@@ -1,3 +1,26 @@
+.indices-container {
+  height: 25rem;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.accordion-q-title {
+  color: rgb(4, 4, 139);
+  font-size: 1.3rem;
+}
+
+.accordion-q-answers {
+  color: grey;
+  font-size: 1.2rem;
+}
+
+.questionnaires-container {
+  height: 35rem;
+  width: 100%;
+  overflow-y: auto;
+}
+
+
 #formTitle {
     text-align: center;
 }

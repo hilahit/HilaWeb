@@ -26,6 +26,25 @@ def push_questionnaire(request):
     saveAction(f"יצרת את שאלון {questionnaire_title}", request.user)
     return JsonResponse({'message': "Questionnaire created successfully!"})
 
+@login_required(login_url="login")
+def edit_question_view(request, pk):
+    print(pk)
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            q = Question.objects.filter(pk=pk).update(
+                question = form.cleaned_data['question'],
+                answers = form.cleaned_data['answers'],
+                questionnaire = form.cleaned_data['questionnaire'],
+                question_type = form.cleaned_data['question_type']
+            )
+            messages.success(request, f"השאלה עודכנה בהצלחה")
+
+    else:
+        q = Question.objects.filter(pk=pk).get()
+        form = QuestionForm(initial={'questionnaire': q.questionnaire, 'question': q.question, 'answers': q.answers})
+
+    return render(request, 'accounts/doctors/edit_question.html', {'form': form, 'q_key': pk})
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
@@ -33,7 +52,6 @@ def create_question_view(request, index):
     """
     
     """
-
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():

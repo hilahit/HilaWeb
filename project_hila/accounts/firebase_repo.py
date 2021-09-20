@@ -26,6 +26,10 @@ default_app = firebase_admin.initialize_app()
 push_service = FCMNotification(
     api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
+def send_reset_password_email(email):
+    result = auth_fb.send_password_reset_email("btlltk13@gmail.com")
+    print(result)
+
 def send_message_notification(registration_token, dataObject):
 
     result = push_service.notify_single_device(

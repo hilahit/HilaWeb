@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success">
+            <li class=" {{ message.tags }}">{{ message|safe }}</li>
+        </div>
+        {% endif %}
+        {% if message.tags == 'warning' %}
+        <li class="alert alert-danger {{ message.tags }}">{{ message }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<br>
+<h5 style="text-align: center;">עריכת שאלה</h5>
+<div class="container-fluid d-flex justify-content-center">
+    
+    <br>
+    <div class="form-group w-50">
+        <form action="{% url 'edit_question' q_key %}" method="POST" style="text-align: right " dir="rtl">
+            {% csrf_token %}
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">שאלון</label>
+                {% render_field form.questionnaire value="1" class="form-control" %}
+            </div>
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">סוג שאלה</label>
+                {% render_field form.question_type class="form-control" %}
+            </div>
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">שאלה</label>
+                {% render_field form.question class="form-control" %}
+            </div>
+            <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="rtl">
+                <label class="label rtl">תשובות</label>
+                {% render_field form.answers class="form-control" %}
+                <small><label class="label rtl">יש להפריד תשובות בפסיק ורווח</label></small>
+            </div>
+            <div class="col-md-12 text-center ">
+                <button type="submit" class="btn btn-secondary">אישור</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+
+</script>
+
+{% endblock %}

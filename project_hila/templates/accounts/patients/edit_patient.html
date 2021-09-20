@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+<html dir="rtl" lang="">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>עריכת מטופלים</title>
+    </head>
+    <body>
+        {% block content %}
+        <div dir="rtl">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                {% if message.tags == 'success' %}
+                <div class="alert alert-success">
+                    <li class=" {{ message.tags }} text-right">{{ message|safe }}</li>
+                </div>
+                {% endif %}
+                {% if message.tags == 'warning' %}
+                <li class="alert alert-danger {{ message.tags }} text-right">{{ message }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if form.errors %}
+            <ul>
+                {% for error in form.errors %}
+                    <li class="alert alert-danger text-right">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        </div>
+
+        <div class="container-fluid fade-in-row">
+        
+            <div class="row h-100 justify-content-center align-items-center ">
+                <h3 id="formTitle">עריכת מטופל/ת: {{ patient.name }}</h3>
+                <div class="form-group w-50 ">
+                
+                    <form method="post" style="text-align: right " dir="rtl">
+                        {% csrf_token %}
+
+                
+
+                        <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                            {{ form.first_name|as_crispy_field }}
+                        </div>
+                        <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                            {{ form.last_name|as_crispy_field }}
+                        </div>
+                        <div class="shadow-sm p-3 mb-5 bg-body rounded" dir="ltr">
+                            {{ form.phone_number|as_crispy_field }}
+                        </div>
+                        <div class="shadow-sm p-3 mb-5 bg-body rounded">
+                            <label for="datepicker: " >תאריך לידה&nbsp; &nbsp;</label>
+                            <div>
+                            <input name="birth_date" id='datepicker' class="form-control" type="date" value="{{ birth_date }}">
+                            </div>
+                        </div>
+                        <br><br>
+        
+                        <div class="col-md-12 text-center ">
+                            <button class="btn btn-secondary">אישור</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+
+
+
+</script>
+
+{% endblock content %}
+{% block footer_scripts %}
+{% endblock footer_scripts %}
+
+

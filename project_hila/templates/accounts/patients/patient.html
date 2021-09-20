@@ -9,7 +9,7 @@
             <div class="card card-body h-100">
                 <h5>מטופל/ת: {{ context.name }}</h5>
                 <hr>
-                <a class="btn btn-outline-info btn-sm btn-block" href="">עדכון פרטים</a>
+                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'edit_patient' context.key %}">עדכון פרטים</a>
                 <a class="btn btn-outline-primary btn-sm btn-block" href="{% url 'questions_repository' context.key %}">שליחת שאלונים</a>
                 <a class="btn btn-outline-warning btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ context.name }}">שליחת מודעה</a>
                 <br>
@@ -87,17 +87,79 @@
     <div class="row">
         <div class="col-md">
             <div class="card card-body">
-                <table class="table table-sm">
-                    <tr>
-                        <th>פעולה</th>
-                        <th>תאריך</th>
-                        <th>סטאטוס</th>
-                    </tr>
-                </table>
+                <h6 style="font-size: 1.5rem;">מדדים</h6>
+                <hr>
+                <div class="indices-container">
+                    <table class="table">
+                        <thead>
+                        <tr>                 
+                            <th scope="col">מדידה</th>
+                            <th scope="col">ערך</th>
+                            <th scope="col">תאריך</th>
+                        </tr>
+                        </thead>
+                        <tbody>                 
+                            {% for indice in indices %}                                    
+                                {% for measurement in indice.measurement_list %}   
+                                    <tr>    
+                                        <td style="color: rgb(4, 4, 139);">{{ indice.indice_name }}</td>
+                                        <td style="font-weight: bold;">{{ measurement.value }}</td>
+                                        <td style="color: rgb(4, 4, 139);">{{ measurement.date }}</td>
+                                    <tr> 
+                                {% endfor %}     
+                            {% endfor %}             
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+    <div class="questionnaires-container">
+        <br>
+        <h6 style="font-size: 1.5rem;">שאלונים</h6>
+        <hr>
+        {% if questionnaires|length != 0 %}
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                {% for questionnaire in questionnaires %}
 
+                <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne{{ forloop.counter }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="flush-collapse{{ forloop.counter }}">
+                        {{ questionnaire.questionnaire_name }} - {{ questionnaire.date_answered }} &nbsp;&nbsp;
+                    </button>
+                </h2>
+                <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        {% for question in questionnaire.question_list %}
+                            <div class="accordion-q-title">
+                                {{ question.title }} : <div class="accordion-q-answers">
+                                    {% if 'answer' in question %}
+                                        {{ question.answer }}
+                                    {% else %}
+                                        {% for answer in question.answers %}
+                                            {% if answer %}
+                                                {{ answer }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+        {% endif %}
+           
+
+       
+
+    
+    </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -129,11 +191,13 @@
 
 
 
-
-
 <script src="{% static 'js/chat.js' %}"></script>
 <script src="{% static 'js/patient.js' %}"></script>
 <script>
+    
+
+
+   
 
     function sendAnnouncement(){
           const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
@@ -175,7 +239,10 @@
         
     // });
 
+   
+
      window.addEventListener('DOMContentLoaded', (event) => {
+
         initializeSocket(
             "{{ context.key }}", 
             "{{ context.doctor_id }}",  

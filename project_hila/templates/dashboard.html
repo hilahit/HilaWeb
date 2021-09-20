@@ -6,7 +6,10 @@
 <br>
 <div class="container-fluid">
     <div class="row fade-in-row">
-
+        {% if user.is_authenticated %}
+        <h6 style="font-size: 1.8rem;">שלום {{ user.get_username }}</h6>
+        <br><br><br><br>
+        {% endif %}
         <div class="col-md-6 shadow-sm p-3 mb-5 bg-white rounde">
             <h4 class="text-center blue-everything">הודעות חדשות</h4>
             <hr>
