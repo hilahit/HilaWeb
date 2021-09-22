@@ -98,10 +98,10 @@ def fetch_chats_data(request):
 
                 db_chat_id = get_db_chat_id(f_chat)
                 db_chat_size = get_db_chat_size(f_chat)   
-                print("#############")
+
                 print("firebase chat size: ", f_chat_size)
                 print("db chat size: ", db_chat_size)
-                print("#############")
+
 
                 # If chat exists
                 if db_chat_size is not None and db_chat_id is not None:

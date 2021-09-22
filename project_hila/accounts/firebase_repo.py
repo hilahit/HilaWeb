@@ -5,8 +5,9 @@ from pyrebase import pyrebase
 from firebase_admin import auth
 from pyfcm import FCMNotification
 import json
+from project_hila.bcolors import bcolors
 
-GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject_service_private_key.json')
+GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject-admin-key.json')
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
 config = {
@@ -18,13 +19,26 @@ config = {
 }
 
 firebase = pyrebase.initialize_app(config)
-auth_fb = firebase.auth()
 db = firebase.database()
-default_app = firebase_admin.initialize_app()
+storage = firebase.storage()
+auth_fb = firebase.auth()
 
+push_service = FCMNotification(api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
-push_service = FCMNotification(
-    api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
+"""
+This dummy account was created for fetching items from the Firebase Storage.
+We need a valid user token in order to get a download url for the item we are getting.
+"""
+email = "btlltk13@gmail.com"
+password = "nimda321"
+
+user = auth_fb.sign_in_with_email_and_password(email,password)
+
+def fetch_document(patient_key, doc_name):
+    url = storage.child(patient_key).child("images").child(doc_name).get_url(user['idToken'])
+    print(url)
+
+    return url
 
 def send_reset_password_email(email):
     result = auth_fb.send_password_reset_email("btlltk13@gmail.com")
@@ -33,12 +47,8 @@ def send_reset_password_email(email):
 def send_message_notification(registration_token, dataObject):
 
     result = push_service.notify_single_device(
-
         registration_id = registration_token, 
-        # message_title = title, 
-        # message_body = msg, 
-        data_message = dataObject
-        
+        data_message = dataObject 
         )
         
     print(result)
@@ -51,7 +61,7 @@ def send_important_notification(registration_token, body, title):
         message_title = title,
         registration_id = registration_token,
     )
-    print("#### token: ", registration_token)
+
     print(result)
 
 def create_user_without_sign_in(email, password):

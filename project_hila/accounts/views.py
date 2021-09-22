@@ -2,7 +2,7 @@ import datetime
 from django.shortcuts import render
 from .forms import PatientRegisterForm, DoctorRegisterForm, PatientEditForm
 from django.contrib import messages
-from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient
+from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient, fetch_document
 from django.contrib.auth.decorators import login_required
 from project_hila.views import home
 from operator import itemgetter
@@ -106,7 +106,7 @@ def get_questionnaires_from_firebase(key):
     answered_questionnaires = []
     questionnaires = db.child("Patients").child(key).child('questionnaires').get()
 
-    if questionnaires is not None:
+    if questionnaires.val() is not None:
         for questionnaire in questionnaires.each():
             if 'date_answered' in questionnaire.val():
                 date = datetime.datetime.fromtimestamp(questionnaire.val()['date_answered'] / 1000.0)
@@ -119,8 +119,6 @@ def get_questionnaires_from_firebase(key):
                 })
 
 
-    print(answered_questionnaires)
-    print("######################################################")
     return answered_questionnaires
 
 
@@ -128,6 +126,8 @@ def get_questionnaires_from_firebase(key):
 @login_required(login_url="login")
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def patient_view(request, key):
+
+    fetch_document(key, 'helloWorld.png')
 
     patient = db.child("Patients").order_by_key().equal_to(key).get()
     doctor_id = request.user.id
@@ -236,15 +236,15 @@ def search_patients_view(request):
             # final_date = date.strftime('%d-%m-%Y')
             email = patient_details["email"]
 
-        new_patient = {
-            "name": f"{patient_details['first_name']} {patient_details['last_name']}",
-            "date_of_birth": date_of_birth,
-            "email": email,
-            "key": pat.key()
-        }
+            new_patient = {
+                "name": f"{patient_details['first_name']} {patient_details['last_name']}",
+                "date_of_birth": date_of_birth,
+                "email": email,
+                "key": pat.key()
+            }
 
-        patient_list.append(new_patient)
-        patient_list.sort(key=itemgetter('name'), reverse=False)
+            patient_list.append(new_patient)
+            patient_list.sort(key=itemgetter('name'), reverse=False)
 
     return render(
         request, 
@@ -302,7 +302,7 @@ def edit_patient(request, key):
                      'phone_number': db_mobile_phone,
                      }
         )
-        return render(request, "accounts/patients/edit_patient.html", {'form': patient_form, 'birth_date': final_date})
+        return render(request, "accounts/patients/edit_patient.html", {'form': patient_form, 'birth_date': final_date, 'patient_name': f"{db_first_name} {db_last_name}"})
 
 
 

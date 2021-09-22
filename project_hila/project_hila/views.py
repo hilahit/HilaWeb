@@ -4,6 +4,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
+from accounts.firebase_repo import db, fetch_document
+
 
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)

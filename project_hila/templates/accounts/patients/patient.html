@@ -48,9 +48,20 @@
 
         <div class="col-md">
             <div class="card card-body h-100">
-                <h5>פעולה אחרונה</h5>
-                <hr>
-                <h1 style="text-align: center;padding: 10px"></h1>
+                <h5>מסמכים</h5>
+                <input type="text" id="search-document-input" placeholder="חיפוש מסמך...">
+                <hr>    
+                <div class="document-container">
+                    <ul id="document-list">
+                        <li><a href="#">אישור חשוב</a></li>
+                        <li><a href="#">מסמך טרום ניתוח</a></li>
+                        <li><a href="#">אישור נוסף</a></li>
+                        <li><a href="#">טופס 17</a></li>
+                        <li><a href="#">מסמך רפואי</a></li>
+                        <li><a href="#">צילום מסמך</a></li>
+                        <li><a href="#">סיכום ישיבה</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -154,11 +165,7 @@
                 {% endfor %}
             </div>
         {% endif %}
-           
 
-       
-
-    
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -194,9 +201,29 @@
 <script src="{% static 'js/chat.js' %}"></script>
 <script src="{% static 'js/patient.js' %}"></script>
 <script>
+
+    window.addEventListener("load", function(){
+    // (B) ATTACH KEY UP LISTENER TO SEARCH BOX
+    document.getElementById("search-document-input").addEventListener("keyup", function(){
+        // (C) GET THE SEARCH TERM
+        var search = this.value.toLowerCase();
+
+        // (D) GET ALL LIST ITEMS
+        var all = document.querySelectorAll("#document-list li");
+
+        // (E) LOOP THROUGH LIST ITELS - ONLY SHOW ITEMS THAT MATCH SEARCH
+        for (let li of all) {
+        let item = li.innerHTML.toLowerCase();
+        if (item.indexOf(search) == -1) {
+             li.style.display="none";
+            }
+        else {
+            li.style.display="block" ;
+            }
+        }
+    });
+    });
     
-
-
    
 
     function sendAnnouncement(){

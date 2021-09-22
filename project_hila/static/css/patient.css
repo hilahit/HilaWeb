@@ -1,5 +1,20 @@
+#search-document-input {
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 5px 12px 5px 20px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+  outline-width: 0;
+}
+
 .indices-container {
   height: 25rem;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.document-container{
+  height: 10rem;
   width: 100%;
   overflow-y: auto;
 }
