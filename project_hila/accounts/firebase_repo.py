@@ -14,10 +14,10 @@ GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject-admin-key.json')
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
 config = {
-    "apiKey": "AIzaSyBBxecsVnTegPnRNNgC0AFd2UX6keoyIQw",
-    "authDomain": "hilaproject-76c5d.firebaseapp.com",
-    "databaseURL": "https://hilaproject-76c5d-default-rtdb.firebaseio.com",
-    "storageBucket": "hilaproject-76c5d.appspot.com",
+    "apiKey": env("APIKEY"),
+    "authDomain": env("AUTHDOMAIN"),
+    "databaseURL": env("DATABASEURL"),
+    "storageBucket": env("STORAGEBUCKET"),
     "serviceAccount": GOOGLE_APPLICATION_CREDENTIALS
 }
 
