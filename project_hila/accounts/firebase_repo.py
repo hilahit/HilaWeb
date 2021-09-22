@@ -1,11 +1,14 @@
 import os
-
+from dotenv import load_dotenv
+import environ
 import firebase_admin
 from pyrebase import pyrebase
 from firebase_admin import auth
 from pyfcm import FCMNotification
 import json
 from project_hila.bcolors import bcolors
+
+env = environ.Env()
 
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join('hilaproject-admin-key.json')
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
@@ -23,14 +26,14 @@ db = firebase.database()
 storage = firebase.storage()
 auth_fb = firebase.auth()
 
-push_service = FCMNotification(api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
 """
 This dummy account was created for fetching items from the Firebase Storage.
 We need a valid user token in order to get a download url for the item we are getting.
+TODO: move these credentials to .env file
 """
-email = "btlltk13@gmail.com"
-password = "nimda321"
+email = env('ADMIN_EMAIL')
+password = env('ADMIN_PASSWORD')
 
 user = auth_fb.sign_in_with_email_and_password(email,password)
 
@@ -39,6 +42,8 @@ def fetch_document(patient_key, doc_name):
     print(url)
 
     return url
+
+push_service = FCMNotification(api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
 def send_reset_password_email(email):
     result = auth_fb.send_password_reset_email("btlltk13@gmail.com")
