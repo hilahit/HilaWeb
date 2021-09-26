@@ -49,17 +49,13 @@
         <div class="col-md">
             <div class="card card-body h-100">
                 <h5>מסמכים</h5>
-                <input type="text" id="search-document-input" placeholder="חיפוש מסמך...">
                 <hr>    
+                <input type="text" id="search-document-input" placeholder="חיפוש מסמך...">
                 <div class="document-container">
                     <ul id="document-list">
-                        <li><a href="#">אישור חשוב</a></li>
-                        <li><a href="#">מסמך טרום ניתוח</a></li>
-                        <li><a href="#">אישור נוסף</a></li>
-                        <li><a href="#">טופס 17</a></li>
-                        <li><a href="#">מסמך רפואי</a></li>
-                        <li><a href="#">צילום מסמך</a></li>
-                        <li><a href="#">סיכום ישיבה</a></li>
+                        {% for file in file_list %}
+                            <li><a href="{{ file.path }}" target="_blank">{{ file.name }} - {{ file.date_uploaded }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

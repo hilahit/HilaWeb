@@ -140,7 +140,7 @@ def patient_view(request, key):
 
     # get list of file urls
     list_of_files = fetch_documents(user_details['email'])
-    print(list_of_files)
+    # print(list_of_files)
 
     # print(list_of_files)
     context = {

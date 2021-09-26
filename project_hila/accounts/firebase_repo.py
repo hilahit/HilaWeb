@@ -35,9 +35,11 @@ def fetch_documents(patient_email):
 
         date_property = file._properties['timeCreated']
         date = get_file_upload_date(date_property)
+        formatted_name = name[name.index('/')+1:]
+        
 
         list_of_paths.append({
-            'name': name[name.index("/")+1:],
+            'name': formatted_name[:formatted_name.index('.')],
             'date_uploaded': date,
             'path': path,
         })
