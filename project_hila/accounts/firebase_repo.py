@@ -41,19 +41,23 @@ def fetch_documents(patient_email):
         path = file.generate_signed_url(datetime.timedelta(seconds=600), method='GET')
         name = file.name
 
-        date_created = file._properties['timeCreated']
-        date_substring = date_created[:date_created.index("T")]
-
-        date_obj = datetime.datetime.strptime(date_substring, "%Y-%m-%d").date()
-        date_string = date_obj.strftime('%d-%m-%Y')
+        date_property = file._properties['timeCreated']
+        date = get_file_upload_date(date_property)
 
         list_of_paths.append({
             'name': name[name.index("/")+1:],
-            'date_uploaded': date_string,
+            'date_uploaded': date,
             'path': path,
         })
 
     return list_of_paths
+
+def get_file_upload_date(date_property):
+    date_substring = date_property[:date_property.index("T")]
+    date_obj = datetime.datetime.strptime(date_substring, "%Y-%m-%d").date()
+    date_string = date_obj.strftime('%d-%m-%Y')
+
+    return date_string
 
 push_service = FCMNotification(api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
