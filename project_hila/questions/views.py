@@ -218,7 +218,6 @@ def fetch_questions(db_questionnaire: QuerySet)-> list:
             'index': q_set.pk
         })
     
-    print(type(questionnaires))
     return questionnaires
 
 def questionnaires_view(request):

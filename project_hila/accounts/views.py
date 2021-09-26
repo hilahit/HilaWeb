@@ -2,7 +2,7 @@ import datetime
 from django.shortcuts import render
 from .forms import PatientRegisterForm, DoctorRegisterForm, PatientEditForm
 from django.contrib import messages
-from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient, fetch_document
+from .firebase_repo import db, create_user_without_sign_in, get_patient_by_email, delete_patient, fetch_documents
 from django.contrib.auth.decorators import login_required
 from project_hila.views import home
 from operator import itemgetter
@@ -39,7 +39,6 @@ def saveAction(desc, user):
 
 def navigate_to_patient(request):
     p_key = request.POST.get('patient_key')
-    print(p_key)
 
     response = {'patient_key': p_key}
 
@@ -127,8 +126,6 @@ def get_questionnaires_from_firebase(key):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def patient_view(request, key):
 
-    fetch_document(key, 'helloWorld.png')
-
     patient = db.child("Patients").order_by_key().equal_to(key).get()
     doctor_id = request.user.id
 
@@ -141,6 +138,10 @@ def patient_view(request, key):
     user_details = details['user_details']
     patient_key = list(patient_obj.keys())[0]
 
+    # get list of file urls
+    list_of_files = fetch_documents(user_details['email'])
+
+    print(list_of_files)
     context = {
         "name": f"{user_details['first_name']} {user_details['last_name']}",
         "email": user_details['email'],
@@ -160,7 +161,12 @@ def patient_view(request, key):
     return render(
         request, 
         'accounts/patients/patient.html', 
-        {'context': context, 'indices': answered_indices, 'questionnaires': answered_questionnaires}
+        {
+            'context': context, 
+            'indices': answered_indices, 
+            'questionnaires': answered_questionnaires,
+            'file_list': list_of_files
+        }
     )
 
 @login_required(login_url="login")
@@ -171,7 +177,6 @@ def search_patient_by_keyword_view(request):
 
     if request.method == 'GET':
         keyword = request.GET.get('search')
-        print(keyword)
 
         date = "-"
 
@@ -281,7 +286,6 @@ def edit_patient(request, key):
 
                 messages.warning(request, "יש להזין תאריך לידה")
             else:
-                print(birth_date_string)
                 datetime_obj = datetime.datetime.strptime(birth_date_string, "%Y-%m-%d")
 
                 db.child("Patients").child(key).update({'name': f"{first_name} {last_name}"})
@@ -329,7 +333,6 @@ def add_patients(response):
 
                 messages.warning(response, "יש להזין תאריך לידה")
             else:
-                print(birth_date_string)
                 datetime_obj = datetime.datetime.strptime(birth_date_string, "%Y-%m-%d")
                 
                 # date = birth_date_string.split("-")
@@ -379,11 +382,6 @@ def add_patients(response):
             return render(response, "accounts/patients/add_patients.html", {'form': patient_form})
 
         else:
-            print(patient_form['first_name'].errors)
-            print(patient_form['last_name'].errors)
-            print(patient_form['email'].errors)
-            print(patient_form['password'].errors)
-            print(patient_form['phone_number'].errors)
             messages.warning(response, "הוזנו נתונים שגויים")
 
         return render(response, "accounts/patients/add_patients.html", {'form': patient_form})

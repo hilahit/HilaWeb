@@ -62,9 +62,7 @@ def save_msg_count(request, p_key, p_name):
     if f_chat.val() is not None:
 
         chat_values = f_chat.val().values()
-        print(chat_values)
         chat_count = len(list(chat_values)) - 1
-        print("updating message count")
         chat, created = ChatData.objects.update_or_create(
             chat_id = f"{p_key}_{request.user.id}",
             defaults={'patient_name': p_name, 'chat_message_count': chat_count}
@@ -124,7 +122,6 @@ def fetch_chats_data(request):
                         })
                     elif db_chat_size > f_chat_size:
                         msg = f"{bcolors.OKGREEN}{db_chat_size-f_chat_size} messages missing from local db"
-                        print(msg)
 
     new_messages = {'messages': chat_list}
     return JsonResponse(new_messages)
@@ -203,8 +200,7 @@ def push_notification(request):
         token = user_details.val()['token']
 
         user_name = f"{user_details.val()['first_name']} {user_details.val()['last_name']}"
-        print(token)
-        print(user_name)
+
 
         send_important_notification(token, message, title)
         saveAction(f"שלחת מודעה חשובה ל {user_name}", request.user)

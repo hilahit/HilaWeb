@@ -1,12 +1,10 @@
+import datetime
 import os
+from django.core.validators import RegexValidator
 from dotenv import load_dotenv
 import environ
-import firebase_admin
 from pyrebase import pyrebase
-from firebase_admin import auth
 from pyfcm import FCMNotification
-import json
-from project_hila.bcolors import bcolors
 
 env = environ.Env()
 
@@ -24,7 +22,7 @@ config = {
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 storage = firebase.storage()
-auth_fb = firebase.auth()
+auth = firebase.auth()
 
 
 """
@@ -32,21 +30,26 @@ This dummy account was created for fetching items from the Firebase Storage.
 We need a valid user token in order to get a download url for the item we are getting.
 TODO: move these credentials to .env file
 """
-email = env('ADMIN_EMAIL')
-password = env('ADMIN_PASSWORD')
 
-user = auth_fb.sign_in_with_email_and_password(email,password)
 
-def fetch_document(patient_key, doc_name):
-    url = storage.child(patient_key).child("images").child(doc_name).get_url(user['idToken'])
-    print(url)
+def fetch_documents(patient_email):
+    list_of_paths = []
+    files = storage.bucket.list_blobs(prefix = patient_email)
 
-    return url
+    for file in files:
+        path = file.generate_signed_url(datetime.timedelta(seconds=600), method='GET')
+        name = file.name
+        list_of_paths.append({
+            'name': name[name.index("/")+1:],
+            'path': path
+        })
+
+    return list_of_paths
 
 push_service = FCMNotification(api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
 def send_reset_password_email(email):
-    result = auth_fb.send_password_reset_email("btlltk13@gmail.com")
+    result = auth.send_password_reset_email("btlltk13@gmail.com")
     print(result)
 
 def send_message_notification(registration_token, dataObject):
