@@ -1,11 +1,10 @@
 import datetime
 import os
-from django.core.validators import RegexValidator
-from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import auth
 import environ
 from pyrebase import pyrebase
 from pyfcm import FCMNotification
-from pprint import pprint
 
 env = environ.Env()
 
@@ -23,15 +22,8 @@ config = {
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 storage = firebase.storage()
-auth = firebase.auth()
-
-
-"""
-This dummy account was created for fetching items from the Firebase Storage.
-We need a valid user token in order to get a download url for the item we are getting.
-TODO: move these credentials to .env file
-"""
-
+pyre_auth = firebase.auth()
+default_app = firebase_admin.initialize_app()
 
 def fetch_documents(patient_email):
     list_of_paths = []
@@ -62,7 +54,7 @@ def get_file_upload_date(date_property):
 push_service = FCMNotification(api_key=os.environ['CLOUD_MESSAGING_SERVER_KEY'])
 
 def send_reset_password_email(email):
-    result = auth.send_password_reset_email("btlltk13@gmail.com")
+    result = pyre_auth.send_password_reset_email("btlltk13@gmail.com")
     print(result)
 
 def send_message_notification(registration_token, dataObject):
