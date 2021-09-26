@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import environ
 from pyrebase import pyrebase
 from pyfcm import FCMNotification
+from pprint import pprint
 
 env = environ.Env()
 
@@ -39,9 +40,17 @@ def fetch_documents(patient_email):
     for file in files:
         path = file.generate_signed_url(datetime.timedelta(seconds=600), method='GET')
         name = file.name
+
+        date_created = file._properties['timeCreated']
+        date_substring = date_created[:date_created.index("T")]
+
+        date_obj = datetime.datetime.strptime(date_substring, "%Y-%m-%d").date()
+        date_string = date_obj.strftime('%d-%m-%Y')
+
         list_of_paths.append({
             'name': name[name.index("/")+1:],
-            'path': path
+            'date_uploaded': date_string,
+            'path': path,
         })
 
     return list_of_paths
