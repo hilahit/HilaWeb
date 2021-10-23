@@ -10,6 +10,9 @@ from accounts.firebase_repo import db
 @login_required(login_url="login")
 @cache_control(no_cache=False, must_revalidate=True, no_store=True)
 def home(request):
+    """
+    main page
+    """
     if request.user.is_authenticated:
         # TODO make 'fetch_chats_data' load on html ready
         # fetch_chats_data(request)
