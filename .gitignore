@@ -1,5 +1,5 @@
 env
 db.sqlite3
-hilaproject_service_private_key.json
+hilaproject-admin-key.json
 .env
 
